@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Avi;
 
-class AvisController extends Controller
+class AvisRatingsController extends Controller
 {
     public function index()
     {

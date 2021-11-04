@@ -84,7 +84,7 @@ export default {
         {name: 'Contact Us', path: {name: 'ratings.contacts'}}
       ],
       isMobileMenu: false,
-      loading: true,
+      loading: false,
     }
   },
 

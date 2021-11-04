@@ -82,6 +82,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -89,19 +90,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      menu: [],
-      wp_menu: [],
-      isMobileMenu: false,
-      loading: true
-    };
-  },
-  mounted: function mounted() {
-    this.loading = true;
-    this.setMenu();
-  },
-  methods: {
-    setMenu: function setMenu() {
-      this.menu = [{
+      menu: [{
         name: 'Dashboard',
         path: {
           name: 'ratings.dashboard'
@@ -122,18 +111,16 @@ __webpack_require__.r(__webpack_exports__);
           name: 'ratings.creeps.list'
         }
       }, {
-        name: 'FAQ',
-        path: {
-          name: 'ratings.faq'
-        }
-      }, {
         name: 'Contact Us',
         path: {
           name: 'ratings.contacts'
         }
-      }];
-      this.loading = false;
-    },
+      }],
+      isMobileMenu: false,
+      loading: false
+    };
+  },
+  methods: {
     toggleMobileMenu: function toggleMobileMenu() {
       this.isMobileMenu = !this.isMobileMenu;
     }
@@ -732,7 +719,7 @@ var render = function () {
                             },
                           },
                         },
-                        [_vm._v(_vm._s(item.name))]
+                        [_vm._v(_vm._s(item.name) + "\n        ")]
                       )
                     }),
                     1

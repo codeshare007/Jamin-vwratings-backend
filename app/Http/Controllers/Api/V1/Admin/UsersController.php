@@ -2,12 +2,12 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Avi;
+use App\Models\User;
 
-class AvisController extends Controller
+class UsersController extends Controller
 {
     public function index()
     {
-        return Avi::paginate(10);
+        return User::paginate(10);
     }
 }

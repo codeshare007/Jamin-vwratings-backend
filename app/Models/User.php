@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * @method static firstOrCreate(array $array)
+ * @method static paginate(int $int)
  * @property mixed $username
  * @property mixed $password
  * @property mixed $email

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static findOrFail($id)
  * @method static find($id)
  * @method static select(string[] $array)
+ * @method static paginate(int $int)
  */
 class Avi extends Model
 {

@@ -26,6 +26,12 @@ Route::prefix('v1')->group(function () {
         Route::post('{id}/comment', 'App\Http\Controllers\Api\V1\Front\AvisController@comment');
     });
 
+    Route::prefix('admin')->group(function() {
+        Route::prefix('users')->group(function() {
+            Route::get('', 'App\Http\Controllers\Api\V1\Admin\UsersController@index');
+        });
+    });
+
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
         Route::post('login', 'App\Http\Controllers\Api\V1\Front\AuthController@login');
         Route::post('register', 'App\Http\Controllers\Api\V1\Front\AuthController@register');
@@ -36,10 +42,6 @@ Route::prefix('v1')->group(function () {
             Route::post('logout', 'App\Http\Controllers\Api\V1\Front\AuthController@logout');
             Route::post('refresh', 'App\Http\Controllers\Api\V1\Front\AuthController@refresh');
             Route::get('me', 'App\Http\Controllers\Api\V1\Front\AuthController@me');
-        });
-
-        Route::prefix('admin')->group(function() {
-
         });
     });
 });

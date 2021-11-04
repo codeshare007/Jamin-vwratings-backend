@@ -1,6 +1,6 @@
 <template>
-  <div class="faq-page">
-
+  <div class="admin-dashboard">
+    qwe
   </div>
 </template>
 <script>
@@ -9,7 +9,7 @@
   }
 </script>
 <style lang="scss">
-  .faq-page {
+  .admin-dashboard {
 
   }
 </style>

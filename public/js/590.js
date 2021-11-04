@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[590],{9590:(s,t,e)=>{e.r(t),e.d(t,{default:()=>n});const l={};const n=(0,e(1900).Z)(l,(function(){var s=this.$createElement;return(this._self._c||s)("div",{staticClass:"parties-list"})}),[],!1,null,null,null).exports}}]);

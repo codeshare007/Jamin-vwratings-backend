@@ -4,6 +4,9 @@ import Cookie from 'js-cookie';
 import apiAuth from './methods/auth';
 import apiProfile from './methods/profile';
 import apiAvis from './methods/avis';
+import apiUsers from './methods/users';
+
+import apiAdminAvis from './methods/adminAvis'
 
 export default {
   removeJWT() {
@@ -12,8 +15,6 @@ export default {
   },
 
   resetJWT(responseData) {
-    // let tokenExpires = responseData.data.access_token_expire_at;
-    // let refreshExpires = responseData.data.refresh_token_expire_at;
     Cookie.set('access_token', responseData.access_token);
     Cookie.set('refresh_token', responseData.refresh_token);
   },
@@ -103,7 +104,9 @@ export default {
     const repositories = {
       auth: apiAuth(this.apiInstance),
       profile: apiProfile(this.apiInstance),
-      avis: apiAvis(this.apiInstance)
+      avis: apiAvis(this.apiInstance),
+      users: apiUsers(this.apiInstance),
+      adminAvis: apiAdminAvis(this.apiInstance)
     };
 
     Vue.prototype.$api = repositories;

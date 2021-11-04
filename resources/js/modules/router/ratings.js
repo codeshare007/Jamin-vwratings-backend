@@ -46,5 +46,37 @@ export default [
     name: 'ratings.contact',
     path: 'contact',
     component: () => import('../../views/Contact')
-  }
+  },
+  {
+    path: 'admin',
+    name: 'admin',
+    redirect: {name: 'admin.dashboard'},
+    component: () => import('../../layouts/admin'),
+    children: [
+      {
+        name: 'admin.dashboard',
+        path: 'dashboard',
+        component: () => import('../../views/admin/Dashboard'),
+        meta: {title: 'Admin'}
+      },
+      {
+        name: 'admin.users',
+        path: 'users',
+        component: () => import('../../views/admin/Users'),
+        meta: {title: 'Users'}
+      },
+      {
+        name: 'admin.avis',
+        path: 'avis',
+        component: () => import('../../views/admin/Avis'),
+        meta: {title: 'Avis'}
+      },
+      {
+        name: 'admin.comments',
+        path: 'avis',
+        component: () => import('../../views/admin/AvisComments'),
+        meta: {title: 'Avis Comments'}
+      }
+    ]
+  },
 ];

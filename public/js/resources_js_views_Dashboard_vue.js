@@ -88,8 +88,9 @@ var render = function () {
                     { staticClass: "d-flex justify-content-center" },
                     [
                       _c("div", { staticClass: "text-center w-50" }, [
+                        _c("h2", [_vm._v("Hello")]),
                         _vm._v(
-                          "\n                        Welcome VW players. You're at the right place.\n                        Behaviour ratings of vw characters\n\n                        To highlight the awesome players and\n                        To expose rotten players like these\n                    "
+                          "\n\n            Welcome VW players. You're at the right place.\n            Behaviour ratings of vw characters\n\n            To highlight the awesome players and\n            To expose rotten players like these\n          "
                         ),
                       ]),
                     ]
@@ -120,7 +121,7 @@ var render = function () {
                         _vm._v(" "),
                         _c("p", { staticClass: "m-0" }, [
                           _vm._v(
-                            "Ratings & Comments of other players in your game\n                            Read what others are saying and have your say.\n                        "
+                            "Ratings & Comments of other players in your game\n              Read what others are saying and have your say.\n            "
                           ),
                         ]),
                         _vm._v(" "),
@@ -149,7 +150,7 @@ var render = function () {
                     _c("div", { staticClass: "text-center" }, [
                       _c("p", [
                         _vm._v(
-                          "Some players would like you to believe this site is full of\n                            gossip and rumours. Click a pic below to see hard evidence\n                            of the kinds of players that could be trying to friend you in the\n                            game. There are hundreds of pics like these in the site."
+                          "Some players would like you to believe this site is full of\n              gossip and rumours. Click a pic below to see hard evidence\n              of the kinds of players that could be trying to friend you in the\n              game. There are hundreds of pics like these in the site."
                         ),
                       ]),
                       _vm._v(" "),
@@ -171,13 +172,13 @@ var render = function () {
             [
               _c("b-card", { staticClass: "mb-3" }, [
                 _vm._v(
-                  "\n                If you're name hasn't been added...be sure to add and rate yourself. Then get your friends to rate\n                you.\n                There might be random awards for well rated avis.\n            "
+                  "\n        If you're name hasn't been added...be sure to add and rate yourself. Then get your friends to rate\n        you.\n        There might be random awards for well rated avis.\n      "
                 ),
               ]),
               _vm._v(" "),
               _c("b-card", [
                 _vm._v(
-                  "\n                Prizes Prizes Prizes\n                Hang around or Sign up... either way you can win prizes.\n            "
+                  "\n        Prizes Prizes Prizes\n        Hang around or Sign up... either way you can win prizes.\n      "
                 ),
               ]),
             ],
