@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[880],{9880:(s,t,e)=>{e.r(t),e.d(t,{default:()=>n});const l={};const n=(0,e(1900).Z)(l,(function(){var s=this.$createElement;return(this._self._c||s)("div",{staticClass:"admin-avis"})}),[],!1,null,null,null).exports}}]);

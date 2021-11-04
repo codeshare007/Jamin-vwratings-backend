@@ -1,7 +1,7 @@
 <template>
   <div class="default-theme">
     <HeaderBar />
-    <b-container fluid class="p-0">
+    <b-container class="p-0">
       <router-view />
     </b-container>
   </div>

@@ -1,31 +1,27 @@
 <template>
   <div class="admin-comments">
-    <b-row>
-      <b-col cols="10">
-        <b-pagination
-          v-model="currentPage"
-          @change="handlePageChange"
-          :total-rows="total"
-        />
-        <b-table :items="comments" :fields="commentsFields">
-          <template #cell(index)="data">{{ data.index + 1 }}</template>
-          <template #cell(opinion)="data">{{ data.item.opinion | opinion }}</template>
-          <template #cell(actions)="row">
-            <b-button variant="primary" size="sm">
-              <b-icon-pencil />
-            </b-button>
-            <b-button variant="danger" size="sm" @click="remove(row.item.id)">
-              <b-icon-trash/>
-            </b-button>
-          </template>
-        </b-table>
-        <b-pagination
-          v-model="currentPage"
-          @change="handlePageChange"
-          :total-rows="total"
-        />
-      </b-col>
-    </b-row>
+    <b-pagination
+      v-model="currentPage"
+      @change="handlePageChange"
+      :total-rows="total"
+    />
+    <b-table :items="comments" :fields="commentsFields">
+      <template #cell(index)="data">{{ data.index + 1 }}</template>
+      <template #cell(opinion)="data">{{ data.item.opinion | opinion }}</template>
+      <template #cell(actions)="row">
+        <b-button variant="primary" size="sm">
+          <b-icon-pencil />
+        </b-button>
+        <b-button variant="danger" size="sm" @click="remove(row.item.id)">
+          <b-icon-trash/>
+        </b-button>
+      </template>
+    </b-table>
+    <b-pagination
+      v-model="currentPage"
+      @change="handlePageChange"
+      :total-rows="total"
+    />
   </div>
 </template>
 <script>
@@ -46,13 +42,13 @@ export default {
         {key: 'opinion'},
         {
           key: 'created_at', formatter: createdAt => {
-            return moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
-          }, thStyle: 'min-width: 200px'
+            return moment(createdAt).format('YYYY-MM-DD HH:mm')
+          }, thStyle: 'min-width: 100px'
         },
         {
           key: 'updated_at', formatter: createdAt => {
-            return moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
-          }, thStyle: 'min-width: 200px'
+            return moment(createdAt).format('YYYY-MM-DD HH:mm')
+          }, thStyle: 'min-width: 110px'
         },
         {key: 'actions', thStyle: 'min-width: 120px'}
       ]

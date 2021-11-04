@@ -1,40 +1,24 @@
 <template>
   <div class="admin-messages">
-    <b-row>
-      <b-col cols="9">
-        <b-pagination
-          v-model="currentPage"
-          @change="handlePageChange"
-          :total-rows="total"
-        />
-        <b-table :items="messages" :fields="messagesFields">
-          <template #cell(select)="data">
-            <input type="checkbox" :data-id="data.item.id"/>
-          </template>
-          <template #cell(index)="data">
-            {{ data.index + 1 }}
-          </template>
-          <template #cell(info)="data">
-            <b>{{ data.item.name }}</b>
-            {{ data.item.email }}
-          </template>
-          <template #cell(actions)="row">
-            <b-button
-              variant="danger"
-              size="sm"
-              @click="remove(row.item.id)"
-            >
-              <b-icon-trash/>
-            </b-button>
-          </template>
-        </b-table>
-        <b-pagination
-          v-model="currentPage"
-          @change="handlePageChange"
-          :total-rows="total"
-        />
-      </b-col>
-    </b-row>
+    <b-pagination v-model="currentPage" @change="handlePageChange" :total-rows="total" />
+    <b-table :items="messages" :fields="messagesFields">
+      <template #cell(select)="data">
+        <input type="checkbox" :data-id="data.item.id"/>
+      </template>
+      <template #cell(index)="data">
+        {{ data.index + 1 }}
+      </template>
+      <template #cell(info)="data">
+        <b>{{ data.item.name }}</b>
+        {{ data.item.email }}
+      </template>
+      <template #cell(actions)="row">
+        <b-button variant="danger" size="sm" @click="remove(row.item.id)">
+          <b-icon-trash />
+        </b-button>
+      </template>
+    </b-table>
+    <b-pagination v-model="currentPage" @change="handlePageChange" :total-rows="total"/>
   </div>
 </template>
 <script>

@@ -1,10 +1,10 @@
 <template>
   <div class="admin-layout">
-    <b-row class="p-0 m-0 justify-content-center">
+    <b-row class="p-0 m-0">
       <b-col cols="2">
         <SidebarNav />
       </b-col>
-      <b-col cols="8">
+      <b-col cols="10">
         <router-view />
       </b-col>
     </b-row>

@@ -1,35 +1,31 @@
 <template>
   <div class="admin-avis">
-    <b-row>
-      <b-col cols="8">
-        <div class="mb-3">
-          <b-button variant="success">Create</b-button>
-        </div>
-        <b-pagination
-          v-model="currentPage"
-          @change="handlePageChange"
-          :total-rows="total"
-        />
-        <b-table :items="avis" :fields="avisFields">
-          <template #cell(index)="data">
-            {{ data.index + 1 }}
-          </template>
-          <template #cell(actions)="row">
-            <b-button variant="success" size="sm">
-              <b-icon-wrench/>
-            </b-button>
-            <b-button variant="danger" size="sm" @click="remove(row.item.id)">
-              <b-icon-trash/>
-            </b-button>
-          </template>
-        </b-table>
-        <b-pagination
-          v-model="currentPage"
-          @change="handlePageChange"
-          :total-rows="total"
-        />
-      </b-col>
-    </b-row>
+    <div class="mb-3">
+      <b-button variant="success">Create</b-button>
+    </div>
+    <b-pagination
+      v-model="currentPage"
+      @change="handlePageChange"
+      :total-rows="total"
+    />
+    <b-table :items="avis" :fields="avisFields">
+      <template #cell(index)="data">
+        {{ data.index + 1 }}
+      </template>
+      <template #cell(actions)="row">
+        <b-button variant="success" size="sm">
+          <b-icon-wrench/>
+        </b-button>
+        <b-button variant="danger" size="sm" @click="remove(row.item.id)">
+          <b-icon-trash/>
+        </b-button>
+      </template>
+    </b-table>
+    <b-pagination
+      v-model="currentPage"
+      @change="handlePageChange"
+      :total-rows="total"
+    />
   </div>
 </template>
 <script>
