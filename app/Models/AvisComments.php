@@ -12,6 +12,8 @@ class AvisComments extends Model
 {
     use HasFactory;
 
+    public $with = ['attachments'];
+
     protected $fillable = [
         'user_id',
         'avis_id',

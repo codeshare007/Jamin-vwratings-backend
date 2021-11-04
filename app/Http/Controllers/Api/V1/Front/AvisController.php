@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Avi;
+use App\Models\AvisRatings;
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Psy\Util\Str;
 
 class AvisController extends Controller
 {
@@ -93,6 +97,30 @@ class AvisController extends Controller
     }
 
     /**
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function rate($id, Request $request)
+    {
+        $this->validate($request, [
+           'rating' => 'required'
+        ]);
+
+        $rating = AvisRatings::firstOrCreate([
+           'user_id' => auth()->user()->getAuthIdentifier(),
+           'avis_id' => $id
+        ]);
+
+        if ($rating) {
+            $rating->update(['rating' => $request->get('rating')]);
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    /**
      * @param Request $request
      * @param $id
      * @return \Illuminate\Http\JsonResponse|void
@@ -136,20 +164,32 @@ class AvisController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function send($id, Request $request)
+    public function comment($id, Request $request)
     {
         $this->validate($request, [
-            'content' => 'required|string',
-            'opinion' => 'int'
+            'comment' => 'required|string',
+            'opinion' => 'required|int'
         ]);
 
         if ($avi = Avi::find($id)->first()) {
 
-            $avi->comments()->create([
-                'content' => $request->get('content'),
-                'opinion' => $request->get('opinion'),
-                'user_id' => 9999
+            $comment = $avi->comments()->create([
+                'content' => $request->input('content'),
+                'opinion' => $request->input('opinion'),
+                'user_id' => auth()->user()->id
             ]);
+
+            /** @var UploadedFile $file */
+            foreach ($request->file('attachments') as $file) {
+                $fileName = \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();;
+                $filePath = $file->storeAs('uploads', $fileName, 'public');
+
+                $comment->attachments()->create([
+                    'filename' => $file->getClientOriginalName(),
+                    'path' => '/storage/' . $filePath,
+                    'type' => $file->getMimeType()
+                ]);
+            }
 
             return response()->json(['status' => 'success']);
         }

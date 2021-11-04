@@ -10,6 +10,16 @@ export default axios => ({
       return response.data;
     });
   },
+  rating(id, payload) {
+    return axios.post(`avis/${id}/rate`, payload)
+  },
+  comment(id, payload) {
+    return axios.post(`avis/${id}/comment`, payload, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  },
   get(id) {
     return axios.get(`avis/${id}`)
   }

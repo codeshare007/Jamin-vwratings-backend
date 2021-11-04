@@ -15,10 +15,31 @@ class Avi extends Model
 {
     use HasFactory;
 
+    public $appends = ['average_rating', 'user_rating'];
+
     protected $fillable = [
         'user_id',
         'name'
     ];
+
+    public function getUserRatingAttribute()
+    {
+        if (auth()->check()) {
+            if ($rating = $this->ratings()->where([
+                'avis_id' => $this->attributes['id'],
+                'user_id' => auth()->user()->getAuthIdentifier()
+            ])->first()) {
+                return $rating->rating;
+            }
+        }
+
+        return null;
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return $this->ratings->average('rating');
+    }
 
     public function interview()
     {
@@ -32,7 +53,8 @@ class Avi extends Model
 
     public function comments()
     {
-        return $this->hasMany(AvisComments::class, 'avis_id', 'id')->orderBy('created_at', 'desc');
+        return $this->hasMany(AvisComments::class, 'avis_id', 'id')
+            ->orderBy('created_at', 'desc');
     }
 
     public function ratings()

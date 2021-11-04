@@ -4,7 +4,6 @@ import Cookie from 'js-cookie';
 import apiAuth from './methods/auth';
 import apiProfile from './methods/profile';
 import apiAvis from './methods/avis';
-import apiComments from './methods/comments'
 
 export default {
   removeJWT() {
@@ -104,8 +103,7 @@ export default {
     const repositories = {
       auth: apiAuth(this.apiInstance),
       profile: apiProfile(this.apiInstance),
-      avis: apiAvis(this.apiInstance),
-      comments: apiComments(this.apiInstance)
+      avis: apiAvis(this.apiInstance)
     };
 
     Vue.prototype.$api = repositories;

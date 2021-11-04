@@ -20,7 +20,10 @@ Route::prefix('v1')->group(function () {
         Route::get('', 'App\Http\Controllers\Api\V1\Front\AvisController@index');
         Route::post('create', 'App\Http\Controllers\Api\V1\Front\AvisController@create');
         Route::get('{id}', 'App\Http\Controllers\Api\V1\Front\AvisController@show');
-        Route::post('{id}/send', 'App\Http\Controllers\Api\V1\Front\AvisController@send');
+
+        // Actions
+        Route::post('{id}/rate', 'App\Http\Controllers\Api\V1\Front\AvisController@rate');
+        Route::post('{id}/comment', 'App\Http\Controllers\Api\V1\Front\AvisController@comment');
     });
 
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
