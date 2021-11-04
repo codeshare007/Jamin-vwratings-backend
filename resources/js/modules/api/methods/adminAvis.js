@@ -1,5 +1,5 @@
 export default axios => ({
-  fetch() {
-    return axios.get('admin/avis');
+  fetch(page = 1) {
+    return axios.get('admin/avis', {params: {page: page}});
   },
 });

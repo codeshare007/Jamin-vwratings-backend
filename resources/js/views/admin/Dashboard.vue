@@ -1,6 +1,6 @@
 <template>
   <div class="admin-dashboard">
-    qwe
+    <h1>Welcome to Admin Dashboard</h1>
   </div>
 </template>
 <script>

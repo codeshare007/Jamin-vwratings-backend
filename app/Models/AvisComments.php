@@ -26,4 +26,14 @@ class AvisComments extends Model
     {
         return $this->hasMany(AvisCommentsAttachments::class, 'comment_id', 'id');
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function avi()
+    {
+        return $this->hasOne(Avi::class, 'id', 'avis_id');
+    }
 }

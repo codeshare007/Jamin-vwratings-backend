@@ -18,4 +18,14 @@ class AvisRatings extends Model
         'avis_id',
         'rating'
     ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function avi()
+    {
+        return $this->hasOne(Avi::class, 'id', 'avis_id');
+    }
 }

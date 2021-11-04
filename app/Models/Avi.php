@@ -62,4 +62,9 @@ class Avi extends Model
     {
         return $this->hasMany(AvisRatings::class, 'avis_id', 'id');
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }

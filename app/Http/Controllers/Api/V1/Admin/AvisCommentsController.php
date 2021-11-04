@@ -8,6 +8,6 @@ class AvisCommentsController extends Controller
 {
     public function index()
     {
-        return AvisComments::paginate(10);
+        return AvisComments::with(['user', 'avi'])->paginate(10);
     }
 }

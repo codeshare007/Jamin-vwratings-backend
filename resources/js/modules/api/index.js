@@ -4,9 +4,12 @@ import Cookie from 'js-cookie';
 import apiAuth from './methods/auth';
 import apiProfile from './methods/profile';
 import apiAvis from './methods/avis';
-import apiUsers from './methods/users';
 
 import apiAdminAvis from './methods/adminAvis'
+import apiAdminComments from './methods/adminCommments'
+import apiAdminMessages from './methods/adminMessages'
+import apiAdminRatings from './methods/adminRatings';
+import apiAdminUsers from './methods/adminUsers'
 
 export default {
   removeJWT() {
@@ -105,8 +108,11 @@ export default {
       auth: apiAuth(this.apiInstance),
       profile: apiProfile(this.apiInstance),
       avis: apiAvis(this.apiInstance),
-      users: apiUsers(this.apiInstance),
-      adminAvis: apiAdminAvis(this.apiInstance)
+      adminAvis: apiAdminAvis(this.apiInstance),
+      adminComments: apiAdminComments(this.apiInstance),
+      adminMessages: apiAdminMessages(this.apiInstance),
+      adminRatings: apiAdminRatings(this.apiInstance),
+      adminUsers: apiAdminUsers(this.apiInstance)
     };
 
     Vue.prototype.$api = repositories;

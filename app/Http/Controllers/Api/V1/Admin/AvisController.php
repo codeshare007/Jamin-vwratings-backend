@@ -8,6 +8,6 @@ class AvisController extends Controller
 {
     public function index()
     {
-        return Avi::paginate(10);
+        return Avi::with('user')->paginate(10);
     }
 }

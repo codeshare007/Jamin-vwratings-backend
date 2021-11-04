@@ -30,6 +30,18 @@ Route::prefix('v1')->group(function () {
         Route::prefix('users')->group(function() {
             Route::get('', 'App\Http\Controllers\Api\V1\Admin\UsersController@index');
         });
+        Route::prefix('avis')->group(function() {
+            Route::get('', 'App\Http\Controllers\Api\V1\Admin\AvisController@index');
+        });
+        Route::prefix('comments')->group(function() {
+            Route::get('', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@index');
+        });
+        Route::prefix('messages')->group(function() {
+            Route::get('', 'App\Http\Controllers\Api\V1\Admin\MessagesController@index');
+        });
+        Route::prefix('ratings')->group(function() {
+            Route::get('', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController@index');
+        });
     });
 
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
