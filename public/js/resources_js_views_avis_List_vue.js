@@ -43,14 +43,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       query: null,
       currentPage: 1,
       avis: [],
-      type: 'full_list'
+      type: 'full_list',
+      form: {
+        name: null
+      }
     };
+  },
+  computed: {
+    loggedIn: function loggedIn() {
+      return this.$store.getters['auth/loggedIn'];
+    }
   },
   watch: {
     query: function query(data) {
@@ -92,22 +112,37 @@ __webpack_require__.r(__webpack_exports__);
         _this3.avis = response;
       });
     },
-    fetchNextAxis: function fetchNextAxis() {
+    createAvi: function createAvi(e) {
       var _this4 = this;
+
+      e.preventDefault();
+      this.$api.avis.create(this.form).then(function (response) {
+        var avi = response.data.data;
+
+        _this4.$router.push({
+          name: 'ratings.avis.view',
+          params: {
+            id: avi.id
+          }
+        });
+      });
+    },
+    fetchNextAxis: function fetchNextAxis() {
+      var _this5 = this;
 
       window.onscroll = function () {
         var bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
 
         if (bottomOfWindow) {
-          if (_this4.$route.name === 'ratings.avis.list') {
-            _this4.currentPage++;
+          if (_this5.$route.name === 'ratings.avis.list') {
+            _this5.currentPage++;
 
-            _this4.$api.avis.fetch({
-              page: _this4.currentPage,
+            _this5.$api.avis.fetch({
+              page: _this5.currentPage,
               per_page: 50
             }).then(function (response) {
               for (var i in response) {
-                _this4.avis.push(response[i]);
+                _this5.avis.push(response[i]);
               }
             });
           }
@@ -273,16 +308,65 @@ var render = function () {
     "div",
     { staticClass: "avi-list" },
     [
+      _c(
+        "b-modal",
+        {
+          ref: "createAvi",
+          attrs: {
+            "ok-title": "Create",
+            "ok-variant": "success",
+            title: "Create Avi",
+          },
+          on: { ok: _vm.createAvi },
+        },
+        [
+          _c(
+            "b-form",
+            [
+              _c(
+                "b-form-group",
+                { attrs: { label: "Avi name" } },
+                [
+                  _c("b-form-input", {
+                    attrs: { type: "text" },
+                    model: {
+                      value: _vm.form.name,
+                      callback: function ($$v) {
+                        _vm.$set(_vm.form, "name", $$v)
+                      },
+                      expression: "form.name",
+                    },
+                  }),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+      _vm._v(" "),
       _c("b-row", { staticClass: "d-flex justify-content-center" }, [
         _c(
           "div",
           { staticClass: "w-50 d-flex justify-content-between pt-5" },
           [
-            _c(
-              "b-button",
-              { staticClass: "w-25", attrs: { variant: "success" } },
-              [_vm._v("Create")]
-            ),
+            _vm.loggedIn
+              ? _c(
+                  "b-button",
+                  {
+                    staticClass: "w-25",
+                    attrs: { variant: "success" },
+                    on: {
+                      click: function ($event) {
+                        return _vm.$refs["createAvi"].show()
+                      },
+                    },
+                  },
+                  [_vm._v("Create Avi")]
+                )
+              : _vm._e(),
             _vm._v(" "),
             _c(
               "b-form-select",

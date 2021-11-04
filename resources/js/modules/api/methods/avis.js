@@ -22,5 +22,8 @@ export default axios => ({
   },
   get(id) {
     return axios.get(`avis/${id}`)
+  },
+  create(payload) {
+    return axios.post('avis/create', payload)
   }
 });

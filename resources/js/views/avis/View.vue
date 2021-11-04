@@ -83,7 +83,9 @@ import StarRating from 'vue-star-rating'
 import moment from 'moment';
 
 export default {
+
   props: ['id'],
+
   data() {
     return {
       avi: {
@@ -173,7 +175,6 @@ export default {
     },
 
     setRating(rating) {
-      console.log(rating);
       this.$api.avis.rating(this.id, {rating: rating}).then(() => {
         this.fetchAvi();
       })

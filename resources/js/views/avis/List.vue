@@ -1,9 +1,21 @@
 <template>
   <div class="avi-list">
 
+    <b-modal ref="createAvi"
+             ok-title="Create"
+             ok-variant="success"
+             @ok="createAvi"
+             title="Create Avi">
+      <b-form>
+        <b-form-group label="Avi name">
+          <b-form-input type="text" v-model="form.name" />
+        </b-form-group>
+      </b-form>
+    </b-modal>
+
     <b-row class="d-flex justify-content-center">
       <div class="w-50 d-flex justify-content-between pt-5">
-        <b-button variant="success" class="w-25">Create</b-button>
+        <b-button v-if="loggedIn" variant="success" class="w-25" @click="$refs['createAvi'].show()">Create Avi</b-button>
         <b-form-select class="w-25" v-model="type">
           <b-form-select-option value="full_list">Full list</b-form-select-option>
           <b-form-select-option value="good_list">Good list</b-form-select-option>
@@ -38,7 +50,16 @@ export default {
       query: null,
       currentPage: 1,
       avis: [],
-      type: 'full_list'
+      type: 'full_list',
+      form: {
+        name: null
+      }
+    }
+  },
+
+  computed: {
+    loggedIn() {
+      return this.$store.getters['auth/loggedIn']
     }
   },
 
@@ -68,6 +89,13 @@ export default {
     fetchAvis() {
       this.$api.avis.fetch({per_page: 50}).then(response => {
         this.avis = response;
+      })
+    },
+    createAvi(e) {
+      e.preventDefault();
+      this.$api.avis.create(this.form).then(response => {
+        const avi = response.data.data;
+        this.$router.push({name: 'ratings.avis.view', params: {id: avi.id}})
       })
     },
     fetchNextAxis() {

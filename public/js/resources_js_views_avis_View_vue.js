@@ -192,7 +192,6 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
     setRating: function setRating(rating) {
       var _this3 = this;
 
-      console.log(rating);
       this.$api.avis.rating(this.id, {
         rating: rating
       }).then(function () {

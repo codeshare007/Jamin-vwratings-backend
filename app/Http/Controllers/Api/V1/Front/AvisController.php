@@ -80,7 +80,7 @@ class AvisController extends Controller
                         ->having('avis_count', '>', '0')
                         ->orderBy('avis_count', 'DESC')
                         ->limit(10);
-                        break;
+                    break;
             endswitch;
         }
 
@@ -93,7 +93,7 @@ class AvisController extends Controller
      */
     public function show($id)
     {
-        return Avi::find($id)->with('comments')->first();
+        return Avi::with('comments')->find($id);
     }
 
     /**
@@ -105,12 +105,12 @@ class AvisController extends Controller
     public function rate($id, Request $request)
     {
         $this->validate($request, [
-           'rating' => 'required'
+            'rating' => 'required'
         ]);
 
         $rating = AvisRatings::firstOrCreate([
-           'user_id' => auth()->user()->getAuthIdentifier(),
-           'avis_id' => $id
+            'user_id' => auth()->user()->getAuthIdentifier(),
+            'avis_id' => $id
         ]);
 
         if ($rating) {
@@ -147,15 +147,9 @@ class AvisController extends Controller
      */
     public function create(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|string'
-        ]);
-
-        Avi::firstOrCreate([
-            'name' => $request->get('name')
-        ]);
-
-        return response()->json(['status' => 'success']);
+        $this->validate($request, ['name' => 'required|string']);
+        $avi = Avi::firstOrCreate(['name' => $request->get('name')]);
+        return response()->json(['status' => 'success', 'data' => $avi]);
     }
 
     /**
