@@ -3,6 +3,7 @@
     <b-row class="d-flex justify-content-center align-items-center">
       <b-col cols="4">
         <div class="auth-page__signin" @keyup.enter="submitLogin()" v-if="this.signin_form">
+		<router-link :to="{ name: 'auth.signup'}">Need an account? Register</router-link>
           <b-form-group class="m-0 mb-1">
             <b-form-input
               size="lg"

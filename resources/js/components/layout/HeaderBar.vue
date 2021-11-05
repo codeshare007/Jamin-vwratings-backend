@@ -55,10 +55,7 @@
             <router-link class="nav-link" :to="item.path" v-if="item.path" v-text="item.name"/>
           </li>
           <li class="nav-item" v-if="!loggedIn">
-            <router-link class="nav-link" :to="{ name: 'auth.signin'}">sing in</router-link>
-          </li>
-          <li class="nav-item" v-if="!loggedIn">
-            <router-link class="nav-link" :to="{ name: 'auth.signup'}">register</router-link>
+            <router-link class="nav-link" :to="{ name: 'auth.signin'}">Login/Join</router-link>
           </li>
         </b-navbar-nav>
 
@@ -77,11 +74,9 @@ export default {
   data() {
     return {
       menu: [
-        {name: 'Dashboard', path: {name: 'ratings.dashboard'}},
+        {name: 'Players', path: {name: 'ratings.avis.list'}},
         {name: 'Parties', path: {name: 'ratings.parties.list'}},
-        {name: 'Avis', path: {name: 'ratings.avis.list'}},
-        {name: 'Creeps', path: {name: 'ratings.creeps.list'}},
-        {name: 'Contact Us', path: {name: 'ratings.contacts'}}
+        {name: 'Buttons', path: {name: 'ratings.dashboard'}}		
       ],
       isMobileMenu: false,
       loading: false,
