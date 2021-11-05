@@ -1,16 +1,33 @@
 <template>
   <div class="admin-users">
-    <div class="mb-3">
-      <b-button variant="success">Create</b-button>
-      <b-button variant="primary">
-        <b-icon-arrow-clockwise/>
-      </b-button>
+
+    <div class="d-flex justify-content-between">
+      <b-col>
+        <b-pagination
+          v-model="currentPage"
+          @change="handlePageChange"
+          :total-rows="total"/>
+      </b-col>
+      <b-col class="d-flex justify-content-end align-items-center">
+        <b-form-input class="mr-2" v-model="params.search" placeholder="Search..." />
+        <b-button variant="success" class="mr-2">Create</b-button>
+        <b-button variant="primary" @click="fetchUsers()">
+          <b-icon-arrow-clockwise/>
+        </b-button>
+      </b-col>
     </div>
-    <b-pagination
-      v-model="currentPage"
-      @change="handlePageChange"
-      :total-rows="total"/>
-    <b-table :items="users" :fields="usersFields">
+    <b-table
+      ref="userTable"
+      :sort-by.sync="sortBy"
+      @sort-changed="sortChanged"
+      :sort-desc.sync="isDesc"
+      :no-footer-sorting="false"
+      :items="users"
+      :fields="usersFields"
+      :busy="loading">
+      <template #cell(select)="data">
+        <b-checkbox />
+      </template>
       <template #cell(index)="data">
         {{ data.index + 1 }}
       </template>
@@ -31,38 +48,75 @@
   </div>
 </template>
 <script>
+import moment from "moment";
+
 export default {
   data() {
     return {
       currentPage: 1,
       total: 1,
       users: [],
+      loading: false,
+      sortBy: 'created_at',
+      isDesc: false,
+      params: {
+        search: '',
+        sortBy: 'created_at',
+        sort: 'desc',
+        page: 1
+      },
       usersFields: [
         {key: 'select', label: ''},
-        {key: 'index', label: '#'},
-        {key: 'username'},
-        {key: 'email'},
-        {key: 'role'},
-        {key: 'status'},
+        {key: 'index', label: '#', sortable: true},
+        {key: 'username', sortable: true},
+        {key: 'email', sortable: true},
+        {key: 'role', sortable: true},
+        {key: 'status', sortable: true},
+        {key: 'created_at', sortable: true, formatter: createdAt => {
+            return moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
+          }},
         {key: 'actions'}
       ]
     }
   },
 
+
+  watch: {
+    sortBy(data) {
+      this.params.sortBy = data;
+      this.fetchUsers();
+    },
+    isDesc(data) {
+      this.params.sort = (data === true ? 'desc' : 'asc')
+      this.fetchUsers();
+    },
+    'params.search'(data) {
+      this.fetchUsers()
+    }
+  },
+
   mounted() {
-    this.fetchUsers(1)
+    this.fetchUsers()
   },
 
   methods: {
-    fetchUsers(page) {
-      this.$api.adminUsers.fetch(page).then(response => {
+    fetchUsers() {
+      this.loading = true;
+      this.$api.adminUsers.fetch(this.currentPage, this.params).then(response => {
         this.users = response.data.data;
-        this.total = response.data.total
+        this.currentPage = response.data.current_page;
+        this.total = response.data.total;
+        this.loading = false;
       })
     },
 
+    sortChanged() {
+
+    },
+
     handlePageChange(value) {
-      this.fetchUsers(value)
+      this.params.page = value;
+      this.fetchUsers()
     }
   }
 }
