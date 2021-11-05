@@ -3,7 +3,6 @@
     <b-row class="d-flex justify-content-center align-items-center">
       <b-col cols="4">
         <div class="auth-page__signin" @keyup.enter="submitLogin()" v-if="this.signin_form">
-		<router-link :to="{ name: 'auth.signup'}">Need an account? Register</router-link>
           <b-form-group class="m-0 mb-1">
             <b-form-input
               size="lg"
@@ -34,6 +33,7 @@
           </b-form-group>
 
           <b-button size="large" variant="primary" class="w-100" type="submit" @click="submitLogin()">Login</b-button>
+		  <div class="text-center mt-2"><router-link :to="{ name: 'auth.signup'}" style="font-size: 20px;">Need an account first? Go Register</router-link></div>
           <a class="text-center mt-3 d-block cursor-pointer" @click="signin_form = false">Forgot password?</a>
           <span class="error-message text-center text-danger d-block">{{ this.error }}</span>
 
