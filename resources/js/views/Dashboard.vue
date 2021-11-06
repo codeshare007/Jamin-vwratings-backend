@@ -44,6 +44,17 @@
                     Rate and comment about other vw players that you think are exceptional or just plain
                     trouble.<br> Everything is anonymous....
 				</p>
+                <div class="intro-right mt-2" v-if="!loading">
+                    <div>
+                        <img class="img-preview" v-bind:src="'img/home/home-img-4.png'" alt>
+                        <img class="img-preview" v-bind:src="'img/home/home-img-3.jpeg'" alt>
+                    </div>
+                    <div>
+                        <img class="img-preview" v-bind:src="'img/home/home-img-2.jiff'" alt>
+                        <img class="img-preview" v-bind:src="'img/home/home-img-1.jpeg'" alt>
+                    </div>
+                </div>				
+				
             </div>
           </b-card-body>
         </b-card>
