@@ -1,7 +1,11 @@
 <template>
   <div class="admin-ratings">
     <b-pagination v-model="currentPage" @change="handlePageChange" :total-rows="total" />
-    <b-table :items="ratings" :fields="ratingFields">
+    <b-table
+      table-variant="dark"
+      :items="ratings"
+      :fields="ratingFields"
+    >
       <template #cell(index)="data">
         {{ data.index + 1 }}
       </template>

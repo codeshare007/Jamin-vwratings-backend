@@ -54,7 +54,7 @@ export default {
   &__button {
     cursor: pointer;
     border-radius: 5px;
-    border: 1px solid black;
+    border: 1px solid white;
     height: 40px;
     display: flex;
     align-items: center;
@@ -63,7 +63,7 @@ export default {
   }
 
   &__name {
-    color: black;
+    color: white;
     font-size: 24px;
     font-weight: 300;
     text-transform: lowercase;
@@ -78,12 +78,14 @@ export default {
     font-weight: 300;
     width: 100%;
     display: block;
-    color: black;
+    color: white;
     text-align: center;
     padding: 4px 10px;
+    background: #15161c;
 
     &:hover {
-      background: #4a4a4a;
+      background: white;
+      color: black;
     }
   }
 
@@ -91,7 +93,8 @@ export default {
     top: 50px;
     width: 100%;
     border-radius: 5px;
-    border: 1px solid black;
+    border: 1px solid white;
+    z-index: 1;
     position: absolute;
   }
 }

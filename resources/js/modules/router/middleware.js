@@ -14,6 +14,14 @@ export function Guest({next, store, to}) {
     return next({next, store, to});
 }
 
+export function Admin({next, store, to}) {
+  if (!store.getters['auth/loggedIn']) {
+    return next({name: 'auth.signin'});
+  }
+
+  return next({next, store, to});
+}
+
 export function Permission({next, store, to}) {
     function checkPermission(slugs) {
         let checked = false;

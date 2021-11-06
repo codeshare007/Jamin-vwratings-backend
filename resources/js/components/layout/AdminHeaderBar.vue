@@ -4,8 +4,52 @@
       <b-navbar-brand :to="{ name: 'ratings.dashboard' }">
         VW Ratings
       </b-navbar-brand>
+      <b-navbar-toggle
+        class="bg-transparent p-0"
+        target="nav-mobile"
+        @click="toggleMobileMenu"
+      />
+      <div id="nav-mobile" class="nav-mobile" :class="{'d-none': !isMobileMenu }">
+        <div class="d-flex justify-content-between mt-2">
+          <b-navbar-brand class="ml-3" :to="{ name: 'ratings.dashboard' }">
+            Ratings
+          </b-navbar-brand>
+          <button>
+            <b-icon-x
+              @click="toggleMobileMenu"
+              variant="light"
+              height="3rem"
+              width="3rem"
+            />
+          </button>
+        </div>
+
+        <div>
+          <header-profile v-if="loggedIn"/>
+        </div>
+
+        <b-navbar-nav class="ml-auto" v-if="!loading">
+          <b-nav-item
+            v-for="(item, key) in menu"
+            :to="item.path"
+            :key="key"
+            @click="isMobileMenu = !isMobileMenu"
+          >{{ item.name }}
+          </b-nav-item>
+        </b-navbar-nav>
+      </div>
       <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav class="ml-auto">
+        <div v-if="loading" class="d-flex justify-content-end w-100">
+          <b-skeleton
+            class="mt-3 mr-3"
+            v-for="i in 3"
+            :key="i"
+            animation="wave"
+            height="30px"
+            width="140px"
+          />
+        </div>
+        <b-navbar-nav class="ml-auto" v-else>
           <li v-for="(item, key) in menu" :key="key" class="nav-item">
             <a class="nav-link" :href="item.href" v-if="item.href" v-text="item.name"/>
             <router-link class="nav-link" :to="item.path" v-if="item.path" v-text="item.name"/>
@@ -17,7 +61,10 @@
             <router-link class="nav-link" :to="{ name: 'auth.signup'}">register</router-link>
           </li>
         </b-navbar-nav>
+
         <header-profile v-if="loggedIn"/>
+
+
       </b-collapse>
     </b-container>
   </b-navbar>
@@ -30,12 +77,11 @@ export default {
   data() {
     return {
       menu: [
-        {name: 'Parties', path: {name: 'ratings.parties.list'} },
-        {name: 'Avis', path: {name: 'ratings.avis.list'} },
-        {name: 'Creeps', path: {name: 'ratings.creeps.list'} },
-        {name: 'Faq', path: {name: 'ratings.faq'} },
-        {name: 'Forum', path: {name: 'ratings.forum'} },
-        {name: 'Contact Us', path: {name: 'ratings.contacts'} },
+        {name: 'Dashboard', path: {name: 'ratings.dashboard'}},
+        {name: 'Parties', path: {name: 'ratings.parties.list'}},
+        {name: 'Avis', path: {name: 'ratings.avis.list'}},
+        {name: 'Creeps', path: {name: 'ratings.creeps.list'}},
+        {name: 'Contact Us', path: {name: 'ratings.contacts'}}
       ],
       isMobileMenu: false,
       loading: false,

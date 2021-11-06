@@ -29,6 +29,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('admin')->group(function() {
         Route::prefix('users')->group(function() {
             Route::get('', 'App\Http\Controllers\Api\V1\Admin\UsersController@index');
+            Route::delete('{id}', 'App\Http\Controllers\Api\V1\Admin\UsersController@delete');
         });
         Route::prefix('avis')->group(function() {
             Route::get('', 'App\Http\Controllers\Api\V1\Admin\AvisController@index');

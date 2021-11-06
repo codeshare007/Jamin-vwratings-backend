@@ -2,7 +2,7 @@ export default [
   {
     name: 'auth.signin',
     path: 'signin',
-    component: () => import('../../views/auth/SignIn'),
+    component: () => import('../../../views/auth/SignIn'),
     meta: {
       title: 'Authorization'
     }
@@ -10,7 +10,7 @@ export default [
   {
     name: 'auth.signup',
     path: 'signup',
-    component: () => import('../../views/auth/SignUp'),
+    component: () => import('../../../views/auth/SignUp'),
     meta: {
       title: 'Registration'
     }

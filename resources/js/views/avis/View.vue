@@ -203,7 +203,7 @@ export default {
 </script>
 <style lang="scss">
 .avi-view {
-  background: black;
+  background: #24252d;
   border-radius: 5px;
   min-height: 1000px;
 

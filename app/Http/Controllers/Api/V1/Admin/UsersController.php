@@ -22,4 +22,12 @@ class UsersController extends Controller
 
         return $users->paginate(10);
     }
+
+    public function delete($id)
+    {
+        if ($user = User::findOrFail($id)) {
+            $user->delete();
+            return response()->json(['status' => 'success']);
+        }
+    }
 }

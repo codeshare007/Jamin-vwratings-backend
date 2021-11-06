@@ -1,15 +1,16 @@
 <template>
   <div class="admin-users">
-
-    <div class="d-flex justify-content-between">
-      <b-col>
+    <div class="d-flex justify-content-between mb-3">
+      <b-col class="p-0">
         <b-pagination
+          class="m-0"
           v-model="currentPage"
           @change="handlePageChange"
-          :total-rows="total"/>
+          :total-rows="total"
+        />
       </b-col>
-      <b-col class="d-flex justify-content-end align-items-center">
-        <b-form-input class="mr-2" v-model="params.search" placeholder="Search..." />
+      <b-col class="p-0 d-flex justify-content-end align-items-center">
+        <b-form-input class="mr-2 search-link" v-model="params.search" placeholder="Search..." />
         <b-button variant="success" class="mr-2">Create</b-button>
         <b-button variant="primary" @click="fetchUsers()">
           <b-icon-arrow-clockwise/>
@@ -17,19 +18,23 @@
       </b-col>
     </div>
     <b-table
+      table-variant="dark"
       ref="userTable"
       :sort-by.sync="sortBy"
-      @sort-changed="sortChanged"
       :sort-desc.sync="isDesc"
       :no-footer-sorting="false"
+      :busy="loading"
       :items="users"
       :fields="usersFields"
-      :busy="loading">
+      >
       <template #cell(select)="data">
         <b-checkbox />
       </template>
       <template #cell(index)="data">
         {{ data.index + 1 }}
+      </template>
+      <template #cell(role)="data">
+        {{ data.item.role | role }}
       </template>
       <template #cell(actions)="row">
         <b-button variant="primary" size="sm">
@@ -53,11 +58,11 @@ import moment from "moment";
 export default {
   data() {
     return {
-      currentPage: 1,
-      total: 1,
       users: [],
       loading: false,
       sortBy: 'created_at',
+      currentPage: 1,
+      total: 1,
       isDesc: false,
       params: {
         search: '',
@@ -71,15 +76,20 @@ export default {
         {key: 'username', sortable: true},
         {key: 'email', sortable: true},
         {key: 'role', sortable: true},
-        {key: 'status', sortable: true},
         {key: 'created_at', sortable: true, formatter: createdAt => {
-            return moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
+            return moment(createdAt).format('YYYY-MM-DD HH:mm')
           }},
         {key: 'actions'}
       ]
     }
   },
 
+  filters: {
+    role(data) {
+      const roles = {1: 'Admin', 2: 'User'}
+      return roles[data];
+    }
+  },
 
   watch: {
     sortBy(data) {
@@ -110,8 +120,10 @@ export default {
       })
     },
 
-    sortChanged() {
-
+    remove(id) {
+      this.$api.adminUsers.delete(id).then(response => {
+        this.fetchUsers()
+      })
     },
 
     handlePageChange(value) {
@@ -121,3 +133,11 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .admin-users {
+    background: #24252d;
+    padding: 25px;
+    border-radius: 5px;
+    margin-bottom: 100px;
+  }
+</style>

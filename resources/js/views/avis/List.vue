@@ -119,7 +119,7 @@ export default {
 </script>
 <style lang="scss">
 .avi-list {
-  background: black;
+  background: #24252d;
   border-radius: 5px;
 
   p {

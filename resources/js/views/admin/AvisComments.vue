@@ -5,7 +5,11 @@
       @change="handlePageChange"
       :total-rows="total"
     />
-    <b-table :items="comments" :fields="commentsFields">
+    <b-table
+      table-variant="dark"
+      :items="comments"
+      :fields="commentsFields"
+    >
       <template #cell(index)="data">{{ data.index + 1 }}</template>
       <template #cell(opinion)="data">{{ data.item.opinion | opinion }}</template>
       <template #cell(actions)="row">
@@ -82,3 +86,11 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .admin-comments {
+    background: #24252d;
+    padding: 25px;
+    border-radius: 5px;
+    margin-bottom: 100px;
+  }
+</style>

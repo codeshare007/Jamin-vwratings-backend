@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../../store/index'
-import AuthRoutes from './auth'
-import RatingsRoutes from './ratings'
 
-import {Guest, middlewarePipeline} from './middleware'
+import AuthRoutes from './routes/auth'
+import RatingsRoutes from './routes/ratings'
+import AdminRoutes from './routes/admin'
+
+import {Admin, Authenticated, Guest, middlewarePipeline} from './middleware'
 
 Vue.use(VueRouter);
 
@@ -14,9 +16,6 @@ const routes = [
     name: 'auth',
     redirect: {name: 'auth.signin'},
     component: () => import('../../layouts/default'),
-    meta: {
-      middleware: [Guest],
-    },
     children: AuthRoutes
   },
   {
@@ -25,6 +24,16 @@ const routes = [
     redirect: {name: 'ratings.dashboard'},
     component: () => import('../../layouts/default'),
     children: RatingsRoutes
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    redirect: {name: 'admin.dashboard'},
+    component: () => import('../../layouts/admin'),
+    meta: {
+      middleware: [Authenticated],
+    },
+    children: AdminRoutes
   },
   {
     path: '/404',

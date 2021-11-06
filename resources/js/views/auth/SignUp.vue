@@ -15,7 +15,7 @@
           </div>
 
           <div class="mb-3">
-            <b-button type="submit" @click="register" variant="primary">Register</b-button>
+            <b-button type="submit" @click="register" variant="dark">Register</b-button>
           </div>
 
           <router-link :to="{ name: 'auth.signin'}">Already a member? Login</router-link>
@@ -53,6 +53,8 @@
 </script>
 <style lang="scss">
   .auth-signup {
-
+    h2, a, label {
+      color: white;
+    }
   }
 </style>

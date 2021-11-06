@@ -32,7 +32,7 @@
             </div>
           </b-form-group>
 
-          <b-button size="large" variant="primary" class="w-100" type="submit" @click="submitLogin()">Login</b-button>
+          <b-button size="large" variant="dark" class="w-100" type="submit" @click="submitLogin()">Login</b-button>
           <a class="text-center mt-3 d-block cursor-pointer" @click="signin_form = false">Forgot password?</a>
           <span class="error-message text-center text-danger d-block">{{ this.error }}</span>
 
@@ -151,6 +151,10 @@ export default {
 </script>
 <style lang="scss">
 .auth-page {
+
+  a {
+    color: white;
+  }
 
   .password-group {
     position: relative;

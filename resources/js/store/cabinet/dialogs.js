@@ -1,10 +1,8 @@
-import ExampleEditDialog from './dialogs/example';
-import FieldEditDialog from './dialogs/field';
+import UserEditDialog from './dialogs/user';
 
 export default {
   namespaced: true,
   modules: {
-    example: ExampleEditDialog,
-    field: FieldEditDialog
+    user: UserEditDialog
   },
 }

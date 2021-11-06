@@ -17,6 +17,8 @@ export default {
 </script>
 <style lang="scss">
 .default-theme {
+  min-height: 100vh;
+
   &__main {
     width: 100%;
     @media screen and (min-width: 768px) {
