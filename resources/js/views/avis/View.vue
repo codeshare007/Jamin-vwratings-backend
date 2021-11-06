@@ -1,9 +1,9 @@
 <template>
   <div class="avi-view">
-    <div class="pl-4 pt-4">
+    <div class="pl-2 pt-2">
       <b-button :to="{name: 'ratings.avis.list'}">Back</b-button>
     </div>
-    <b-card class="mb-3" header="Avi's Profile" v-if="!loading">
+    <b-card v-if="!loading">
       <div class="text-center">
         <p>You're peeking in.....</p>
         <p><span class="avi-name">{{ avi.name }}</span>'s window</p>
@@ -21,9 +21,9 @@
         </div>
       </div>
     </b-card>
-    <b-card class="mb-3" header="New comment" v-if="loggedIn">
-      <b-form class="d-flex align-items-start flex-column">
-        <p>Post a comment about {{ avi.name }}</p>
+    <b-card v-if="loggedIn">
+	<p class="text-center">Post a comment about {{ avi.name }}</p>
+      <b-form class="d-flex flex-column">
         <div class="d-flex justify-content-between align-items-center">
           <b-form-group label="Choose your opinion" v-slot="{ ariaDescribedby }">
             <b-form-radio-group
@@ -49,19 +49,19 @@
       <h2 class="text-danger">Log in to rate and comment</h2>
     </div>
 
-    <b-card header="Comments" class="pb-3" v-if="!loading">
+    <b-card class="posts" v-if="!loading">
       <div class="commentSort">
-        <b-button class="mr-2" @click="sortComments('id', 'desc')">Newest to First</b-button>
-        <b-button class="mr-2" @click="sortComments('id', 'asc')">In order - 1st to last</b-button>
+        <b-button class="mr-2" @click="sortComments('id', 'desc')">Newest</b-button>
+        <b-button class="mr-2" @click="sortComments('id', 'asc')">Oldest</b-button>
         <b-button class="mr-2" @click="pics = !pics">Pics</b-button>
       </div>
 
-      <hr class="bg-white">
+      <hr class="bg-white mt-0">
 
       <div class="commentBlock">
         <div class="commentItem mt-2" v-for="(item, key) in this.sortedComments" :key="key">
-          <b-badge v-if="item.opinion === 1" class="ml-2 p-2" variant="success">{{ item.opinion | opinion }}</b-badge>
-          <b-badge v-if="item.opinion === 0" class="ml-2 p-2" variant="danger">{{ item.opinion | opinion }}</b-badge>
+          <b-badge v-if="item.opinion === 1" class="ml-2" variant="success">{{ item.opinion | opinion }}</b-badge>
+          <b-badge v-if="item.opinion === 0" class="ml-2" variant="danger">{{ item.opinion | opinion }}</b-badge>
           <div class="commentItem__attachments">
             <div v-for="(attachment, key) in item.attachments" :key="key">
               <b-img style="width: 100px; height: 100px" class="m-2" :src="attachment.path"/>
@@ -69,7 +69,6 @@
           </div>
           <div class="commentItem__content">
             <p>{{ item.content }}</p>
-            <span class="commentItem__date">{{ item.created_at | date }}</span>
           </div>
         </div>
       </div>
@@ -222,6 +221,8 @@ export default {
 
   .btn {
     background: green;
+	font-size: 12px;
+	padding: 4px;
     border: 0;
     color: white;
 
@@ -232,6 +233,11 @@ export default {
     }
   }
 
+  .posts {
+	max-width: 70%;
+    margin: auto!important;
+  }
+  
   .commentSort {
     display: flex;
     justify-content: center;
@@ -250,7 +256,7 @@ export default {
     }
 
     .commentItem {
-      font-size: 20px;
+      font-size: 10px;
 
 
       &__attachments {
@@ -258,16 +264,8 @@ export default {
         justify-content: flex-start;
       }
 
-      &__date {
-        right: 0;
-        bottom: 8px;
-        font-size: 18px;
-        display: block;
-        position: absolute;
-      }
-
       &__content {
-        padding: 9px 10px 0;
+        padding: 10px;
         min-height: 100px;
         border-bottom: 1px solid #ffffff61;
         position: relative;
@@ -283,7 +281,6 @@ export default {
 
     .card-header,
     .card-body {
-      border: 1px solid #ffffff61;
       color: white;
     }
 

@@ -5,7 +5,7 @@
         <h2 class="mb-4">Create Account</h2>
         <b-form>
           <b-form-input class="mb-3" v-model="form.username" type="text" placeholder="Username" />
-          <b-form-input class="mb-3" v-model="form.email" type="text" placeholder="Email (optional for password reset)" />
+          <b-form-input class="mb-3" v-model="form.email" type="text" placeholder="Email (optional for password reset & Prizes)" />
           <b-form-input class="mb-3" v-model="form.password" type="password" placeholder="Password" />
           <b-form-input class="mb-3" v-model="form.password_repeat" type="password" placeholder="Confirm password" />
 

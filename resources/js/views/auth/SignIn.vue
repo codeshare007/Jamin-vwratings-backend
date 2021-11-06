@@ -31,8 +31,8 @@
               />
             </div>
           </b-form-group>
-
           <b-button size="large" variant="dark" class="w-100" type="submit" @click="submitLogin()">Login</b-button>
+          <div class="text-center mt-2"><router-link :to="{ name: 'auth.signup'}" style="font-size: 20px;">Need an account first? Go Register</router-link></div>
           <a class="text-center mt-3 d-block cursor-pointer" @click="signin_form = false">Forgot password?</a>
           <span class="error-message text-center text-danger d-block">{{ this.error }}</span>
 

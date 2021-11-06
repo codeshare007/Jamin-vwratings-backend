@@ -11,10 +11,7 @@
             <router-link class="nav-link" :to="item.path" v-if="item.path" v-text="item.name"/>
           </li>
           <li class="nav-item" v-if="!loggedIn">
-            <router-link class="nav-link" :to="{ name: 'auth.signin'}">sing in</router-link>
-          </li>
-          <li class="nav-item" v-if="!loggedIn">
-            <router-link class="nav-link" :to="{ name: 'auth.signup'}">register</router-link>
+            <router-link class="nav-link" :to="{ name: 'auth.signin'}">Login/Join</router-link>
           </li>
         </b-navbar-nav>
         <header-profile v-if="loggedIn"/>
@@ -30,12 +27,9 @@ export default {
   data() {
     return {
       menu: [
-        {name: 'Parties', path: {name: 'ratings.parties.list'} },
-        {name: 'Avis', path: {name: 'ratings.avis.list'} },
-        {name: 'Creeps', path: {name: 'ratings.creeps.list'} },
-        {name: 'Faq', path: {name: 'ratings.faq'} },
-        {name: 'Forum', path: {name: 'ratings.forum'} },
-        {name: 'Contact Us', path: {name: 'ratings.contacts'} },
+        {name: 'Players', path: {name: 'ratings.avis.list'}},
+        {name: 'Parties', path: {name: 'ratings.parties.list'}},
+        {name: 'Buttons', path: {name: 'ratings.dashboard'}}
       ],
       isMobileMenu: false,
       loading: false,
@@ -57,7 +51,7 @@ export default {
 </script>
 <style lang="scss">
 .header-bar {
-  height: 120px;
+  height: 50px;
   margin-bottom: 40px;
 
   .navbar-brand {

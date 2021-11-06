@@ -4,51 +4,58 @@
       <b-col cols="12">
         <b-card class="mb-3" bg-variant="dark" text-variant="white">
           <b-card-body class="d-flex justify-content-center">
-            <div class="text-center w-50">
-              <h2>Hello</h2>
-              <p>Welcome VW players. You're at the right place. Behaviour ratings of vw characters</p>
-              <p>To highlight the awesome players and To expose rotten players like these</p>
+            <div class="text-center w-100">
+                <h3 class="mb-4">Welcome to vwRatings<br>
+				<span style="font-size:20px">
+				Behaviour ratings of vw characters to highlight the awesome and expose the rotten.
+				</span></h3>
+                <div class="content">
+                    <div class="row row-deck">
+                        <div class="col-md-6 col-xl-4">
+                            <div class="block block-rounded">
+                                <div class="block-content fs-sm texting">
+                                    <p>
+                                        1000s of player names
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="block block-rounded">
+                                <div class="block-content fs-sm texting">
+                                    <p>
+                                        1000s of comments & pics
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="block block-rounded">
+                                <div class="block-content fs-sm texting">
+                                    <p>
+                                        1000s of ratings
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mb-0">
+                    Rate and comment about other vw players that you think are exceptional or just plain
+                    trouble.<br> Everything is anonymous....
+				</p>
+                <div class="intro-right mt-2" v-if="!loading">
+                    <div>
+                        <img class="img-preview" v-bind:src="'img/home/home-img-4.png'" alt>
+                        <img class="img-preview" v-bind:src="'img/home/home-img-3.jpeg'" alt>
+                    </div>
+                    <div>
+                        <img class="img-preview" v-bind:src="'img/home/home-img-2.jiff'" alt>
+                        <img class="img-preview" v-bind:src="'img/home/home-img-1.jpeg'" alt>
+                    </div>
+                </div>
             </div>
           </b-card-body>
-        </b-card>
-      </b-col>
-      <b-col cols="8">
-        <b-card class="mb-3" bg-variant="dark" text-variant="white">
-          <b-card-body class="d-flex justify-content-center">
-            <div class="w-75 text-center">
-              <h4>See what everyone is commenting about.</h4>
-              <p class="m-0">
-                Ratings & Comments of other players in your game Read what others are saying and have your say.
-              </p>
-              <p><b>Start with the Buttons button in top menu.</b></p>
-              <a href="#">Read More</a>
-            </div>
-          </b-card-body>
-
-        </b-card>
-        <b-card  bg-variant="dark" text-variant="white">
-          <b-card-body>
-            <div class="text-center">
-              <p>Some players would like you to believe this site is full of
-                gossip and rumours. Click a pic below to see hard evidence
-                of the kinds of players that could be trying to friend you in the
-                game. There are hundreds of pics like these in the site.</p>
-
-              <p>click a pic to open full size in new tab.</p>
-            </div>
-          </b-card-body>
-
-        </b-card>
-      </b-col>
-      <b-col cols="4" bg-variant="dark" text-variant="white">
-        <b-card  bg-variant="dark" text-variant="white" class="mb-3">
-          If you're name hasn't been added...be sure to add and rate yourself. Then get your friends to rate
-          you.
-          There might be random awards for well rated avis.
-        </b-card>
-        <b-card  bg-variant="dark" text-variant="white">
-          Prizes Prizes Prizes
-          Hang around or Sign up... either way you can win prizes.
         </b-card>
       </b-col>
     </b-row>
