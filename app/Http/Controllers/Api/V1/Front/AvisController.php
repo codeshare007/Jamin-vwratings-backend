@@ -161,7 +161,8 @@ class AvisController extends Controller
     public function comment($id, Request $request)
     {
         $this->validate($request, [
-            'comment' => 'required|string',
+            'comment' => 'required_if:files,""',
+            'files' => 'required_if:comment,""',
             'opinion' => 'required|int'
         ]);
 

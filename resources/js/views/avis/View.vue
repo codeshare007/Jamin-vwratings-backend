@@ -36,31 +36,33 @@
           <div class="d-flex justify-content-between align-items-center">
             <b-form-group label="Choose your opinion">
               <b-form-radio-group
-                :class="{ 'form-group__error': !errorRefreshed && $v.form.opinion.$error }"
-                v-model="$v.form.opinion.$model"
+                :class="{ 'form-group__error': !errorRefreshed && $v.opinion.$error }"
+                v-model="$v.opinion.$model"
                 :state="validateState('opinion')"
                 :options="options"
                 buttons
               />
             </b-form-group>
+            <span v-if="$v.$error && !errorRefreshed" class="text-danger mt-3">Not all fields submitted, opinion, images or message required</span>
             <div class="mt-2 pt-2 ml-3">
               <b-button class="aviView__uploadButton" @click="openUploadDialog"><b-icon-paperclip /></b-button>
-              <input type="file" ref="file" @change="onFileChange" class="d-none" multiple="multiple" />
+              <input type="file" ref="file"
+                     @change="onFileChange" class="d-none" multiple="multiple" />
             </div>
           </div>
           <b-form-textarea
-            v-model="$v.form.comment.$model"
+            v-model="$v.comment.$model"
             :state="validateState('comment')"
             ref="commentArea"
             placeholder="Choose positive or negative before submitting"
           />
           <div class="mt-3">
-            <b-button @click="comment">Send</b-button>
+            <b-button @click="send">Send</b-button>
           </div>
 
-          <div class="d-flex mt-3">
-            <div class="mr-2" v-for="(item, key) in files">
-              <img :src="item.previewUrl" alt="" style="width: 100px; height: 100px; object-fit: cover" />
+          <div class="d-flex mt-3" ref="imageContainer">
+            <div class="mr-2" v-for="(item, key) in previews" :key="key">
+              <img :src="item" alt="" style="width: 100px; height: 100px; object-fit: cover" />
             </div>
           </div>
         </b-form>
@@ -92,7 +94,7 @@
   </div>
 </template>
 <script>
-const {required, minLength} = require('vuelidate/lib/validators')
+const { required, minLength } = require('vuelidate/lib/validators')
 import StarRating from 'vue-star-rating'
 
 import CommentItem from "../../components/avis/CommentItem";
@@ -106,7 +108,7 @@ export default {
         user_rating: null,
         comments: []
       },
-      previewUrl: null,
+      previews: [],
       errorRefreshed: false,
       currentFilter: 1,
       filters: [
@@ -118,15 +120,13 @@ export default {
         {text: 'Positive', value: 1},
         {text: 'Negative', value: 0},
       ],
-      files: [],
       sort: 'id',
       sortDir: 'desc',
       pics: false,
       loading: true,
-      form: {
-        opinion: null,
-        comment: null,
-      }
+      opinion: null,
+      comment: '',
+      files: []
     }
   },
 
@@ -138,13 +138,18 @@ export default {
   },
 
   validations: {
-    form: {
-      opinion: {
-        required
-      },
-      comment: {
-        required: required,
-        minLength: minLength(1)
+    opinion: {
+      required
+    },
+    comment: {
+      minLength: minLength(1),
+      required(v) {
+        return this.files || required(v)
+      }
+    },
+    files: {
+      required(v) {
+        return this.comment || required(v)
       }
     }
   },
@@ -181,7 +186,7 @@ export default {
     },
 
     validateState(name) {
-      const {$dirty, $error} = this.$v.form[name];
+      const {$dirty, $error} = this.$v[name];
       return $dirty ? !$error : null;
     },
 
@@ -193,10 +198,11 @@ export default {
         if (typeof file.type === 'undefined') continue;
         if (!file.type.match('image.*')) continue;
         const reader = new FileReader()
-        const that = this.files[i];
+        const that = this;
 
+        this.previews = [];
         reader.addEventListener('load', (e) => {
-          that.previewUrl = reader.result;
+          that.previews.push(reader.result);
         }, false);
 
         if (file) {
@@ -239,16 +245,16 @@ export default {
       })
     },
 
-    comment(e) {
-      this.$v.form.$touch();
-      if (this.$v.form.$anyError) {
+    send(e) {
+      this.$v.$touch();
+      if (this.$v.$anyError) {
         this.errorRefreshed = false;
         return;
       }
 
       let formData = new FormData();
-      formData.append('comment', this.$v.form.comment.$model);
-      formData.append('opinion', this.$v.form.opinion.$model);
+      formData.append('comment', this.$v.comment.$model);
+      formData.append('opinion', this.$v.opinion.$model);
 
       if (this.$refs.file.files.length) {
         for (let i = 0; i < this.$refs.file.files.length; i++) {
@@ -259,12 +265,18 @@ export default {
 
       this.$api.avis.comment(this.id, formData).then(() => {
         this.fetchAvi();
-        this.$v.form.opinion.$model = '';
+        this.$v.opinion.$model = '';
         this.errorRefreshed = true;
         this.$refs['commentForm'].reset();
+        this.previews = [];
 
-        this.$bvToast.toast(`Comment successfully sent`, {
-          autoHideDelay: 5000
+        this.$bvToast.toast('Success', {
+          autoHideDelay: 5000,
+          title: 'Comment successfully sent',
+          variant: 'success',
+          solid: true,
+          appendToast: true,
+          toaster: 'b-toaster-bottom-right'
         })
       });
     }
@@ -316,7 +328,8 @@ export default {
   }
 
   .form-group__error {
-    border: 1px solid red;
+    border: 2px solid red;
+    border-radius: 5px;
   }
 
   .aviView__name {

@@ -1,14 +1,17 @@
 <template>
   <div class="commentItem mt-2">
-    <b-badge v-if="comment.opinion === 1" class="ml-2" variant="success">{{ comment.opinion | opinion }}</b-badge>
-    <b-badge v-if="comment.opinion === 0" class="ml-2" variant="danger">{{ comment.opinion | opinion }}</b-badge>
+    <b-badge v-if="comment.opinion === 1" variant="success">{{ comment.opinion | opinion }}</b-badge>
+    <b-badge v-if="comment.opinion === 0" variant="danger">{{ comment.opinion | opinion }}</b-badge>
     <div class="commentItem__attachments">
-      <div v-for="(attachment, key) in comment.attachments" :key="key">
-        <b-img class="attachmentItem m-2" :src="attachment.path"/>
-      </div>
+
     </div>
     <div class="commentItem__content">
       <p>{{ comment.content }}</p>
+      <div class="commentItem__attachments">
+        <div v-for="(attachment, key) in comment.attachments" :key="key">
+          <a target="_blank" :href="attachment.path"><b-img class="attachmentItem mr-2" :src="attachment.path"/></a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -52,20 +55,26 @@ export default {
   margin: 20px;
 
   &__attachments {
+    margin-top: 10px;
     display: flex;
     justify-content: flex-start;
   }
 
   &__content {
-    padding: 10px;
+    padding: 10px 0;
     min-height: 100px;
     border-bottom: 1px solid #ffffff61;
     position: relative;
   }
 
+  &__attachments {
+    display: flex;
+  }
+
   .attachmentItem {
     width: 100px;
     height: 100px;
+    object-fit: cover;
   }
 
   p {
