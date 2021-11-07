@@ -93,7 +93,7 @@ class AvisController extends Controller
      */
     public function show($id)
     {
-        return Avi::with('comments')->find($id);
+        return Avi::with('comments')->append(['average_rating', 'user_rating'])->find($id);
     }
 
     /**
