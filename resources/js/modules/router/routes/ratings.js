@@ -49,9 +49,9 @@ export default [
     meta: {title: 'Contacts'}
   },
   {
-    name: 'ratings.button',
-    path: 'button',
-    component: () => import('../../../views/button/empty'),
-    meta: {title: 'New Button'}
+    name: 'ratings.buttons',
+    path: 'buttons',
+    component: () => import('../../../views/buttons/buttons'),
+    meta: {title: 'Buttons'}
   },
 ]
