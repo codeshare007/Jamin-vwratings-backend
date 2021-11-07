@@ -5,6 +5,7 @@ import apiAuth from './methods/auth';
 import apiProfile from './methods/profile';
 import apiAvis from './methods/avis';
 
+import apiAdminDashboard from './methods/adminDashboard'
 import apiAdminAvis from './methods/adminAvis'
 import apiAdminComments from './methods/adminCommments'
 import apiAdminMessages from './methods/adminMessages'
@@ -108,6 +109,7 @@ export default {
       auth: apiAuth(this.apiInstance),
       profile: apiProfile(this.apiInstance),
       avis: apiAvis(this.apiInstance),
+      adminDashboard: apiAdminDashboard(this.apiInstance),
       adminAvis: apiAdminAvis(this.apiInstance),
       adminComments: apiAdminComments(this.apiInstance),
       adminMessages: apiAdminMessages(this.apiInstance),

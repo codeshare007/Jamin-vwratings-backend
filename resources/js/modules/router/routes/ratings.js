@@ -54,4 +54,10 @@ export default [
     component: () => import('../../../views/buttons/buttons'),
     meta: {title: 'Buttons'}
   },
+  {
+    name: 'ratings.notfound',
+    path: '404',
+    component: () => import('../../../views/NotFound'),
+    meta: {title: 'Not Found'}
+  }
 ]

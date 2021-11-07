@@ -11,7 +11,6 @@
       </b-col>
       <b-col class="p-0 d-flex justify-content-end align-items-center">
         <b-form-input class="mr-2 search-link" v-model="params.search" placeholder="Search..." />
-        <b-button variant="success" class="mr-2">Create</b-button>
         <b-button variant="primary" @click="fetchAvis()">
           <b-icon-arrow-clockwise/>
         </b-button>
@@ -64,30 +63,31 @@ export default {
       },
       avisFields: [
         {key: 'select', label: ''},
-        {key: 'index', label: '#'},
-        {key: 'id'},
-        {key: 'user.username', label: 'user'},
-        {key: 'name'},
-        {key: 'status'},
-        {key: 'average_rating', formatter: (data) => {return data.toFixed(2)}},
+        {key: 'id', label: '#', sortable: true},
+        {key: 'user.username', formatter: item => {
+            return item ? item: '—'
+          }, label: 'user', sortable: true},
+        {key: 'name', sortable: true},
+        {key: 'average_rating', formatter: (data) => {return data.toFixed(2)}, sortable: true},
         {key: 'actions'}
       ]
     }
   },
 
   mounted() {
-    this.fetchAvis(1)
+    this.fetchAvis()
   },
 
   methods: {
-    fetchAvis(page) {
-      this.$api.adminAvis.fetch(page).then(response => {
+    fetchAvis() {
+      this.$api.adminAvis.fetch(this.currentPage, this.params).then(response => {
         this.avis = response.data.data;
         this.total = response.data.total;
       })
     },
     handlePageChange(value) {
-      this.fetchAvis(value)
+      this.params.page = value;
+      this.fetchAvis()
     }
   }
 }

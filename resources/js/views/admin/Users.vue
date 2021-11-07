@@ -1,13 +1,16 @@
 <template>
   <div class="admin-users">
     <div class="d-flex justify-content-between mb-3">
-      <b-col class="p-0">
+      <b-col class="p-0  d-flex justify-items-start">
         <b-pagination
           class="m-0"
           v-model="currentPage"
           @change="handlePageChange"
           :total-rows="total"
         />
+        <div class="ml-3" v-if="ids.length > 0">
+          <b-button variant="danger" @click="bulkDelete">Bulk Delete</b-button>
+        </div>
       </b-col>
       <b-col class="p-0 d-flex justify-content-end align-items-center">
         <b-form-input class="mr-2 search-link" v-model="params.search" placeholder="Search..." />
@@ -28,7 +31,9 @@
       :fields="usersFields"
       >
       <template #cell(select)="data">
-        <b-checkbox />
+        <div class="d-flex justify-content-center align-items-center h-100">
+          <b-checkbox type="checkbox" v-model="data.item.selected" @change="rowSelected" />
+        </div>
       </template>
       <template #cell(index)="data">
         {{ data.index + 1 }}
@@ -50,6 +55,11 @@
       @change="handlePageChange"
       :total-rows="total"
     />
+
+    <b-modal ref="deleteModal" title="Delete User" @ok="remove" ok-variant="danger" ok-title="Delete">
+      Are you sure that you want to delete this user?
+    </b-modal>
+
   </div>
 </template>
 <script>
@@ -58,6 +68,7 @@ import moment from "moment";
 export default {
   data() {
     return {
+      ids: [],
       users: [],
       loading: false,
       sortBy: 'created_at',
@@ -74,7 +85,9 @@ export default {
         {key: 'select', label: ''},
         {key: 'index', label: '#', sortable: true},
         {key: 'username', sortable: true},
-        {key: 'email', sortable: true},
+        {key: 'email', formatter: item => {
+            return item ? item: '—'
+          }, sortable: true},
         {key: 'role', sortable: true},
         {key: 'created_at', sortable: true, formatter: createdAt => {
             return moment(createdAt).format('YYYY-MM-DD HH:mm')
@@ -120,10 +133,23 @@ export default {
       })
     },
 
+    rowSelected() {
+      this.ids = this.users
+        .filter(item => { if (item.users) return item.id })
+        .map(item => item.id);
+    },
+
     remove(id) {
       this.$api.adminUsers.delete(id).then(response => {
         this.fetchUsers()
       })
+    },
+
+    bulkDelete() {
+      this.$api.adminUsers.bulkDelete(this.ids).then(() => {
+        this.fetchMessages();
+        this.ids = [];
+      });
     },
 
     handlePageChange(value) {

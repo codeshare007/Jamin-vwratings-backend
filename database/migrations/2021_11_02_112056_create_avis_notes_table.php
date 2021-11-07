@@ -17,7 +17,7 @@ class CreateAvisNotesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('avis_id');
             $table->text('content');
-            $table->text('comment');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

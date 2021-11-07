@@ -3,5 +3,11 @@ export default axios => ({
     return axios.get('admin/messages', {
       params: {page: page, ...filter}
     });
-  }
+  },
+  delete(id) {
+    return axios.delete(`admin/messages/${id}`)
+  },
+  bulkDelete(ids) {
+    return axios.post('admin/messages/bulk-delete', {ids: ids})
+  },
 });

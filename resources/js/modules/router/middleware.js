@@ -15,8 +15,8 @@ export function Guest({next, store, to}) {
 }
 
 export function Admin({next, store, to}) {
-  if (!store.getters['auth/loggedIn']) {
-    return next({name: 'auth.signin'});
+  if (!store.getters['auth/loggedIn'] || store.getters['auth/isAdmin'] !== 1) {
+    return next({name: 'ratings'});
   }
 
   return next({next, store, to});

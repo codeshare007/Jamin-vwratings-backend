@@ -27,18 +27,24 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('admin')->group(function() {
+
+        Route::get('dashboard/information', 'App\Http\Controllers\Api\V1\Admin\DashboardController@information');
+
         Route::prefix('users')->group(function() {
             Route::get('', 'App\Http\Controllers\Api\V1\Admin\UsersController@index');
+            Route::get('{id}', 'App\Http\Controllers\Api\V1\Admin\UsersController@show');
             Route::delete('{id}', 'App\Http\Controllers\Api\V1\Admin\UsersController@delete');
+        });
+        Route::prefix('messages')->group(function() {
+            Route::get('', 'App\Http\Controllers\Api\V1\Admin\MessagesController@index');
+            Route::post('bulk-delete', 'App\Http\Controllers\Api\V1\Admin\MessagesController@bulkDelete');
+            Route::delete('{id}', 'App\Http\Controllers\Api\V1\Admin\MessagesController@delete');
         });
         Route::prefix('avis')->group(function() {
             Route::get('', 'App\Http\Controllers\Api\V1\Admin\AvisController@index');
         });
         Route::prefix('comments')->group(function() {
             Route::get('', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@index');
-        });
-        Route::prefix('messages')->group(function() {
-            Route::get('', 'App\Http\Controllers\Api\V1\Admin\MessagesController@index');
         });
         Route::prefix('ratings')->group(function() {
             Route::get('', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController@index');

@@ -31,7 +31,7 @@ const routes = [
     redirect: { name: 'admin.dashboard' },
     component: () => import('../../layouts/admin'),
     meta: {
-      middleware: [Authenticated],
+      middleware: [Admin],
     },
     children: AdminRoutes
   },

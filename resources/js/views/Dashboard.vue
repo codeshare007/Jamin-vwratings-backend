@@ -62,6 +62,15 @@
     </b-row>
   </div>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      loading: false
+    }
+  }
+}
+</script>
 <style lang="scss">
 .img-preview {
   width: 160px;
@@ -74,7 +83,4 @@
 .img-preview:hover {
   opacity: 0.9;
 }
-
-<
-/
-style >
+</style>

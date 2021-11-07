@@ -3,10 +3,10 @@
     <b-container class="p-0">
       <HeaderBar />
       <b-row class="p-0 m-0">
-        <b-col class="p-0" cols="2">
+        <b-col class="p-0" cols="12" lg="2">
           <SidebarNav />
         </b-col>
-        <b-col cols="10">
+        <b-col cols="12" lg="10">
           <router-view />
         </b-col>
       </b-row>
