@@ -29,7 +29,7 @@ export default {
       menu: [
         {name: 'Players', path: {name: 'ratings.avis.list'}},
         {name: 'Parties', path: {name: 'ratings.parties.list'}},
-        {name: 'Buttons', path: {name: 'ratings.dashboard'}}
+        {name: 'Buttons', path: {name: 'ratings.buttons'}}
       ],
       isMobileMenu: false,
       loading: false,

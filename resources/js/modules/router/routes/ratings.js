@@ -1,7 +1,7 @@
 export default [
   {
     name: 'ratings.dashboard',
-    path: 'dashboard',
+    path: '',
     component: () => import('../../../views/Dashboard'),
     meta: {title: 'Dashboard'}
   },
@@ -47,5 +47,11 @@ export default [
     path: 'contacts',
     component: () => import('../../../views/Contact'),
     meta: {title: 'Contacts'}
+  },
+  {
+    name: 'ratings.buttons',
+    path: 'buttons',
+    component: () => import('../../../views/buttons/buttons'),
+    meta: {title: 'Buttons'}
   },
 ]

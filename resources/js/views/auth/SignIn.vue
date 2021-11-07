@@ -141,7 +141,7 @@ export default {
       formData.append('password', this.form.password);
 
       this.login(formData).then(() => {
-        this.$router.push({name: 'ratings.dashboard'})
+        this.$router.push({name: 'ratings.profile'})
       }).catch(() => {
         this.error = 'Invalid email or password'
       })
