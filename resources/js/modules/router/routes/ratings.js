@@ -48,4 +48,10 @@ export default [
     component: () => import('../../../views/Contact'),
     meta: {title: 'Contacts'}
   },
+  {
+    name: 'ratings.button',
+    path: 'button',
+    component: () => import('../../../views/button/empty'),
+    meta: {title: 'New Button'}
+  },
 ]
