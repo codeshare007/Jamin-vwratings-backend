@@ -44,7 +44,7 @@
         const payload = this.form;
         this.$api.auth.register(payload).then(response => {
           if (response.status === 'success') {
-            this.$router.push({name: 'auth.signin'})
+            this.$router.push({name: 'ratings.profile'})
           }
         })
       }
