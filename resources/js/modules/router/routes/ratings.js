@@ -1,7 +1,7 @@
 export default [
   {
     name: 'ratings.dashboard',
-    path: 'dashboard',
+    path: '',
     component: () => import('../../../views/Dashboard'),
     meta: {title: 'Dashboard'}
   },
