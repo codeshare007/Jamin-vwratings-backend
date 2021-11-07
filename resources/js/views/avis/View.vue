@@ -68,7 +68,7 @@
         </b-form>
       </div>
       <div v-else>
-        <h2 class="text-danger">Log in to rate and comment</h2>
+        <h2 class="text-danger text-center">Log in to rate and comment</h2>
       </div>
     </div>
 
