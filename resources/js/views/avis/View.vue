@@ -43,7 +43,9 @@
                 buttons
               />
             </b-form-group>
-            <span v-if="$v.$error && !errorRefreshed" class="text-danger mt-3">Not all fields submitted, opinion, images or message required</span>
+            <span v-if="$v.$error && !errorRefreshed" class="text-danger mt-3">
+              Not all fields submitted, opinion, images or message required
+            </span>
             <div class="mt-2 pt-2 ml-3">
               <b-button class="aviView__uploadButton" @click="openUploadDialog"><b-icon-paperclip /></b-button>
               <input type="file" ref="file"
@@ -56,13 +58,14 @@
             ref="commentArea"
             placeholder="Choose positive or negative before submitting"
           />
-          <div class="mt-3">
-            <b-button @click="send">Send</b-button>
-          </div>
-
-          <div class="d-flex mt-3" ref="imageContainer">
-            <div class="mr-2" v-for="(item, key) in previews" :key="key">
-              <img :src="item" alt="" style="width: 100px; height: 100px; object-fit: cover" />
+          <div class="mt-3 d-flex justify-content-between">
+            <div class="d-flex mt-3">
+              <viewer :images="previews">
+                <img alt class="imagePreview" v-for="src in previews" :key="src" :src="src">
+              </viewer>
+            </div>
+            <div>
+              <b-button @click="send">Send</b-button>
             </div>
           </div>
         </b-form>
@@ -90,7 +93,6 @@
         <div v-if="!Object.keys(sortedComments).length">No comments</div>
       </div>
     </div>
-
   </div>
 </template>
 <script>
@@ -108,6 +110,7 @@ export default {
         user_rating: null,
         comments: []
       },
+      index: 0,
       previews: [],
       errorRefreshed: false,
       currentFilter: 1,
@@ -265,6 +268,7 @@ export default {
 
       this.$api.avis.comment(this.id, formData).then(() => {
         this.fetchAvi();
+        this.$v.comment.$model = '';
         this.$v.opinion.$model = '';
         this.errorRefreshed = true;
         this.$refs['commentForm'].reset();
@@ -363,6 +367,15 @@ export default {
   }
 
   &__comment {
+
+    .imagePreview {
+      cursor: pointer;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-right: 20px;
+      border-radius: 10px;
+    }
 
     @media screen and (min-width: 1024px) {
       padding: 0 170px;

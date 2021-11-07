@@ -28,6 +28,8 @@
         "bootstrap-vue": "^2.21.2",
         "js-cookie": "^3.0.1",
         "moment": "^2.29.1",
+        "v-viewer": "^1.6.4",
+        "vue-loading-overlay": "^3.4.2",
         "vue-router": "^3.5.3",
         "vue-star-rating": "^1.7.0",
         "vue-the-mask": "^0.11.1",
