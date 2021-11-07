@@ -1,6 +1,6 @@
 <template>
   <div class="aviView">
-    <div class="pl-2 pt-2">
+    <div class="aviView__buttons">
       <b-button :to="{ name: 'ratings.avis.list' }">Back</b-button>
     </div>
 
@@ -10,7 +10,6 @@
       <div class="d-flex w-100 justify-content-center justify-items-center">
         <star-rating
           :max-rating="12"
-          :star-size="30"
           :read-only="true"
           :rating="avi.average_rating"
         />
@@ -24,7 +23,6 @@
       <div class="d-flex w-100 justify-content-center justify-items-center">
         <star-rating
           :max-rating="12"
-          :star-size="30"
           @rating-selected="setRating"
           :rating="avi.user_rating"
         />
@@ -33,12 +31,16 @@
 
     <div class="aviView__comment">
       <div v-if="loggedIn">
-        <p class="text-center">Post a comment about {{ avi.name }}</p>
-        <b-form class="d-flex flex-column">
+        <p>Post a comment about {{ avi.name }}</p>
+        <b-form class="d-flex flex-column" ref="commentForm">
           <div class="d-flex justify-content-between align-items-center">
             <b-form-group label="Choose your opinion">
               <b-form-radio-group
-                v-model="form.opinion" :options="options" buttons
+                :class="{ 'form-group__error': !errorRefreshed && $v.form.opinion.$error }"
+                v-model="$v.form.opinion.$model"
+                :state="validateState('opinion')"
+                :options="options"
+                buttons
               />
             </b-form-group>
             <div class="mt-2 pt-2 ml-3">
@@ -47,7 +49,8 @@
             </div>
           </div>
           <b-form-textarea
-            v-model="form.comment"
+            v-model="$v.form.comment.$model"
+            :state="validateState('comment')"
             ref="commentArea"
             placeholder="Choose positive or negative before submitting"
           />
@@ -104,6 +107,7 @@ export default {
         comments: []
       },
       previewUrl: null,
+      errorRefreshed: false,
       currentFilter: 1,
       filters: [
         {name: 'Newest', value: 1},
@@ -133,7 +137,7 @@ export default {
     StarRating
   },
 
-  validators: {
+  validations: {
     form: {
       opinion: {
         required
@@ -174,6 +178,11 @@ export default {
     openUploadDialog(e) {
       e.preventDefault();
       this.$refs['file'].click();
+    },
+
+    validateState(name) {
+      const {$dirty, $error} = this.$v.form[name];
+      return $dirty ? !$error : null;
     },
 
     onFileChange(e) {
@@ -231,19 +240,32 @@ export default {
     },
 
     comment(e) {
-      e.preventDefault();
+      this.$v.form.$touch();
+      if (this.$v.form.$anyError) {
+        this.errorRefreshed = false;
+        return;
+      }
+
       let formData = new FormData();
-      formData.append('comment', this.form.comment);
-      formData.append('opinion', this.form.opinion);
+      formData.append('comment', this.$v.form.comment.$model);
+      formData.append('opinion', this.$v.form.opinion.$model);
+
       if (this.$refs.file.files.length) {
         for (let i = 0; i < this.$refs.file.files.length; i++) {
           let file = this.$refs.file.files[i];
           formData.append(`attachments[${i}]`, file);
         }
       }
+
       this.$api.avis.comment(this.id, formData).then(() => {
-        this.form = {comment: null, reaction: null}
         this.fetchAvi();
+        this.$v.form.opinion.$model = '';
+        this.errorRefreshed = true;
+        this.$refs['commentForm'].reset();
+
+        this.$bvToast.toast(`Comment successfully sent`, {
+          autoHideDelay: 5000
+        })
       });
     }
   }
@@ -254,6 +276,30 @@ export default {
   background: #24252d;
   border-radius: 5px;
   color: white;
+  padding-bottom: 70px;
+
+  &__buttons {
+    padding-bottom: 30px;
+  }
+
+  @media screen and (min-width: 1024px) {
+    &__buttons {
+      padding: 20px;
+    }
+  }
+
+  .vue-star-rating-star {
+    width: 20px;
+
+    @media screen and (min-width: 1024px) {
+      width: 30px;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    margin: 20px;
+    padding: 20px;
+  }
 
   .btn {
     background: #00a71c;
@@ -269,13 +315,21 @@ export default {
     background: #007209;
   }
 
+  .form-group__error {
+    border: 1px solid red;
+  }
+
   .aviView__name {
     font-size: 30px;
     color: #23e116;
   }
 
   &__info {
-    padding: 0 40px;
+
+    @media screen and (min-width: 1024px) {
+      padding: 0 40px;
+    }
+
     text-align: center;
     font-family: 'Futura PT', sans-serif;
     font-size: 24px;
@@ -296,7 +350,16 @@ export default {
   }
 
   &__comment {
-    padding: 0 40px;
+
+    @media screen and (min-width: 1024px) {
+      padding: 0 170px;
+    }
+
+    p {
+      text-align: center;
+      font-size: 20px;
+      font-family: 'Futura PT', sans-serif;
+    }
 
     textarea {
       background: #173618;
@@ -324,7 +387,10 @@ export default {
   }
 
   .comments {
-    padding: 0 150px;
+
+    @media screen and (min-width: 1024px) {
+      padding: 0 150px;
+    }
 
     &__sortBlock {
       display: flex;

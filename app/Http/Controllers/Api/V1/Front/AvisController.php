@@ -165,24 +165,26 @@ class AvisController extends Controller
             'opinion' => 'required|int'
         ]);
 
-        if ($avi = Avi::find($id)->first()) {
+        if ($avi = Avi::findOrFail($id)) {
 
             $comment = $avi->comments()->create([
-                'content' => $request->input('content'),
-                'opinion' => $request->input('opinion'),
+                'content' => $request->get('comment'),
+                'opinion' => $request->get('opinion'),
                 'user_id' => auth()->user()->id
             ]);
 
-            /** @var UploadedFile $file */
-            foreach ($request->file('attachments') as $file) {
-                $fileName = \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();;
-                $filePath = $file->storeAs('uploads', $fileName, 'public');
+            if ($request->has('attachments')) {
+                /** @var UploadedFile $file */
+                foreach ($request->file('attachments') as $file) {
+                    $fileName = \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();;
+                    $filePath = $file->storeAs('uploads', $fileName, 'public');
 
-                $comment->attachments()->create([
-                    'filename' => $file->getClientOriginalName(),
-                    'path' => '/storage/' . $filePath,
-                    'type' => $file->getMimeType()
-                ]);
+                    $comment->attachments()->create([
+                        'filename' => $file->getClientOriginalName(),
+                        'path' => '/storage/' . $filePath,
+                        'type' => $file->getMimeType()
+                    ]);
+                }
             }
 
             return response()->json(['status' => 'success']);
