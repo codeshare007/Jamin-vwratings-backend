@@ -22,7 +22,7 @@
       </div>
     </b-card>
     <b-card v-if="loggedIn">
-	<p class="text-center">Post a comment about {{ avi.name }}</p>
+      <p class="text-center">Post a comment about {{ avi.name }}</p>
       <b-form class="d-flex flex-column">
         <div class="d-flex justify-content-between align-items-center">
           <b-form-group label="Choose your opinion" v-slot="{ ariaDescribedby }">
@@ -59,24 +59,15 @@
       <hr class="bg-white mt-0">
 
       <div class="commentBlock">
-        <div class="commentItem mt-2" v-for="(item, key) in this.sortedComments" :key="key">
-          <b-badge v-if="item.opinion === 1" class="ml-2" variant="success">{{ item.opinion | opinion }}</b-badge>
-          <b-badge v-if="item.opinion === 0" class="ml-2" variant="danger">{{ item.opinion | opinion }}</b-badge>
-          <div class="commentItem__attachments">
-            <div v-for="(attachment, key) in item.attachments" :key="key">
-              <b-img style="width: 100px; height: 100px" class="m-2" :src="attachment.path"/>
-            </div>
-          </div>
-          <div class="commentItem__content">
-            <p>{{ item.content }}</p>
-          </div>
-        </div>
+        <CommentItem v-for="(comment, key) in sortedComments" :key="key" :comment="comment" />
+        <h2 class="text-center" v-if="!Object.keys(sortedComments).length">No comments</h2>
       </div>
     </b-card>
   </div>
 </template>
 <script>
-const { required, minLength } = require('vuelidate/lib/validators')
+import CommentItem from "../../components/avis/CommentItem";
+const {required, minLength} = require('vuelidate/lib/validators')
 
 import StarRating from 'vue-star-rating'
 import moment from 'moment';
@@ -108,6 +99,7 @@ export default {
   orderByName: false,
 
   components: {
+    CommentItem,
     StarRating
   },
 
@@ -120,18 +112,6 @@ export default {
         required: required,
         minLength: minLength(1)
       }
-    }
-  },
-
-  filters: {
-    opinion(data) {
-      if (typeof data === 'number') {
-        return data ? 'positive' : 'negative';
-      }
-      return '';
-    },
-    date(data) {
-      return moment(data).format('MMMM Do YYYY, h:mm:ss')
     }
   },
 
@@ -193,7 +173,7 @@ export default {
       }
 
       this.$api.avis.comment(this.id, formData).then(() => {
-        this.form = { comment: null, reaction: null }
+        this.form = {comment: null, reaction: null}
         this.fetchAvi();
       });
     }
@@ -204,7 +184,8 @@ export default {
 .avi-view {
   background: #24252d;
   border-radius: 5px;
-  min-height: 1000px;
+  padding-bottom: 70px;
+  margin-bottom: 100px;
 
   p {
     margin-bottom: 0;
@@ -221,8 +202,8 @@ export default {
 
   .btn {
     background: green;
-	font-size: 12px;
-	padding: 4px;
+    font-size: 12px;
+    padding: 4px;
     border: 0;
     color: white;
 
@@ -234,16 +215,17 @@ export default {
   }
 
   .posts {
-	max-width: 70%;
-    margin: auto!important;
+    max-width: 70%;
+    margin: auto !important;
   }
-  
+
   .commentSort {
     display: flex;
     justify-content: center;
   }
 
   .card {
+    border: 0;
 
     textarea {
       color: white;
@@ -257,7 +239,6 @@ export default {
 
     .commentItem {
       font-size: 10px;
-
 
       &__attachments {
         display: flex;
@@ -278,6 +259,7 @@ export default {
 
     background: transparent;
     margin: 20px;
+
 
     .card-header,
     .card-body {
