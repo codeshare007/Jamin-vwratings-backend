@@ -61,3 +61,16 @@
     </b-row>
   </div>
 </template>
+<style lang="scss">
+.img-preview {
+	width: 160px;
+	height: 160px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.img-preview:hover {
+	opacity: 0.9;
+}
+</style>
