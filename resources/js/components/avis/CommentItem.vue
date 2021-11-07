@@ -4,7 +4,7 @@
     <b-badge v-if="comment.opinion === 0" class="ml-2" variant="danger">{{ comment.opinion | opinion }}</b-badge>
     <div class="commentItem__attachments">
       <div v-for="(attachment, key) in comment.attachments" :key="key">
-        <b-img style="width: 100px; height: 100px" class="m-2" :src="attachment.path"/>
+        <b-img class="attachmentItem m-2" :src="attachment.path"/>
       </div>
     </div>
     <div class="commentItem__content">
@@ -45,3 +45,31 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.commentItem {
+  font-size: 20px;
+  background: transparent;
+  margin: 20px;
+
+  &__attachments {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &__content {
+    padding: 10px;
+    min-height: 100px;
+    border-bottom: 1px solid #ffffff61;
+    position: relative;
+  }
+
+  .attachmentItem {
+    width: 100px;
+    height: 100px;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+</style>

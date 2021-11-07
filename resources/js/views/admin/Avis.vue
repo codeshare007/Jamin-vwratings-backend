@@ -69,14 +69,11 @@ export default {
           }, label: 'user', sortable: true},
         {key: 'name', sortable: true},
         {key: 'average_rating', formatter: (data) => {
-
           if (data) {
             return data.toFixed(2)
           }
 
           return null;
-
-
           }, sortable: true},
         {key: 'actions'}
       ]

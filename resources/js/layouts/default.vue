@@ -1,14 +1,15 @@
 <template>
   <div class="default-theme">
     <HeaderBar />
-    <b-container class="p-0">
-      <router-view />
-    </b-container>
+    <div class="default-theme__main">
+      <b-container class="p-0">
+        <router-view />
+      </b-container>
+    </div>
   </div>
 </template>
 <script>
 import HeaderBar from '../components/layout/HeaderBar';
-
 export default {
   components: {
     HeaderBar,
@@ -20,17 +21,7 @@ export default {
   min-height: 100vh;
 
   &__main {
-    width: 100%;
-    @media screen and (min-width: 768px) {
-      width: calc(100% - 240px);
-      padding-left: 20px
-    }
-  }
-
-  &__container {
-    height: calc(100% - 100px);
-    display: flex;
-    justify-content: flex-start;
+    padding-bottom: 100px;
   }
 }
 </style>
