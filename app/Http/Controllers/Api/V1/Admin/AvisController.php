@@ -8,6 +8,10 @@ class AvisController extends Controller
 {
     public function index()
     {
-        return Avi::with('user')->paginate(10);
+        $avis = Avi::with(['ratings', 'user'])->paginate(10);
+        $avis->each(function ($reply) {
+            $reply->append('average_rating');
+        });
+        return $avis;
     }
 }

@@ -16,6 +16,8 @@ class Avi extends Model
 {
     use HasFactory;
 
+    //public $appends = ['average_rating', 'user_rating'];
+
     protected $fillable = [
         'user_id',
         'name'
