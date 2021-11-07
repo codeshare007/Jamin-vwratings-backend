@@ -51,7 +51,6 @@ export default {
 </script>
 <style lang="scss">
 .header-bar {
-  height: 50px;
   margin-bottom: 40px;
 
   .navbar-brand {
