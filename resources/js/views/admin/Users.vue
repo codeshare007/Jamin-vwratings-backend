@@ -14,9 +14,9 @@
       </b-col>
       <b-col class="p-0 d-flex justify-content-end align-items-center">
         <b-form-input class="mr-2 search-link" v-model="params.search" placeholder="Search..." />
-        <b-button variant="success" class="mr-2">Create</b-button>
+        <b-button variant="success" @click="create" class="mr-2">Create</b-button>
         <b-button variant="primary" @click="fetchUsers()">
-          <b-icon-arrow-clockwise/>
+          <b-icon-arrow-clockwise />
         </b-button>
       </b-col>
     </div>
@@ -41,11 +41,11 @@
       <template #cell(role)="data">
         {{ data.item.role | role }}
       </template>
-      <template #cell(actions)="row">
-        <b-button variant="primary" size="sm">
+      <template #cell(actions)="data">
+        <b-button variant="primary" size="sm" @click="edit(data.item.id)">
           <b-icon-pencil />
         </b-button>
-        <b-button variant="danger" size="sm" @click="remove(row.item.id)">
+        <b-button variant="danger" size="sm" @click="remove(data.item.id)">
           <b-icon-trash/>
         </b-button>
       </template>
@@ -64,6 +64,7 @@
 </template>
 <script>
 import moment from "moment";
+import { mapActions } from "vuex";
 
 export default {
   data() {
@@ -123,6 +124,13 @@ export default {
   },
 
   methods: {
+
+    ...mapActions({
+      createUser: 'dialogs/user/create',
+      editUser: 'dialogs/user/edit',
+      fetchUsers: 'users/FETCH'
+    }),
+
     fetchUsers() {
       this.loading = true;
       this.$api.adminUsers.fetch(this.currentPage, this.params).then(response => {
@@ -130,6 +138,12 @@ export default {
         this.currentPage = response.data.current_page;
         this.total = response.data.total;
         this.loading = false;
+      })
+    },
+
+    create() {
+      this.createUser().then(() => {
+        this.fetchUsers()
       })
     },
 
@@ -141,6 +155,12 @@ export default {
 
     remove(id) {
       this.$api.adminUsers.delete(id).then(response => {
+        this.fetchUsers()
+      })
+    },
+
+    edit(id) {
+      this.editUser(id).then(() => {
         this.fetchUsers()
       })
     },

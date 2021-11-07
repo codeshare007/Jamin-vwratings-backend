@@ -7,13 +7,13 @@ export default axios => ({
       }
     });
   },
-  show(id) {
+  get(id) {
     return axios.get(`admin/users/${id}`)
   },
   create(payload) {
     return axios.post('admin/users/create', payload)
   },
-  edit(id, payload) {
+  update(id, payload) {
     return axios.post(`admin/users/${id}`, payload)
   },
   delete(id) {

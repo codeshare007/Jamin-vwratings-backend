@@ -66,7 +66,6 @@
     <b-modal ref="deleteModal" title="Delete Message" @ok="remove" ok-variant="danger" ok-title="Delete">
       Are you sure that you want to delete this message?
     </b-modal>
-
   </div>
 </template>
 <script>
@@ -121,11 +120,9 @@ export default {
         this.fetchMessages()
       }
     },
-    search() {
-      if (data) {
-        this.params.search = data;
-        this.fetchMessages()
-      }
+    search(data) {
+      this.params.search = data;
+      this.fetchMessages()
     }
   },
 

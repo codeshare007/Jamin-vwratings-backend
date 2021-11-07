@@ -1,5 +1,9 @@
 <template>
   <div class="admin-layout">
+    <div v-if="isAdmin">
+      <UserEditDialog />
+    </div>
+
     <b-container class="p-0">
       <HeaderBar />
       <b-row class="p-0 m-0">
@@ -16,11 +20,20 @@
 <script>
 import SidebarNav from "../components/admin/SidebarNav";
 import HeaderBar from "../components/layout/HeaderBar";
+import UserEditDialog from "../components/admin/dialogs/UserEditDialog";
 
 export default {
   components: {
+    UserEditDialog,
     HeaderBar,
     SidebarNav
+  },
+
+
+  computed: {
+    isAdmin() {
+      return this.$store.getters['auth/isAdmin']
+    }
   }
 }
 </script>

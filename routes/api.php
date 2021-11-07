@@ -33,6 +33,8 @@ Route::prefix('v1')->group(function () {
         Route::prefix('users')->group(function() {
             Route::get('', 'App\Http\Controllers\Api\V1\Admin\UsersController@index');
             Route::get('{id}', 'App\Http\Controllers\Api\V1\Admin\UsersController@show');
+            Route::post('create', 'App\Http\Controllers\Api\V1\Admin\UsersController@create');
+            Route::post('{id}', 'App\Http\Controllers\Api\V1\Admin\UsersController@edit');
             Route::delete('{id}', 'App\Http\Controllers\Api\V1\Admin\UsersController@delete');
         });
         Route::prefix('messages')->group(function() {

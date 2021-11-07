@@ -57,8 +57,8 @@ class StalkalotParserService
                     'referrer_name' => !empty($user->referred_by) ? $user->referred_by : null,
                     'points' => $user->points,
                     'last_visit' => Carbon::parse($user->last_visit),
-                    'updated_at' => Carbon::createFromTimestamp($user->updated_at),
-                    'created_at' => Carbon::createFromTimestamp($user->created_at)
+                    'updated_at' => Carbon::createFromTimestamp($user->updated_at)->toDateTimeString('second'),
+                    'created_at' => Carbon::createFromTimestamp($user->created_at)->toDateTimeString('second')
                 ]);
 
                 if ($user->notes !== 'x' && $user->notes !== '') {
