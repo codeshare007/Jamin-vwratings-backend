@@ -1,5 +1,5 @@
 <template>
-  <div class="faq-page">
+  <div class="info-page">
 
   </div>
 </template>
@@ -9,7 +9,7 @@
   }
 </script>
 <style lang="scss">
-  .faq-page {
+  .info-page {
 
   }
 </style>

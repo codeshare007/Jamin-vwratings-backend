@@ -31,22 +31,40 @@ export default [
     meta: {title: 'Parties'}
   },
   {
-    name: 'ratings.creeps.list',
-    path: 'creeps',
-    component: () => import('../../../views/creeps/List'),
-    meta: {title: 'Creeprs'}
+    name: 'ratings.specialone',
+    path: 'specialone',
+    component: () => import('../../../views/buttons/specialone'),
+    meta: {title: 'Special Page'}
+  },  
+  {
+    name: 'ratings.specialtwo',
+    path: 'specialtwo',
+    component: () => import('../../../views/buttons/specialtwo'),
+    meta: {title: 'Special Page'}
+  },  
+  {
+    name: 'ratings.peepscreeps',
+    path: 'peepscreeps',
+    component: () => import('../../../views/buttons/peepscreeps'),
+    meta: {title: 'Peeps & Creeps'}
   },
   {
-    name: 'ratings.faq',
-    path: 'faq',
-    component: () => import('../../../views/Faq'),
-    meta: {title: 'FAQ'}
+    name: 'ratings.claim',
+    path: 'claim',
+    component: () => import('../../../views/buttons/claim'),
+    meta: {title: 'Claim Name'}
+  },  
+  {
+    name: 'ratings.info',
+    path: 'info',
+    component: () => import('../../../views/buttons/info'),
+    meta: {title: 'Info'}
   },
   {
-    name: 'ratings.contacts',
-    path: 'contacts',
-    component: () => import('../../../views/Contact'),
-    meta: {title: 'Contacts'}
+    name: 'ratings.contact',
+    path: 'contact',
+    component: () => import('../../../views/buttons/contact'),
+    meta: {title: 'Contact Us'}
   },
   {
     name: 'ratings.buttons',

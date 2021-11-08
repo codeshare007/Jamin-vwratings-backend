@@ -5,12 +5,12 @@
         <b-card class="mb-3" bg-variant="dark" text-variant="white">
           <b-card-body class="justify-content-center">
 		   <div class="text-center">
-				<b-button :to="{name: 'ratings.1special'}">Special</b-button>
-				<b-button :to="{name: 'ratings.2special'}">Special</b-button>
+				<b-button :to="{name: 'ratings.specialone'}">Special</b-button>
+				<b-button :to="{name: 'ratings.specialtwo'}">Special</b-button>
 			</div>
 			<hr>
 			<div class="text-center">
-				<b-button :to="{name: 'ratings.peepcreep'}">Peeps&Creeps</b-button>
+				<b-button :to="{name: 'ratings.peepscreeps'}">Peeps&Creeps</b-button>
 			</div>
 			<hr>
 			<div class="text-center">
@@ -18,7 +18,7 @@
 			</div>
 			<hr>								
 			<div class="text-center">
-				<b-button :to="{name: ''}">Message Us</b-button>
+				<b-button :to="{name: 'ratings.contact'}">Message Us</b-button>
 				<b-button :to="{name: 'ratings.info'}">Info</b-button>
 			</div>
 			<hr>
