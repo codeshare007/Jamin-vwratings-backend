@@ -19,9 +19,14 @@ export default {
 <style lang="scss">
 .default-theme {
   min-height: 100vh;
-
   &__main {
-    padding-bottom: 100px;
+   // padding-bottom: 70px;
+
+    .container {
+      min-height: calc(100vh - 110px);
+    }
   }
+
+  //min-height: 100vh;
 }
 </style>

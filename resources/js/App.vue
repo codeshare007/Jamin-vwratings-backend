@@ -6,8 +6,7 @@
 </template>
 
 <script>
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
+
 import {mapState} from "vuex";
 
 export default {
@@ -21,12 +20,8 @@ export default {
 
   watch: {
     $route() {
-      this.preloader();
+   //   this.preloader();
     },
-  },
-
-  components: {
-    Loading
   },
 
   computed: {
@@ -46,7 +41,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -56,11 +51,15 @@ export default {
   margin-top: 60px;
 }
 
-.vld-overlay .vld-background {
-  opacity: 1;
+body {
+  min-height: 100vh;
 }
 
 .app {
   background-color: #15161c;
+  .vld-overlay .vld-background {
+    opacity: 1;
+  }
+
 }
 </style>

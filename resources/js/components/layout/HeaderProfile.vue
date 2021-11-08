@@ -96,6 +96,13 @@ export default {
     border: 1px solid white;
     z-index: 1;
     position: absolute;
+
+    button {
+      &:focus {
+        outline: unset;
+        border: unset;
+      }
+    }
   }
 }
 </style>

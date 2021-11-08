@@ -29,6 +29,8 @@ export default axios => ({
     return axios.get(`profile`, payload);
   },
   register(payload) {
-    return axios.post('auth/register', payload)
+    return axios.post('auth/register', payload).then(response => {
+      return response.data;
+    })
   }
 })
