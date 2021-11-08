@@ -1,7 +1,7 @@
 <template>
   <b-navbar toggleable="lg" class="header-bar" variant="">
     <b-container class="p-0">
-      <b-navbar-brand :to="{ name: 'ratings.dashboard' }">
+      <b-navbar-brand :to="{ name: 'ratings.home' }">
         VW Ratings
       </b-navbar-brand>
       <b-collapse id="nav-collapse" is-nav>
