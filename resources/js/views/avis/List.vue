@@ -5,23 +5,21 @@
              ok-title="Create"
              ok-variant="success"
              @ok="createAvi"
-             title="Create Avi">
+             title="Add a Name">
       <b-form>
-        <b-form-group label="Avi name">
-          <b-form-input type="text" v-model="form.name" />
+        <b-form-group label="">
+          <b-form-input type="text" placeholder="Enter Name" v-model="form.name" />
         </b-form-group>
       </b-form>
     </b-modal>
 
     <b-row class="d-flex justify-content-center">
       <div class="w-50 d-flex justify-content-between pt-5">
-        <b-button v-if="loggedIn" variant="success" class="w-25" @click="$refs['createAvi'].show()">Create Avi</b-button>
+        <b-button v-if="loggedIn" variant="success" class="w-25" @click="$refs['createAvi'].show()">Add Name</b-button>
         <b-form-select class="w-25" v-model="type">
           <b-form-select-option value="full_list">Full list</b-form-select-option>
           <b-form-select-option value="good_list">Good list</b-form-select-option>
           <b-form-select-option value="bad_list">Bad list</b-form-select-option>
-          <b-form-select-option value="recent_list">Recent list</b-form-select-option>
-          <b-form-select-option value="most_rated">Most rated</b-form-select-option>
           <b-form-select-option value="comments">Comments</b-form-select-option>
           <b-form-select-option value="pics">Pics</b-form-select-option>
         </b-form-select>
