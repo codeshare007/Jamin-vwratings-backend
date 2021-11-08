@@ -23,7 +23,7 @@
 			</div>
 			<hr>
 			<div class="text-center">
-				<b-button :to="{name: 'ratings.dashboard'}">Home</b-button>
+				<b-button :to="{name: 'ratings.home'}">Home</b-button>
 				<b-button :to="{name: 'ratings.forum'}">Forum</b-button>								
 			</div>
           </b-card-body>

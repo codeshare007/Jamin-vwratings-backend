@@ -1,9 +1,9 @@
 export default [
   {
-    name: 'ratings.dashboard',
+    name: 'ratings.home',
     path: '',
-    component: () => import('../../../views/Dashboard'),
-    meta: {title: 'Dashboard'}
+    component: () => import('../../../views/home'),
+    meta: {title: 'vwRatings Home'}
   },
   {
     name: 'ratings.profile',

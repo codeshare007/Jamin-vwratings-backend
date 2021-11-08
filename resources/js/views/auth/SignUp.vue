@@ -104,7 +104,7 @@ export default {
       const payload = this.form;
       this.$api.auth.register(payload).then(response => {
         if (response.status === 'success') {
-          this.$router.push({name: 'ratings.dashboard'})
+          this.$router.push({name: 'ratings.home'})
         }
       }).catch(error => {
         this.errors = [];
