@@ -47,12 +47,12 @@
               </p>
               <div class="intro-right mt-2" v-if="!loading">
                 <div>
-                  <img class="img-preview" width="200" :src="'img/home/home-img-4.png'" alt data-toggle="modal" data-target="#myModal1">
-                  <img class="img-preview" width="200" :src="'img/home/home-img-3.jpeg'" alt data-toggle="modal" data-target="#myModal2">
+                  <img class="img-preview" width="200" :src="'img/home/home-img-4.png'" alt>
+                  <img class="img-preview" width="200" :src="'img/home/home-img-3.jpeg'" alt>
                 </div>
                 <div>
-                  <img class="img-preview" width="200" :src="'img/home/home-img-2.jiff'" alt data-toggle="modal" data-target="#myModal3">
-                  <img class="img-preview" width="200" :src="'img/home/home-img-1.jpeg'" alt data-toggle="modal" data-target="#myModal4">
+                  <img class="img-preview" width="200" :src="'img/home/home-img-2.jiff'" alt>
+                  <img class="img-preview" width="200" :src="'img/home/home-img-1.jpeg'" alt>
                 </div>
               </div>
             </div>
@@ -60,56 +60,16 @@
         </b-card>
       </b-col>
     </b-row>
-    <div class="modal" id="myModal1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">      
-          <!-- Modal body -->
-          <div class="modal-body">
-            <img src="img/home/home-img-4.png" width="900" height="700" alt/>        
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal" id="myModal2">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">      
-          <!-- Modal body -->
-          <div class="modal-body">
-            <img src="img/home/home-img-3.jpeg" width="900" height="700" alt/>        
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal" id="myModal3">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">     
-          <!-- Modal body -->
-          <div class="modal-body">
-            <img src="img/home/home-img-2.jiff" width="900" height="700" alt/>        
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal" id="myModal4">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">      
-          <!-- Modal body -->
-          <div class="modal-body">
-            <img src="img/home/home-img-1.jpeg" width="900" height="700" alt/>        
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>  
+  </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      loading: false,
-    };
-  },
-};
+      loading: false
+    }
+  }
+}
 </script>
 <style lang="scss">
 .img-preview {
@@ -122,9 +82,5 @@ export default {
 
 .img-preview:hover {
   opacity: 0.9;
-}
-.modal-body {
-    text-align: center;
-    background-color: #1a1d20;
 }
 </style>
