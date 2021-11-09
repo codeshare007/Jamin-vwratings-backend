@@ -2,8 +2,8 @@ export default [
   {
     name: 'ratings.home',
     path: '',
-    component: () => import('../../../views/home'),
-    meta: {title: 'vwRatings Home'}
+    component: () => import('../../../views/Home'),
+    meta: {title: 'Home'}
   },
   {
     name: 'ratings.profile',
@@ -35,13 +35,13 @@ export default [
     path: 'specialone',
     component: () => import('../../../views/buttons/specialone'),
     meta: {title: 'Special Page'}
-  },  
+  },
   {
     name: 'ratings.specialtwo',
     path: 'specialtwo',
     component: () => import('../../../views/buttons/specialtwo'),
     meta: {title: 'Special Page'}
-  },  
+  },
   {
     name: 'ratings.peepscreeps',
     path: 'peepscreeps',
@@ -53,7 +53,7 @@ export default [
     path: 'claim',
     component: () => import('../../../views/buttons/claim'),
     meta: {title: 'Claim Name'}
-  },  
+  },
   {
     name: 'ratings.info',
     path: 'info',
@@ -63,7 +63,7 @@ export default [
   {
     name: 'ratings.contact',
     path: 'contact',
-    component: () => import('../../../views/buttons/contact'),
+    component: () => import('../../../views/buttons/Contact'),
     meta: {title: 'Contact Us'}
   },
   {

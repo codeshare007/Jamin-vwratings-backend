@@ -37,7 +37,8 @@
             class="mb-3"
             :state="validateState('eighteen')"
             v-model="$v.form.eighteen.$model"
-          >I am at least 18yrs old</b-check>
+          >I am at least 18yrs old
+          </b-check>
           <div class="mb-3">
             <b-button type="submit" @click="register" variant="dark">Register</b-button>
           </div>
@@ -49,7 +50,9 @@
   </div>
 </template>
 <script>
-const { required, minLength, email, sameAs } = require('vuelidate/lib/validators')
+import {mapActions} from "vuex";
+
+const {required, minLength, email, sameAs} = require('vuelidate/lib/validators')
 export default {
   data() {
     return {
@@ -80,13 +83,15 @@ export default {
         minLength: minLength(6)
       },
       eighteen: {
-        sameAs: sameAs( () => true )
+        sameAs: sameAs(() => true)
       }
     }
   },
 
   methods: {
-
+    ...mapActions({
+      login: 'auth/LOGIN'
+    }),
     validateState(name) {
       const {$dirty, $error} = this.$v.form[name];
       return $dirty ? !$error : null;
@@ -104,7 +109,9 @@ export default {
       const payload = this.form;
       this.$api.auth.register(payload).then(response => {
         if (response.status === 'success') {
-          this.$router.push({name: 'ratings.home'})
+          this.login(payload).then(() => {
+            this.$router.push({name: 'ratings.profile'})
+          })
         }
       }).catch(error => {
         this.errors = [];
@@ -120,6 +127,7 @@ export default {
 </script>
 <style lang="scss">
 .auth-signup {
+
   h2, a, label {
     color: white;
   }

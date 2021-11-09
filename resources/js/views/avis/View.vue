@@ -33,38 +33,52 @@
       <div v-if="loggedIn">
         <p>Post a comment about {{ avi.name }}</p>
         <b-form class="d-flex flex-column" ref="commentForm">
-          <div class="d-flex justify-content-between align-items-center">
-            <b-form-group label="Choose your opinion">
-              <b-form-radio-group
-                :class="{ 'form-group__error': !errorRefreshed && $v.opinion.$error }"
-                v-model="$v.opinion.$model"
-                :state="validateState('opinion')"
-                :options="options"
-                buttons
-              />
-            </b-form-group>
-            <span v-if="$v.$error && !errorRefreshed" class="text-danger mt-3">
-              Not all fields submitted, opinion, images or message required
-            </span>
-            <div class="mt-2 pt-2 ml-3">
-              <b-button class="aviView__uploadButton" @click="openUploadDialog"><b-icon-paperclip /></b-button>
-              <input type="file" ref="file"
-                     @change="onFileChange" class="d-none" multiple="multiple" />
-            </div>
+          <b-row class="justify-content-between align-items-center">
+            <b-col>
+
+            </b-col>
+            <b-col class="d-flex justify-content-center">
+              <b-form-group class="m-0" label="Choose your opinion">
+                <b-form-radio-group
+                  :class="{ 'form-group__error': !errorRefreshed && $v.opinion.$error }"
+                  v-model="$v.opinion.$model"
+                  :state="validateState('opinion')"
+                  :options="options"
+                  buttons
+                />
+              </b-form-group>
+            </b-col>
+            <b-col class="d-flex justify-content-end">
+              <div class="mt-2 pt-2 ml-3" v-if="this.$v.opinion.$model !== null">
+                <b-button class="aviView__uploadButton" @click="openUploadDialog">
+                  <b-icon-paperclip/>
+                </b-button>
+                <input type="file" ref="file" @change="onFileChange" class="d-none" multiple="multiple"/>
+              </div>
+            </b-col>
+          </b-row>
+
+          <div class="text-center text-danger" style="height: 30px">
+            <p class="m-0" v-if="$v.$error && !errorRefreshed">Not all fields submitted, opinion, images or message required</p>
           </div>
+
           <b-form-textarea
+            v-if="$v.opinion.$model !== null"
             v-model="$v.comment.$model"
             :state="validateState('comment')"
             ref="commentArea"
             placeholder="Choose positive or negative before submitting"
           />
           <div class="mt-3 d-flex justify-content-between">
-            <div class="d-flex mt-3">
-              <viewer :images="previews">
-                <img alt class="imagePreview" v-for="src in previews" :key="src" :src="src">
-              </viewer>
-            </div>
             <div>
+              <div class="d-flex mt-3">
+                <viewer :images="previews">
+                  <img alt class="imagePreview" v-for="src in previews" :key="src" :src="src">
+                </viewer>
+              </div>
+              <span class="m-2 text-danger d-block" v-if="previews.length">Are you sure?</span>
+            </div>
+            <div v-if="this.$v.opinion.$model !== null">
               <b-button @click="send">Send</b-button>
             </div>
           </div>
@@ -96,7 +110,7 @@
   </div>
 </template>
 <script>
-const { required, minLength } = require('vuelidate/lib/validators')
+const {required, minLength} = require('vuelidate/lib/validators')
 import StarRating from 'vue-star-rating'
 
 import CommentItem from "../../components/avis/CommentItem";
@@ -183,6 +197,7 @@ export default {
   },
 
   methods: {
+
     openUploadDialog(e) {
       e.preventDefault();
       this.$refs['file'].click();
@@ -269,7 +284,8 @@ export default {
       this.$api.avis.comment(this.id, formData).then(() => {
         this.fetchAvi();
         this.$v.comment.$model = '';
-        this.$v.opinion.$model = '';
+        this.$v.opinion.$model = null;
+        this.$v.files.$model = [];
         this.errorRefreshed = true;
         this.$refs['commentForm'].reset();
         this.previews = [];

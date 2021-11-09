@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 
 class StalkalotParserService
 {
-
     public function execute()
     {
         $config = [
@@ -45,6 +44,8 @@ class StalkalotParserService
 
         if ($config['users']) {
             $users = $database->select('SELECT * FROM user');
+
+
             foreach ($users as $user) {
                 $newUser = User::firstOrCreate([
                     'id' => $user->id,
@@ -57,8 +58,8 @@ class StalkalotParserService
                     'referrer_name' => !empty($user->referred_by) ? $user->referred_by : null,
                     'points' => $user->points,
                     'last_visit' => Carbon::parse($user->last_visit),
-                    'updated_at' => Carbon::createFromTimestamp($user->updated_at)->toDateTimeString('second'),
-                    'created_at' => Carbon::createFromTimestamp($user->created_at)->toDateTimeString('second')
+                    'updated_at' => Carbon::createFromTimestamp($user->updated_at)->toDateTimeString(),
+                    'created_at' => Carbon::createFromTimestamp($user->created_at)->toDateTimeString()
                 ]);
 
                 if ($user->notes !== 'x' && $user->notes !== '') {
@@ -78,8 +79,8 @@ class StalkalotParserService
                     'user_id' => $avi->added_by !== 0 && $avi->added_by !== null ? $avi->added_by : null,
                     'name' => $avi->name,
                     'status' => $avi->claim_status,
-                    'updated_at' => Carbon::createFromTimestamp($avi->updated_at),
-                    'created_at' => Carbon::createFromTimestamp($avi->created_at)
+                    'created_at' => Carbon::parse($avi->created_at)->toDateTimeString(),
+                    'updated_at' => Carbon::parse($avi->updated_at)->toDateTimeString()
                 ]);
 
                 if ($avi->interview !== '123') {

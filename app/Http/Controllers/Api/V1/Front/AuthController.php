@@ -34,8 +34,12 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
+        if (!$user = User::where('username', '=', $request->get('username'))->first()) {
+            return response()->json(['status' => 'error', 'message' => 'wrong username'], 401);
+        }
+
         if (!$token = JWTAuth::attempt($request->only('username', 'password'))) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['status' => 'error', 'message' => 'wrong password'], 401);
         }
 
         return $this->createNewToken($token);
@@ -49,7 +53,7 @@ class AuthController extends Controller
     {
         $this->validate($request, [
            'username' => 'required|string|unique:users|max:255',
-           'email' => 'email',
+           'email' => 'email|nullable',
            'password' => 'required|min:6',
            'password_repeat' => 'required_with:password|same:password|min:6'
         ]);

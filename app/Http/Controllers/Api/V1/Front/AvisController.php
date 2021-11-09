@@ -18,7 +18,7 @@ class AvisController extends Controller
      */
     public function index(Request $request)
     {
-        $avis = Avi::select(['id', 'name']);
+        $avis = Avi::query();
 
         if ($request->has('query')) {
             $avis->where('name', 'LIKE', "%{$request->get('query')}%");
@@ -29,57 +29,18 @@ class AvisController extends Controller
         }
 
         if ($request->has('type')) {
-            $type = $request->get('type');
-
-            switch ($type):
-                case('bad_list'):
-                    $avis->with('ratings')
-                        ->has('ratings')
-                        ->leftJoin('avis_ratings', 'avis_ratings.avis_id', '=', 'avis.id')
-                        ->select(['avis.*', DB::raw('AVG(avis_ratings.rating) as ratings_average')])
-                        ->groupBy(DB::raw('`avis_ratings`.`avis_id`'))
-                        ->having('ratings_average', '>=', '10')
-                        ->orderBy('ratings_average', 'DESC')
-                        ->limit(10);
+            switch ($request->get('type')):
+                case('full_list'): $avis->select(['id', 'name'])->latest();
                     break;
-                case('good_list'):
-                    $avis->with('ratings')
-                        ->leftJoin('avis_ratings', 'avis_ratings.avis_id', '=', 'avis.id')
-                        ->select(['avis.*', DB::raw('AVG(avis_ratings.rating) as ratings_average')])
-                        ->groupBy(DB::raw('`avis_ratings`.`avis_id`'))
-                        ->having('ratings_average', '<', '4')
-                        ->orderBy('ratings_average', 'ASC')
-                        ->limit(10);
+                case('good_list'): $avis->averageRating('>', 9);
                     break;
-                case('recent_list'):
-                    $avis->distinct()->has('ratings')
-                        ->with('ratings')
-                        ->leftJoin('avis_ratings', 'avis_ratings.avis_id', '=', 'avis.id')
-                        ->select(['avis.*'])
-                        ->groupBy(DB::raw('`avis_ratings`.`updated_at`'))
-                        ->orderBy(DB::raw('`avis_ratings`.`updated_at`'), 'desc')
-                        ->limit(10);
+                case('bad_list'): $avis->averageRating('<',  4, 'ASC');
                     break;
-                case('comments'):
-                    $avis->has('comments')
-                        ->with('comments')
-                        ->leftJoin('avis_comments', 'avis_comments.avis_id', '=', 'avis.id')
-                        ->select(['avis.*', DB::raw('COUNT(avis_comments.id) as avis_count')])
-                        ->groupBy(DB::raw('`avis_comments`.`avis_id`'))
-                        ->orderBy(DB::raw('`avis_comments`.`created_at`'), 'desc')
-                        ->orderBy('avis_count', 'DESC')
-                        ->limit(10);
+                case('recent_list'): $avis->recentRated();
                     break;
-                case('pics'):
-                    $avis->has('comments')
-                        ->with('comments')
-                        ->leftJoin('avis_comments', 'avis_comments.avi_id', '=', 'avis.id')
-                        ->select(['avis.*', DB::raw('COUNT(avis_comments.file) as avis_count')])
-                        ->groupBy(DB::raw('`avis_comments`.`avi_id`'))
-                        ->orderBy(DB::raw('`avis_comments`.`created_at`'), 'desc')
-                        ->having('avis_count', '>', '0')
-                        ->orderBy('avis_count', 'DESC')
-                        ->limit(10);
+                case('comments'): $avis->latestComments();
+                    break;
+                case('pics'): $avis->latestAttachments();
                     break;
             endswitch;
         }

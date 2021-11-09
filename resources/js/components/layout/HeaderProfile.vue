@@ -1,8 +1,8 @@
 <template>
   <div class="headerProfile">
     <div class="headerProfile__button" @click="hidden = !hidden">
-      <span class="headerProfile__name">{{ profile.username }}</span>
-      <b-avatar :src="profile.avatar" size="1.5rem" />
+        <span class="headerProfile__name">{{ profile.username }}</span>
+        <b-avatar :src="profile.avatar" size="1.5rem" />
     </div>
     <transition name="fade">
       <div class="headerProfile__menu" v-if="!hidden">
@@ -64,9 +64,10 @@ export default {
 
   &__name {
     color: white;
-    font-size: 24px;
+    font-size: 21px;
     font-weight: 300;
     text-transform: lowercase;
+    margin-bottom: 3px;
   }
 
   .b-avatar {

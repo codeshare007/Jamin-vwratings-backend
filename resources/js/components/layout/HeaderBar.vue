@@ -51,7 +51,8 @@ export default {
 </script>
 <style lang="scss">
 .header-bar {
-  margin-bottom: 40px;
+  height: 120px;
+  //margin-bottom: 40px;
 
   .navbar-brand {
     font-family: 'Futura PT', sans-serif;

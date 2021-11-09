@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @method static firstOrCreate(array $array)
@@ -18,8 +19,52 @@ class Avi extends Model
 
     protected $fillable = [
         'user_id',
-        'name'
+        'status',
+        'name',
+        'created_at',
+        'updated_at'
     ];
+
+    public function scopeLatestComments($query)
+    {
+        return $query->has('comments')
+            ->leftJoin('avis_comments', 'avis_comments.avis_id', '=', 'avis.id')
+            ->select(['avis.id', 'avis.name', DB::raw('COUNT(avis_comments.id) as avis_count')])
+            ->groupBy(DB::raw('`avis_comments`.`avis_id`'))
+            ->orderBy(DB::raw('`avis_comments`.`created_at`'), 'desc')
+            ->orderBy('avis_count', 'DESC');
+    }
+
+    public function scopeLatestAttachments($query)
+    {
+        return $query->has('comments')
+            ->leftJoin('avis_comments', 'avis_comments.avis_id', '=', 'avis.id')
+            ->rightJoin('avis_comments_attachments', 'avis_comments_attachments.comment_id', '=', 'avis_comments.id')
+            ->select(['avis.id', 'avis.name', DB::raw('COUNT(avis_comments_attachments.id) as attachments_count')])
+            ->groupBy(DB::raw('`avis_comments`.`avis_id`'))
+            ->orderBy(DB::raw('`avis_comments_attachments`.`created_at`'), 'desc')
+            ->having('attachments_count', '>', '0')
+            ->orderBy('attachments_count', 'DESC');
+    }
+
+    public function scopeRecentRated($query)
+    {
+        return $query->distinct()->has('ratings')
+            ->leftJoin('avis_ratings', 'avis_ratings.avis_id', '=', 'avis.id')
+            ->select(['avis.id', 'avis.name'])
+            ->groupBy(DB::raw('`avis_ratings`.`updated_at`'))
+            ->orderBy(DB::raw('`avis_ratings`.`updated_at`'), 'desc');
+    }
+
+    public function scopeAverageRating($query, $operator, $rating, $sort = 'DESC')
+    {
+        return $query->with('ratings')
+            ->leftJoin('avis_ratings', 'avis_ratings.avis_id', '=', 'avis.id')
+            ->select(['avis.id', 'avis.name', DB::raw('AVG(avis_ratings.rating) as ratings_average')])
+            ->groupBy(DB::raw('`avis_ratings`.`avis_id`'))
+            ->having('ratings_average', $operator, $rating)
+            ->orderBy('ratings_average', $sort);
+    }
 
     public function getUserRatingAttribute()
     {

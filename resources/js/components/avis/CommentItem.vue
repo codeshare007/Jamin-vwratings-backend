@@ -8,9 +8,9 @@
     <div class="commentItem__content">
       <p>{{ comment.content }}</p>
       <div class="commentItem__attachments">
-        <div v-for="(attachment, key) in comment.attachments" :key="key">
-          <a target="_blank" :href="attachment.path"><b-img class="attachmentItem mr-2" :src="attachment.path"/></a>
-        </div>
+        <viewer v-for="(attachment, key) in comment.attachments" :key="key">
+          <img alt="Attachment" class="attachmentItem mr-2" :src="attachment.path"/>
+        </viewer>
       </div>
     </div>
   </div>
@@ -74,6 +74,7 @@ export default {
   .attachmentItem {
     width: 100px;
     height: 100px;
+    cursor: pointer;
     object-fit: cover;
   }
 

@@ -1,4 +1,13 @@
 export default axios => ({
+  fetch(page = 1, filter = {}) {
+    return axios.get('avis', {
+      params: {
+        page: page,
+        ...filter
+      }
+    });
+  },
+  /*
   fetch(payload = {}) {
     let params = {page: 1, per_page: 10}
     if (payload.query) params.query = payload.query;
@@ -10,6 +19,8 @@ export default axios => ({
       return response.data;
     });
   },
+
+   */
   rating(id, payload) {
     return axios.post(`avis/${id}/rate`, payload)
   },

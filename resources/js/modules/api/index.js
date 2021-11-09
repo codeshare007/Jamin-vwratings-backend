@@ -3,6 +3,7 @@ import Cookie from 'js-cookie';
 
 import apiAuth from './methods/auth';
 import apiProfile from './methods/profile';
+import apiComments from './methods/comments';
 import apiAvis from './methods/avis';
 
 import apiAdminDashboard from './methods/adminDashboard'
@@ -109,6 +110,7 @@ export default {
       auth: apiAuth(this.apiInstance),
       profile: apiProfile(this.apiInstance),
       avis: apiAvis(this.apiInstance),
+      comments: apiComments(this.apiInstance),
       adminDashboard: apiAdminDashboard(this.apiInstance),
       adminAvis: apiAdminAvis(this.apiInstance),
       adminComments: apiAdminComments(this.apiInstance),
