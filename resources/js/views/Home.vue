@@ -42,7 +42,7 @@
   }
 
   .infoCard {
-    background: #1c4a1d;
+    background: #29413b;
     text-align: center;
     font-size: 18px;
     max-width: 32%;
