@@ -20,8 +20,8 @@ class AvisController extends Controller
     {
         $avis = Avi::query();
 
-        if ($request->has('query')) {
-            $avis->where('name', 'LIKE', "%{$request->get('query')}%");
+        if ($request->has('search')) {
+            $avis->where('name', 'LIKE', "%{$request->get('search')}%");
         }
 
         if ($request->has('per_page')) {
