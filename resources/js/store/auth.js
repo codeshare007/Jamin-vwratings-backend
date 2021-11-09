@@ -62,7 +62,7 @@ export default {
 
     GET_PROFILE: async function ({commit}) {
       let {data} = await this.$api.auth.me();
-      commit('SET_ADMIN', data.role);
+      commit('SET_ADMIN', data.role === 1);
       commit('SET_PROFILE', data);
     },
   },

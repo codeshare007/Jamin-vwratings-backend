@@ -35,6 +35,8 @@
     background: #24252d;
     padding: 10px 0;
     border-radius: 5px;
+    position: sticky;
+    top: 20px;
     .nav-link {
       color: white;
       font-size: 20px;

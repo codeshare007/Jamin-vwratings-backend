@@ -26,7 +26,7 @@ class UsersController extends Controller
                 ->orWhere('email', 'LIKE', '%' . $query . '%');
         }
 
-        return $users->paginate(10);
+        return $users->paginate(100);
     }
 
     /**

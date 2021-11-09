@@ -15,7 +15,7 @@ export function Guest({next, store, to}) {
 }
 
 export function Admin({next, store, to}) {
-  if (!store.getters['auth/loggedIn'] || store.getters['auth/isAdmin'] !== 1) {
+  if (!store.getters['auth/loggedIn'] || !store.getters['auth/isAdmin']) {
     return next({name: 'ratings'});
   }
 
@@ -45,7 +45,7 @@ export function Permission({next, store, to}) {
     if (store && store.state.auth.profile && store.state.auth.permissions) {
         if (!checkPermission(slug)) {
             return next({
-                name: 'ratings.dashboard'
+                name: 'ratings.home'
             });
         }
     }

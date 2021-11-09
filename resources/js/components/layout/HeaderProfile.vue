@@ -7,6 +7,7 @@
     <transition name="fade">
       <div class="headerProfile__menu" v-if="!hidden">
         <button @click="$router.push({ name: 'ratings.profile' }).catch(err => {}); hidden = true">profile</button>
+        <button v-if="isAdmin" @click="$router.push({ name: 'admin.dashboard' }).catch(err => {}); hidden = true">admin</button>
         <button @click="emitLogout">logout</button>
       </div>
     </transition>
@@ -27,6 +28,9 @@ export default {
     profile() {
       return this.$store.getters['auth/profile']
     },
+    isAdmin() {
+      return this.$store.getters['auth/isAdmin']
+    }
   },
 
   methods: {

@@ -23,7 +23,7 @@ class MessagesController extends Controller
                 ->orWhere('content', 'LIKE', '%' . $query . '%');
         }
 
-        return $users->paginate(10);
+        return $users->paginate(100);
     }
 
     /**

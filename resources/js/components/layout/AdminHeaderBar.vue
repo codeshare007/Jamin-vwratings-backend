@@ -1,7 +1,7 @@
 <template>
   <b-navbar toggleable="lg" class="header-bar" variant="">
     <b-container class="p-0">
-      <b-navbar-brand :to="{ name: 'ratings.dashboard' }">
+      <b-navbar-brand :to="{ name: 'ratings.home' }">
         VW Ratings
       </b-navbar-brand>
       <b-navbar-toggle
@@ -11,7 +11,7 @@
       />
       <div id="nav-mobile" class="nav-mobile" :class="{'d-none': !isMobileMenu }">
         <div class="d-flex justify-content-between mt-2">
-          <b-navbar-brand class="ml-3" :to="{ name: 'ratings.dashboard' }">
+          <b-navbar-brand class="ml-3" :to="{ name: 'ratings.home' }">
             Ratings
           </b-navbar-brand>
           <button>
@@ -77,7 +77,7 @@ export default {
   data() {
     return {
       menu: [
-        {name: 'Dashboard', path: {name: 'ratings.dashboard'}},
+        {name: 'Dashboard', path: {name: 'ratings.home'}},
         {name: 'Parties', path: {name: 'ratings.parties.list'}},
         {name: 'Avis', path: {name: 'ratings.avis.list'}},
         {name: 'Creeps', path: {name: 'ratings.creeps.list'}},

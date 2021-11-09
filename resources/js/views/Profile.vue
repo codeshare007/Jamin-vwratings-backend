@@ -9,21 +9,25 @@
           <b-button class="mt-3">Logout</b-button>
         </b-card>
       </b-col>
-      <b-col>
-        <b-card header="Last comments" bg-variant="dark" text-variant="white">
-          <b-card-body style="min-height: 500px; padding: 0">
-            <div class="border-bottom pt-4 pb-4 pl-2" v-for="(comment, key) in comments" :key="key">
-              {{ comment.content }}
-            </div>
-          </b-card-body>
-        </b-card>
+      <b-col cols="6">
+
       </b-col>
     </b-row>
+
+    <b-card class="mt-5" header="Last comments" bg-variant="dark" text-variant="white">
+      <b-card-body style="min-height: 500px; padding: 0">
+        <CommentItem v-for="(comment, key) in comments" :key="key" :comment="comment" />
+      </b-card-body>
+    </b-card>
+
+    <br>
+    <br>
   </div>
 </template>
 <script>
+import CommentItem from "../components/avis/CommentItem";
 export default {
-
+  components: {CommentItem},
   data() {
     return {
       comments: []

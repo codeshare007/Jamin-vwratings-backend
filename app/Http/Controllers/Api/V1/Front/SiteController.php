@@ -10,11 +10,7 @@ class SiteController extends Controller
 {
     public function comments()
     {
-        if ($id = auth()->user()->id) {
-            return AvisComments::where('user_id', '=', $id)->get();
-        }
-
-        return response()->json(['status' => 'error', 'message' => 'Not Authenticated']);
+        return AvisComments::where('user_id', '=', auth()->user()->getAuthIdentifier())->get();
     }
 
     /**

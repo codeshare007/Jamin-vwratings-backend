@@ -10,7 +10,7 @@ class AvisCommentsController extends Controller
 {
     public function index()
     {
-        return AvisComments::with(['user', 'avi'])->paginate(10);
+        return AvisComments::with(['user', 'avi'])->paginate(100);
     }
 
     public function create(Request $request)

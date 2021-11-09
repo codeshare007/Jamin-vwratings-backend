@@ -21,7 +21,7 @@ const routes = [
   {
     path: '/',
     name: 'ratings',
-    redirect: { name: 'ratings.dashboard' },
+    redirect: { name: 'ratings.home' },
     component: () => import('../../layouts/default'),
     children: RatingsRoutes
   },
