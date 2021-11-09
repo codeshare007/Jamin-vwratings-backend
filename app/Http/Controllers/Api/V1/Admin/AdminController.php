@@ -8,17 +8,13 @@ use App\Models\AvisComments;
 use App\Models\AvisRatings;
 use App\Models\User;
 
-class DashboardController extends Controller
+class AdminController extends Controller
 {
-    public function information()
+    public function dashboard()
     {
-
         $users = User::all()->count();
-
         $avis = Avi::all()->count();
-
         $avisComments = AvisComments::all()->count();
-
         $avisRatings = AvisRatings::all()->count();
 
         return response()->json([

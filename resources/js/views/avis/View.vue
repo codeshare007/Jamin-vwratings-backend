@@ -10,6 +10,7 @@
       <div class="d-flex w-100 justify-content-center justify-items-center">
         <star-rating
           :max-rating="12"
+          :increment="0.5"
           :read-only="true"
           :rating="avi.average_rating"
         />
@@ -23,6 +24,7 @@
       <div class="d-flex w-100 justify-content-center justify-items-center">
         <star-rating
           :max-rating="12"
+          :increment="0.5"
           @rating-selected="setRating"
           :rating="avi.user_rating"
         />

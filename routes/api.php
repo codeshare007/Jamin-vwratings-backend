@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,67 +12,45 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::get('v1/migrate', 'App\Http\Controllers\Api\V1\Front\TestController@databaseMigration');
-
 Route::prefix('v1')->group(function () {
 
-    Route::prefix('avis')->group(function() {
+    // Public Methods
+    Route::post('send-message', 'App\Http\Controllers\Api\V1\Front\SiteController@message');
+
+    Route::prefix('avis')->group(function () {
         Route::get('', 'App\Http\Controllers\Api\V1\Front\AvisController@index');
         Route::post('create', 'App\Http\Controllers\Api\V1\Front\AvisController@create');
         Route::get('{id}', 'App\Http\Controllers\Api\V1\Front\AvisController@show');
-
-        // Actions
         Route::post('{id}/rate', 'App\Http\Controllers\Api\V1\Front\AvisController@rate');
         Route::post('{id}/comment', 'App\Http\Controllers\Api\V1\Front\AvisController@comment');
     });
 
-
-    Route::post('send-message', 'App\Http\Controllers\Api\V1\Front\SiteController@message');
-
-
+    // Auth methods
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
         Route::post('login', 'App\Http\Controllers\Api\V1\Front\AuthController@login');
         Route::post('register', 'App\Http\Controllers\Api\V1\Front\AuthController@register');
     });
 
+    // Authenticated methods
     Route::middleware('auth:api')->group(function () {
+
+        Route::get('comments', 'App\Http\Controllers\Api\V1\Front\SiteController@comments');
+
         Route::prefix('auth')->group(function () {
             Route::post('logout', 'App\Http\Controllers\Api\V1\Front\AuthController@logout');
             Route::post('refresh', 'App\Http\Controllers\Api\V1\Front\AuthController@refresh');
             Route::get('me', 'App\Http\Controllers\Api\V1\Front\AuthController@me');
         });
 
-        Route::get('comments', 'App\Http\Controllers\Api\V1\Front\SiteController@comments');
+        // Admin methods
+        Route::prefix('admin')->group(function () {
+            Route::get('dashboard', 'App\Http\Controllers\Api\V1\Admin\AdminController@dashboard');
 
-        Route::prefix('admin')->group(function() {
-
-            Route::get('dashboard/information', 'App\Http\Controllers\Api\V1\Admin\DashboardController@information');
-
-            Route::prefix('users')->group(function() {
-                Route::get('', 'App\Http\Controllers\Api\V1\Admin\UsersController@index');
-                Route::get('{id}', 'App\Http\Controllers\Api\V1\Admin\UsersController@show');
-                Route::post('create', 'App\Http\Controllers\Api\V1\Admin\UsersController@create');
-                Route::post('{id}', 'App\Http\Controllers\Api\V1\Admin\UsersController@edit');
-                Route::delete('{id}', 'App\Http\Controllers\Api\V1\Admin\UsersController@delete');
-            });
-
-            Route::prefix('messages')->group(function() {
-                Route::get('', 'App\Http\Controllers\Api\V1\Admin\MessagesController@index');
-                Route::post('bulk-delete', 'App\Http\Controllers\Api\V1\Admin\MessagesController@bulkDelete');
-                Route::delete('{id}', 'App\Http\Controllers\Api\V1\Admin\MessagesController@delete');
-            });
-
-            Route::prefix('avis')->group(function() {
-                Route::get('', 'App\Http\Controllers\Api\V1\Admin\AvisController@index');
-            });
-            Route::prefix('comments')->group(function() {
-                Route::get('', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@index');
-            });
-            Route::prefix('ratings')->group(function() {
-                Route::get('', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController@index');
-            });
+            Route::resource('users', 'App\Http\Controllers\Api\V1\Admin\UsersController');
+            Route::resource('messages', 'App\Http\Controllers\Api\V1\Admin\MessagesController');
+            Route::resource('avis', 'App\Http\Controllers\Api\V1\Admin\AvisController');
+            Route::resource('comments', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController');
+            Route::resource('ratings', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController');
         });
     });
 });
-
