@@ -42,12 +42,14 @@
         {{ data.item.role | role }}
       </template>
       <template #cell(actions)="data">
-        <b-button variant="primary" size="sm" @click="edit(data.item.id)">
-          <b-icon-pencil />
-        </b-button>
-        <b-button variant="danger" size="sm" @click="remove(data.item.id)">
-          <b-icon-trash/>
-        </b-button>
+        <div class="d-flex">
+          <b-button class="mr-2" variant="primary" size="sm" @click="edit(data.item.id)">
+            <b-icon-pencil />
+          </b-button>
+          <b-button variant="danger" size="sm" @click="remove(data.item.id)">
+            <b-icon-trash/>
+          </b-button>
+        </div>
       </template>
     </b-table>
     <b-pagination
@@ -55,11 +57,9 @@
       @change="handlePageChange"
       :total-rows="total"
     />
-
     <b-modal ref="deleteModal" title="Delete User" @ok="remove" ok-variant="danger" ok-title="Delete">
       Are you sure that you want to delete this user?
     </b-modal>
-
   </div>
 </template>
 <script>
@@ -90,7 +90,7 @@ export default {
             return item ? item: '—'
           }, sortable: true},
         {key: 'role', sortable: true},
-        {key: 'created_at', sortable: true, formatter: createdAt => {
+        {key: 'created_at', thStyle: 'white-space: nowrap', sortable: true, formatter: createdAt => {
             return moment(createdAt).format('YYYY-MM-DD HH:mm')
           }},
         {key: 'actions'}

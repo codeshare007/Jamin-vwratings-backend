@@ -4,7 +4,7 @@
       <UserEditDialog />
     </div>
 
-    <b-container class="p-0">
+    <b-container fluid class="pr-5 pl-5">
       <HeaderBar />
       <b-row class="p-0 m-0">
         <b-col class="p-0" cols="12" lg="2">

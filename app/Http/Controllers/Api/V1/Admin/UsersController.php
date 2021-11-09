@@ -43,11 +43,11 @@ class UsersController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function create(Request $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $this->validate($request, [
             'username' => 'required',
-            'email' => 'email',
+            'email' => 'nullable|email',
             'role' => 'required|int',
             'password' => 'required|string'
         ]);
@@ -100,7 +100,7 @@ class UsersController extends Controller
      * @param $id
      * @return JsonResponse|void
      */
-    public function delete($id)
+    public function destroy($id)
     {
         if ($user = User::findOrFail($id)) {
             $user->delete();
