@@ -30,7 +30,6 @@
           <b-form-select-option value="full_list">All</b-form-select-option>
           <b-form-select-option value="good_list">Good</b-form-select-option>
           <b-form-select-option value="bad_list">Bad</b-form-select-option>
-          <b-form-select-option value="recent_list">Recent</b-form-select-option>
           <b-form-select-option value="comments">Comments</b-form-select-option>
           <b-form-select-option value="pics">Pics</b-form-select-option>
         </b-form-select>

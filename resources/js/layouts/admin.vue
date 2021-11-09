@@ -3,7 +3,6 @@
     <div v-if="isAdmin">
       <UserEditDialog />
     </div>
-
     <b-container fluid class="pr-5 pl-5">
       <HeaderBar />
       <b-row class="p-0 m-0">
