@@ -2,10 +2,10 @@
   <div class="auth-page" style="min-height: inherit">
     <b-row class="d-flex justify-content-center align-items-center" style="min-height: inherit">
       <div class="auth-container">
+             <div class="text-center mt-2"><router-link :to="{ name: 'auth.signup'}" style="font-size: 20px;">Not signed	 up? Go Register</router-link></div>	  
         <b-row class="d-flex justify-content-center align-items-center">
           <b-col cols="12">
             <div class="auth-page__signin" @keyup.enter="submitLogin()" v-if="this.signin_form">
-              <h2 class="text-white">Login</h2>
               <span class="error-message text-center text-danger d-block">{{ this.error }}</span>
               <b-form-group class="m-0 mb-1">
                 <b-form-input
@@ -36,27 +36,27 @@
                 </div>
               </b-form-group>
               <b-button size="large" variant="dark" class="w-100" type="submit" @click="submitLogin()">Login</b-button>
-              <div class="text-center mt-2"><router-link :to="{ name: 'auth.signup'}" style="font-size: 20px;">Need an account first? Go Register</router-link></div>
+              <div class="text-center mt-2"><router-link :to="{ name: 'auth.signup'}" style="font-size: 20px;">Not signed up? Go Register</router-link></div>
               <a class="text-center mt-3 d-block cursor-pointer" @click="signin_form = false">Forgot password?</a>
 
             </div>
             <div class="auth-page__forgot" v-else>
 
               <div v-if="!forget_sent">
-                <h2 class="font-weight-bold">Forgotten Password ?</h2>
+                <h3 class="font-weight-bold text-center">Password reset</h3>
 
-                <span class="d-block mb-5 text-black-50">Enter your email to reset your password</span>
+                <span class="d-block mb-1 text-white-50">Enter your email to reset your password</span>
 
                 <b-form-input
                   class="pt-4 pb-4"
-                  placeholder="Email"
+                  placeholder="Email you signed up with"
                   type="text"
                   v-model="forgetForm.email"
                   @keyup.enter="submitForgetPassword()"
                   autofocus
                 />
 
-                <div class="mt-3">
+                <div class="mt-3 text-center">
                   <b-button variant="primary" class="mr-2" type="submit" @click="submitForgetPassword()">Send</b-button>
                   <b-button @click="signin_form = true">Back</b-button>
                 </div>
@@ -159,7 +159,7 @@ export default {
   }
 
   a {
-    color: white;
+    color: #9F6;
   }
 
   .password-group {
@@ -196,11 +196,17 @@ export default {
   }
 
   .auth-container {
-    background: #24252d;
+    background: #000;
     padding: 25px;
-    width: 500px;
+    width: 340px;
     border-radius: 5px;
     margin-bottom: 100px;
   }
+  
+  .btn-primary {
+    color: #fff;
+    background-color: #508f3e;
+    border-color: #ffffff;
+}
 }
 </style>

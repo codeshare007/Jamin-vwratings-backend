@@ -40,7 +40,7 @@
           >I am at least 18yrs old
           </b-check>
           <div class="mb-3">
-            <b-button type="submit" @click="register" variant="dark">Register</b-button>
+            <b-button type="submit" @click="register">Register</b-button>
           </div>
 
           <router-link :to="{ name: 'auth.signin'}">Already a member? Login</router-link>
@@ -141,11 +141,24 @@ export default {
   }
 
   .auth-container {
-    background: #24252d;
+    background: #000;
     padding: 25px;
-    width: 500px;
+    width: 340px;
     border-radius: 5px;
     margin-bottom: 100px;
   }
+  
+  .btn-secondary {
+    color: #fff;
+    background-color: transparent;
+    border-color: #99ff66;
+	font-size: 1rem;
+}
+
+.btn-secondary:hover {
+    color: #57bd25;
+    background-color: #ffffff;
+    border-color: #57bd25;
+}
 }
 </style>

@@ -1,22 +1,46 @@
 <template>
-  <div class="homePage">
+    <div class="page-container text-center">      
+      <div class="container-fluid tm-content-container">
+            <div class="position-relative page-width-1 page-right">
+              <div class="tm-bg-dark content-pad">
+                 <h3 class="mb-4">Welcome to vwRatings<br><span style="font-size:20px">Behaviour ratings of vw
+                        characters to highlight the
+                        awesome and expose the rotten.</span></h3>
 
-    <b-card bg-variant="dark" text-variant="white">
-      <h1 class="text-center">Welcome to vwRatings</h1>
-      <h2 class="text-center">Behaviour ratings of vw characters to highlight the awesome and expose the rotten.</h2>
-
-      <div class="d-flex justify-content-between mt-5">
-        <div class="infoCard">1000s of player names</div>
-        <div class="infoCard">1000s of comments & pics</div>
-        <div class="infoCard">1000s of ratings</div>
-      </div>
-
-      <div class="mt-4">
-        <p class="text-center m-0">Rate and comment about other vw players that you think are exceptional or just plain
-          trouble.</p>
-        <p class="text-center">Everything is anonymous....</p>
-      </div>
-
+                <div class="content">
+                    <div class="row row-deck">
+                        <div class="col-md-6 col-xl-4">
+                            <div class="block block-rounded">
+                                <div class="block-content fs-sm texting">
+                                    <p>
+                                        1000s of player names
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="block block-rounded">
+                                <div class="block-content fs-sm texting">
+                                    <p>
+                                        1000s of comments & pics
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="block block-rounded">
+                                <div class="block-content fs-sm texting">
+                                    <p>
+                                        1000s of ratings
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mb-0">
+                    Rate and comment about other vw players that you think are exceptional or just plain
+                    trouble.<br> Everything is anonymous....</p>				
       <div class="d-flex justify-content-center">
         <div class="homePage__gallery">
           <viewer>
@@ -27,27 +51,23 @@
           </viewer>
         </div>
       </div>
-    </b-card>
+    </div>
   </div>
+</div>
+</div>
 </template>
 <style lang="scss">
+.texting {
+	background: #1c4a1d;
+	}
+
+.viewer-backdrop {
+    background-color: rgba(0, 0, 0, 1);
+}
+
 .homePage {
 
-  h1 {
-    font-size: 28px;
-  }
 
-  h2 {
-    font-size: 20px;
-  }
-
-  .infoCard {
-    background: #29413b;
-    text-align: center;
-    font-size: 18px;
-    max-width: 32%;
-    flex: 0 0 32%;
-  }
 
   &__gallery {
     width: 345px;
