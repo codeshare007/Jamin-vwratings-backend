@@ -114,7 +114,7 @@
 <script>
 const {required, minLength} = require('vuelidate/lib/validators')
 import StarRating from 'vue-star-rating'
-
+import Cookie from "js-cookie";
 import CommentItem from "../../components/avis/CommentItem";
 
 export default {
@@ -174,7 +174,15 @@ export default {
   },
 
   mounted() {
-    this.fetchAvi()
+    this.fetchAvi();
+
+    if (Cookie.get('promo')) {
+      let amount = Cookie.get('promo');
+      Cookie.set('promo', parseInt(amount + 1))
+
+    } else {
+      Cookie.set('promo', 1);
+    }
   },
 
   computed: {

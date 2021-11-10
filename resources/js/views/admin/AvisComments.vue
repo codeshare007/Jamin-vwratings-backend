@@ -149,12 +149,6 @@ export default {
         {key: 'name', label: 'avi', sortable: true},
         {key: 'content'},
         {key: 'opinion', sortable: true},
-        {
-          key: 'created_at', formatter: createdAt => {
-            return moment(createdAt).format('YYYY-MM-DD HH:mm')
-          }, thStyle: 'white-space: nowrap; min-width: 150px,',
-          sortable: true
-        },
         {key: 'actions', thStyle: 'min-width: 120px', sortable: false}
       ]
     }

@@ -1,15 +1,53 @@
 <template>
   <div class="promoPage">
-    <h1></h1>
+    <div class="promoPage__header">
+      <h4 class="mt-3 mb-5">Continue stalking in {{ timerCount }} seconds</h4>
+
+      <hr class="bg-white">
+    </div>
+    <div class="promoPage__body">
+      <iframe width="100%" height="700px" src="https://www.youtube.com/embed/mowYouYRscw" title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+    </div>
   </div>
 </template>
 <script>
-  export default {
+export default {
+  data() {
+    return {
+      timerCount: 30
+    }
+  },
+
+  watch: {
+    timerCount: {
+      handler(value) {
+        if (value > 0) {
+          setTimeout(() => {
+            this.timerCount--;
+          }, 1000);
+        }
+      },
+      immediate: true
+    }
+  },
+
+
+  mounted() {
 
   }
+}
 </script>
 <style lang="scss">
-  .promoPage {
-    background: rgb(44 71 92);
+.promoPage {
+  height: 100vh;
+  background: rgb(44 71 92);
+
+  &__header {
+    padding: 20px;
+    color: white;
   }
+}
 </style>
