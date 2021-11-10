@@ -1,14 +1,17 @@
 <template>
   <div class="app">
-    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"/>
-    <router-view/>
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    />
+    <router-view />
   </div>
 </template>
 
 <script>
 
 import {mapState} from "vuex";
-
 export default {
   name: 'App',
   data() {

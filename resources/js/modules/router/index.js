@@ -36,6 +36,20 @@ const routes = [
     children: AdminRoutes
   },
   {
+    path: '/promo',
+    name: 'promo',
+    redirect: { name: 'promo.main' },
+    component: () => import('../../layouts/promo'),
+    children: [
+      {
+        name: 'promo.main',
+        path: '',
+        component: () => import('../../views/Promo'),
+        meta: {title: 'Promo'}
+      }
+    ]
+  },
+  {
     path: '/404',
     name: '404',
     component: () => import('../../views/NotFound'),

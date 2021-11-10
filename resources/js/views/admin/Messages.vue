@@ -44,6 +44,7 @@
           <b-checkbox type="checkbox" @change="selectAllRows"/>
         </div>
       </template>
+
       <template #cell(select)="data">
         <div class="d-flex justify-content-center align-items-center h-100">
           <b-checkbox
@@ -57,6 +58,20 @@
 
       <template #cell(id)="data">
         {{ data.item.id }}
+      </template>
+
+      <template #cell(name)="data">
+        <div class="d-flex">
+          <div v-if="data.item.name" class="mr-3">
+            <span class="d-block">Name: </span>
+            <span class="d-block font-weight-bold">{{ data.item.name }}</span>
+          </div>
+          <div v-if="data.item.email">
+            <span class="d-block">Email: </span>
+            <span class="d-block font-weight-bold">{{ data.item.email }}</span>
+          </div>
+        </div>
+        <p class="mt-3">{{ data.item.content }}</p>
       </template>
 
       <template #cell(action)="data">
@@ -109,9 +124,7 @@ export default {
       messagesFields: [
         {key: 'select', label: '', thStyle: 'width: 70px;', sortable: false},
         {key: 'id', label: '#', sortable: true},
-        {key: 'name', label: 'name', sortable: true},
-        {key: 'email', label: 'email', sortable: true},
-        {key: 'content', label: 'content', sortable: false},
+        {key: 'name', label: 'content', sortable: true},
         {
           key: 'created_at',
           label: 'created at',
