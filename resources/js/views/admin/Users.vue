@@ -9,44 +9,65 @@
           :total-rows="total"
         />
         <div class="ml-3" v-if="ids.length > 0">
-          <b-button variant="danger" @click="bulkDelete">Bulk Delete</b-button>
+          <b-button
+            variant="danger"
+            @click="$refs['bulkModal'].show()"
+          >Bulk Delete
+          </b-button>
         </div>
       </b-col>
       <b-col class="p-0 d-flex justify-content-end align-items-center">
-        <b-form-input class="mr-2 search-link" v-model="params.search" placeholder="Search..." />
+        <b-form-input class="mr-2 search-link" v-model="search" placeholder="Search..."/>
         <b-button variant="success" @click="create" class="mr-2">Create</b-button>
         <b-button variant="primary" @click="fetchUsers()">
-          <b-icon-arrow-clockwise />
+          <b-icon-arrow-clockwise/>
         </b-button>
       </b-col>
     </div>
     <b-table
       table-variant="dark"
       ref="userTable"
+      no-local-sorting
       :sort-by.sync="sortBy"
       :sort-desc.sync="isDesc"
       :no-footer-sorting="false"
       :busy="loading"
       :items="users"
-      :fields="usersFields"
-      >
-      <template #cell(select)="data">
+      :fields="usersFields">
+
+      <template #head(select)="data">
         <div class="d-flex justify-content-center align-items-center h-100">
-          <b-checkbox type="checkbox" v-model="data.item.selected" @change="rowSelected" />
+          <b-checkbox type="checkbox" @change="selectAllRows"/>
         </div>
       </template>
+
+      <template #cell(select)="data">
+        <div class="d-flex justify-content-center align-items-center h-100">
+          <b-checkbox
+            type="checkbox"
+            :checked="data.item.selected"
+            @change="rowSelected"
+            v-model="data.item.selected"
+          />
+        </div>
+      </template>
+
       <template #cell(index)="data">
         {{ data.index + 1 }}
       </template>
+
       <template #cell(role)="data">
         {{ data.item.role | role }}
       </template>
+
       <template #cell(actions)="data">
         <div class="d-flex">
           <b-button class="mr-2" variant="primary" size="sm" @click="edit(data.item.id)">
-            <b-icon-pencil />
+            <b-icon-pencil/>
           </b-button>
-          <b-button variant="danger" size="sm" @click="remove(data.item.id)">
+          <b-button
+            variant="danger"
+            size="sm" @click="showDeleteModal(data.item.id)">
             <b-icon-trash/>
           </b-button>
         </div>
@@ -57,6 +78,11 @@
       @change="handlePageChange"
       :total-rows="total"
     />
+
+    <b-modal ref="bulkModal" title="Delete Users" @ok="bulkDelete" ok-variant="danger" ok-title="Delete">
+      Are you sure that you want to delete selected users?
+    </b-modal>
+
     <b-modal ref="deleteModal" title="Delete User" @ok="remove" ok-variant="danger" ok-title="Delete">
       Are you sure that you want to delete this user?
     </b-modal>
@@ -64,7 +90,7 @@
 </template>
 <script>
 import moment from "moment";
-import { mapActions } from "vuex";
+import {mapActions} from "vuex";
 
 export default {
   data() {
@@ -72,8 +98,11 @@ export default {
       ids: [],
       users: [],
       loading: false,
+      selectAll: false,
       sortBy: 'created_at',
+      search: '',
       currentPage: 1,
+      deletableId: null,
       total: 1,
       isDesc: false,
       params: {
@@ -83,17 +112,21 @@ export default {
         page: 1
       },
       usersFields: [
-        {key: 'select', label: ''},
-        {key: 'index', label: '#', sortable: true},
+        {key: 'select', label: '', sortable: false},
+        {key: 'id', label: '#', sortable: true},
         {key: 'username', sortable: true},
-        {key: 'email', formatter: item => {
-            return item ? item: '—'
-          }, sortable: true},
+        {
+          key: 'email', formatter: item => {
+            return item ? item : '—'
+          }, sortable: true
+        },
         {key: 'role', sortable: true},
-        {key: 'created_at', thStyle: 'white-space: nowrap', sortable: true, formatter: createdAt => {
+        {
+          key: 'created_at', thStyle: 'white-space: nowrap', sortable: true, formatter: createdAt => {
             return moment(createdAt).format('YYYY-MM-DD HH:mm')
-          }},
-        {key: 'actions'}
+          }
+        },
+        {key: 'actions', sortable: false}
       ]
     }
   },
@@ -107,14 +140,17 @@ export default {
 
   watch: {
     sortBy(data) {
-      this.params.sortBy = data;
-      this.fetchUsers();
+      if (data) {
+        this.params.sortBy = data;
+        this.fetchUsers();
+      }
     },
     isDesc(data) {
       this.params.sort = (data === true ? 'desc' : 'asc')
       this.fetchUsers();
     },
-    'params.search'(data) {
+    search(data) {
+      this.params.search = data;
       this.fetchUsers()
     }
   },
@@ -134,7 +170,10 @@ export default {
     fetchUsers() {
       this.loading = true;
       this.$api.adminUsers.fetch(this.currentPage, this.params).then(response => {
-        this.users = response.data.data;
+        this.users = response.data.data.map(item => {
+          item.selected = false;
+          return item;
+        });
         this.currentPage = response.data.current_page;
         this.total = response.data.total;
         this.loading = false;
@@ -142,34 +181,52 @@ export default {
     },
 
     create() {
-      this.createUser().then(() => {
-        this.fetchUsers()
-      })
+      this.createUser().then(() => this.fetchUsers());
     },
-
-    rowSelected() {
-      this.ids = this.users
-        .filter(item => { if (item.users) return item.id })
-        .map(item => item.id);
-    },
-
-    remove(id) {
-      this.$api.adminUsers.delete(id).then(response => {
-        this.fetchUsers()
-      })
-    },
-
     edit(id) {
-      this.editUser(id).then(() => {
-        this.fetchUsers()
+      this.editUser(id).then(() => this.fetchUsers());
+    },
+    remove() {
+      this.$api.adminUsers.delete(this.deletableId).then(response => {
+        if (response.data.status === 'success') {
+          this.fetchUsers();
+          this.deletableId = null;
+        }
       })
     },
 
     bulkDelete() {
       this.$api.adminUsers.bulkDelete(this.ids).then(() => {
-        this.fetchMessages();
         this.ids = [];
+        this.fetchUsers();
       });
+    },
+
+    selectAllRows() {
+      this.selectAll = !this.selectAll;
+      this.users = this.users.map(item => {
+        item.selected = this.selectAll;
+        return item;
+      })
+
+      this.ids = this.users
+        .filter(item => {
+          if (item.selected) return item.id
+        })
+        .map(item => item.id);
+    },
+
+    rowSelected() {
+      this.ids = this.users
+        .filter(item => {
+          if (item.selected) return item.id
+        })
+        .map(item => item.id);
+    },
+
+    showDeleteModal(id) {
+      this.deletableId = id;
+      this.$refs['deleteModal'].show()
     },
 
     handlePageChange(value) {
@@ -180,10 +237,10 @@ export default {
 }
 </script>
 <style lang="scss">
-  .admin-users {
-    background: #24252d;
-    padding: 25px;
-    border-radius: 5px;
-    margin-bottom: 100px;
-  }
+.admin-users {
+  background: #24252d;
+  padding: 25px;
+  border-radius: 5px;
+  margin-bottom: 100px;
+}
 </style>

@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\{JsonResponse, Request};
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -17,9 +16,14 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $descOrAsc = $request->get('sort');
 
-        $users = User::orderBy($request->get('sortBy'), $descOrAsc);
+        $users = User::query();
+
+        $users->select(['id', 'username', 'email', 'role', 'created_at']);
+
+        if ($request->has('sortBy') && $request->has('sort')) {
+            $users->orderBy($request->get('sortBy'), $request->get('sort'));
+        }
 
         if ($query = $request->get('search')) {
             $users->where('username', 'LIKE', '%' . $query . '%')
@@ -69,7 +73,7 @@ class UsersController extends Controller
      * @return JsonResponse|void
      * @throws ValidationException
      */
-    public function edit($id, Request $request)
+    public function update($id, Request $request)
     {
         $this->validate($request, [
             'username' => 'required',
@@ -106,5 +110,24 @@ class UsersController extends Controller
             $user->delete();
             return response()->json(['status' => 'success']);
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function bulkDelete(Request $request): JsonResponse
+    {
+        $this->validate($request, [
+            'ids' => 'array|required'
+        ]);
+
+        User::whereIn('id', $request->get('ids'))->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Users Deleted successfully.'
+        ]);
     }
 }

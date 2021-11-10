@@ -11,9 +11,12 @@ export default axios => ({
     return axios.post('admin/users', payload)
   },
   update(id, payload) {
-    return axios.post(`admin/users/${id}`, payload)
+    return axios.put(`admin/users/${id}`, payload)
   },
   delete(id) {
     return axios.delete(`admin/users/${id}`)
+  },
+  bulkDelete(ids) {
+    return axios.post('admin/users/bulk-delete', {ids: ids})
   }
 });

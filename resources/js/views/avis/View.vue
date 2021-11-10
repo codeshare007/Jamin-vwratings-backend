@@ -137,7 +137,7 @@ export default {
       ],
       options: [
         {text: 'Positive', value: 1},
-        {text: 'Negative', value: 0},
+        {text: 'Negative', value: 2},
       ],
       sort: 'id',
       sortDir: 'desc',

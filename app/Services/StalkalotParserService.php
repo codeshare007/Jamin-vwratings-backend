@@ -149,7 +149,7 @@ class StalkalotParserService
                     'id' => $message->id,
                     'name' => $message->name,
                     'email' => $message->email,
-                    'content' => $message->message
+                    'content' => $message->message,
                 ]);
             }
         }

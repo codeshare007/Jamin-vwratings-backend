@@ -28,7 +28,9 @@ export default {
   filters: {
     opinion(data) {
       if (typeof data === 'number') {
-        return data ? 'positive' : 'negative';
+        if (data === 1) return 'positive';
+        if (data === 2) return 'negative';
+        return '';
       }
       return '';
     },

@@ -12,31 +12,33 @@ class MessagesController extends Controller
 {
     public function index(Request $request)
     {
-        $users = Messages::orderBy(
-            $request->get('sortBy'),
-            $request->get('sort')
-        );
+        $messages = Messages::query();
+
+        $messages->select(['id', 'name', 'email', 'content', 'created_at']);
+
+        if ($request->has('sortBy') && $request->has('sort')) {
+            $messages->orderBy($request->get('sortBy'), $request->get('sort'));
+        }
 
         if ($query = $request->get('search')) {
-            $users->where('name', 'LIKE', '%' . $query . '%')
+            $messages->where('name', 'LIKE', '%' . $query . '%')
                 ->orWhere('email', 'LIKE', '%' . $query . '%')
                 ->orWhere('content', 'LIKE', '%' . $query . '%');
         }
 
-        return $users->paginate(100);
+        return $messages->paginate(100);
     }
 
     /**
      * @param $id
      * @return JsonResponse
      */
-    public function delete($id): JsonResponse
+    public function destroy($id): JsonResponse
     {
         $message = Messages::find($id);
         $message->delete();
         return response()->json(['Message Deleted successfully.']);
     }
-
 
     /**
      * @param Request $request
@@ -46,14 +48,14 @@ class MessagesController extends Controller
     public function bulkDelete(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'ids' => 'array'
+            'ids' => 'array|required'
         ]);
 
         Messages::whereIn('id', $request->get('ids'))->delete();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Messages Deleted successfully.'
+            'message' => 'Users Deleted successfully.'
         ]);
     }
 }

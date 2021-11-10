@@ -1,28 +1,22 @@
 <template>
   <b-modal
-    :title="user.id ? 'Edit User' : 'Create User'"
+    :title="avi.id ? 'Edit Avi' : 'Create Avi'"
     :visible.sync="visible"
     @submit.prevent.native=""
     @hide="handleClose(null)"
   >
     <b-form>
-      <b-form-group label="Username">
-        <b-input type="text" v-model="user.username" />
+      <b-form-group label="Avi name">
+        <b-input type="text" v-model="avi.name" />
       </b-form-group>
-      <b-form-group label="Email">
-        <b-input type="text" v-model="user.email" />
-      </b-form-group>
-      <b-form-group label="Role">
-        <b-form-select :options="roles" v-model="user.role" />
-      </b-form-group>
-      <b-form-group label="Password">
-        <b-input type="password" v-model="user.password" />
+      <b-form-group label="User Id">
+        <b-input type="text" v-model="avi.user_id" />
       </b-form-group>
     </b-form>
 
     <template #modal-footer="{ ok, cancel }">
       <b-button @click="handleClose(null) && cancel()">Cancel</b-button>
-      <b-button variant="primary" v-if="user.id" @click="edit() && ok()">Save</b-button>
+      <b-button variant="primary" v-if="avi.id" @click="edit() && ok()">Save</b-button>
       <b-button variant="success" v-else @click="create" :disabled="loading">Create</b-button>
     </template>
   </b-modal>
@@ -35,28 +29,22 @@ export default {
   data() {
     let initialState = {
       id: null,
+      user_id: null,
       name: null,
-      email: null,
-      role: 2,
-      password: null
     };
     return {
       loading: false,
       status: 'hidden',
-      roles: [
-        {value: 1, text: 'Administrator'},
-        {value: 2, text: 'User'},
-      ],
       resolve: null,
       reject: null,
-      user: initialState,
+      avi: initialState,
       initialState: initialState,
       error: null
     }
   },
 
   computed: {
-    ...mapState('dialogs/user', {
+    ...mapState('dialogs/avi', {
       form: state => state
     }),
     visible: {
@@ -75,12 +63,12 @@ export default {
       deep: true,
       handler(value) {
         this.clearData();
-        this.user.id = value.id;
+        this.avi.id = value.id;
         this.status = value.status;
         this.resolve = value.resolve;
         this.reject = value.reject;
 
-        if (this.user.id) {
+        if (this.avi.id) {
           this.load();
         }
       }
@@ -90,18 +78,18 @@ export default {
 
   methods: {
     ...mapActions({
-      close: 'dialogs/user/clear',
+      close: 'dialogs/avi/clear',
     }),
     clearData() {
-      this.user = this.initialState;
+      this.avi = this.initialState;
     },
     handleClose(done = null) {
       done ? done() : this.status = 'hidden';
     },
     load() {
       this.loading = true;
-      this.$api.adminUsers.get(this.user.id).then(response => {
-        this.user = response.data;
+      this.$api.adminAvis.get(this.avi.id).then(response => {
+        this.avi = response.data;
       }).catch(() => {
         this.reject();
         this.clearData();
@@ -113,7 +101,7 @@ export default {
     create() {
       this.error = null;
       this.loading = true;
-      this.$api.adminUsers.create(this.user).then(response => {
+      this.$api.adminAvis.create(this.avi).then(response => {
         this.resolve(response);
         this.handleClose();
       }).catch(() => {
@@ -124,7 +112,7 @@ export default {
     edit() {
       this.error = null;
       this.loading = true;
-      this.$api.adminUsers.update(this.user.id, this.user).then(response => {
+      this.$api.adminAvis.update(this.avi.id, this.avi).then(response => {
         this.resolve(response);
         this.handleClose();
       }).catch(() => {

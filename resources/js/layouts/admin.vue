@@ -2,6 +2,8 @@
   <div class="admin-layout">
     <div v-if="isAdmin">
       <UserEditDialog />
+      <AviEditDialog />
+      <AviCommentEditDialog />
     </div>
     <b-container fluid class="pr-5 pl-5">
       <HeaderBar />
@@ -20,14 +22,17 @@
 import SidebarNav from "../components/admin/SidebarNav";
 import HeaderBar from "../components/layout/HeaderBar";
 import UserEditDialog from "../components/admin/dialogs/UserEditDialog";
+import AviEditDialog from '../components/admin/dialogs/AviEditDialog';
+import AviCommentEditDialog from '../components/admin/dialogs/AviCommentEditDialog'
 
 export default {
   components: {
     UserEditDialog,
+    AviEditDialog,
+    AviCommentEditDialog,
     HeaderBar,
     SidebarNav
   },
-
 
   computed: {
     isAdmin() {

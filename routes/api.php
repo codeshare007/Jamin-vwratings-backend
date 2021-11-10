@@ -51,6 +51,16 @@ Route::prefix('v1')->group(function () {
             Route::resource('avis', 'App\Http\Controllers\Api\V1\Admin\AvisController');
             Route::resource('comments', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController');
             Route::resource('ratings', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController');
+
+            Route::post('users/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\UsersController@bulkDelete');
+            Route::post('messages/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\MessagesController@bulkDelete');
+            Route::post('avis/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\AvisController@bulkDelete');
+            Route::post('comments/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@bulkDelete');
+            Route::post('ratings/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController@bulkDelete');
+
+            Route::post('comments/bulk-opinion', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@bulkOpinion');
+            Route::post('comments/{id}/opinion', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@changeOpinion');
+
         });
     });
 });
