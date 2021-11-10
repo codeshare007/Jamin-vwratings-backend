@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div class="app" :style="{'background-image':'url(/img/tm-astro-bg.jpg)'}">
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"/>
     <router-view/>
   </div>
@@ -55,11 +55,9 @@ body {
   min-height: 100vh;
 }
 
-.app {
-  background-color: #15161c;
-  .vld-overlay .vld-background {
-    opacity: 1;
-  }
-
+.app {  
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>
