@@ -10,13 +10,29 @@
         />
         <div class="ml-3" v-if="ids.length > 0">
           <b-button
+            class="mr-4"
             variant="danger"
             @click="$refs['bulkModal'].show()"
           >Bulk Delete
           </b-button>
+          <b-button
+            variant="success"
+            @click="bulkOpinion(1)"
+          >Set Positive
+          </b-button>
+          <b-button
+            variant="danger"
+            @click="bulkOpinion(2)"
+          >Set Negative
+          </b-button>
+          <b-button
+            variant="dark"
+            @click="bulkOpinion(0)"
+          >Remove Opinion
+          </b-button>
         </div>
       </b-col>
-      <b-col class="p-0 d-flex justify-content-end align-items-center">
+      <b-col cols="4" class="p-0 d-flex justify-content-end align-items-center">
         <b-form-input
           class="mr-2 search-link"
           v-model="search"
@@ -146,9 +162,8 @@ export default {
 
   filters: {
     opinion(data) {
-      if (data !== null) {
-        return data === 1 ? 'positive' : 'negative';
-      }
+      if (data === 1) return 'positive';
+      if (data === 2) return 'negative';
 
       return '—'
     }
@@ -194,7 +209,7 @@ export default {
     },
 
 
-    fetchComments(page) {
+    fetchComments() {
       this.$api.adminComments.fetch(this.currentPage, this.params).then(response => {
         this.comments = response.data.data.map(item => {
           item.selected = false;
@@ -231,6 +246,13 @@ export default {
     showDeleteModal(id) {
       this.deletableId = id;
       this.$refs['deleteModal'].show()
+    },
+
+    bulkOpinion(opinion) {
+      this.$api.adminComments.bulkOpinion(this.ids, opinion).then(() => {
+        this.ids = [];
+        this.fetchComments();
+      })
     },
 
     bulkDelete() {

@@ -18,5 +18,8 @@ export default axios => ({
   },
   bulkDelete(ids) {
     return axios.post('admin/comments/bulk-delete', {ids: ids})
+  },
+  bulkOpinion(ids, opinion) {
+    return axios.post('admin/comments/bulk-opinion', {ids: ids, opinion: opinion})
   }
 });

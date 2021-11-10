@@ -62,22 +62,19 @@ class AvisCommentsController extends Controller
     {
         $this->validate($request, [
             'avis_id' => 'required|int',
+            'opinion' => 'required',
             'user_id' => 'nullable|int',
-            'opinion' => 'nullable',
-            'content' => 'required|string',
+            'content' => 'nullable|string',
         ]);
 
         if ($aviComment = AvisComments::findOrFail($id)) {
 
             $aviComment->avis_id = $request->get('avis_id');
             $aviComment->content = $request->get('content');
+            $aviComment->opinion = $request->get('opinion');
 
             if ($userId = $request->get('user_id')) {
                 $aviComment->user_id = $userId;
-            }
-
-            if ($opinion = $request->get('opinion')) {
-                $aviComment->opinion = $opinion;
             }
 
             $aviComment->save();
@@ -105,9 +102,19 @@ class AvisCommentsController extends Controller
         }
     }
 
-    public function bulkOpinion()
+    public function bulkOpinion(Request $request)
     {
+        $this->validate($request, [
+            'ids' => 'array|required',
+            'opinion' => 'required'
+        ]);
 
+        AvisComments::whereIn('id', $request->get('ids'))->update(['opinion' => $request->get('opinion')]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Users Deleted successfully.'
+        ]);
     }
 
     public function changeOpinion()

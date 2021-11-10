@@ -1,5 +1,5 @@
 <template>
-  <div class="app" :style="{'background-image':'url(/img/tm-astro-bg.jpg)'}">
+  <div class="app">
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"/>
     <router-view/>
   </div>
@@ -55,9 +55,10 @@ body {
   min-height: 100vh;
 }
 
-.app {  
+.app {
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
+  background-image: url('/img/background.jpg');
 }
 </style>
