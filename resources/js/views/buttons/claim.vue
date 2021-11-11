@@ -1,7 +1,8 @@
 <template>
-  <div class="claim-page">
-	<div class="position-relative page-right">
-		<div class="tm-bg-dark content-pad text-center">
+    <div class="page-container text-center">      
+      <div class="container-fluid tm-content-container">
+            <div class="position-relative page-width-1 page-right">
+              <div class="tm-bg-dark content-pad">
 			<h2 class="mb-4">
 			  COMING SOON 
 			</h2>							
@@ -17,6 +18,7 @@
 		</div>
 	</div>
   </div>
+</div>  
 </template>
 <script>
   export default {

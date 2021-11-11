@@ -1,28 +1,26 @@
 <template>
-   <div class="position-relative page-right">
-		<div class="tm-bg-dark content-pad text-center">
+    <div class="page-container text-center">      
+      <div class="container-fluid tm-content-container">
+            <div class="position-relative page-width-1 page-right">
+              <div class="tm-bg-dark content-pad">
 		  <div v-if="!sent">
 			<div>
 			  <h1>Message Us</h1>
 			  <p>If you need us to reply to your message be sure to leave an email address.</p>
-			  <p>If you are requesting an interview please leave your avi name and put interview in the message.</p>
 			</div>
 
-			<b-form>
-			  <b-form-group label="Avi Name (optional)">
-				<b-form-input v-model="$v.form.name.$model" />
+			  <b-form>
+				<b-form-input class="mb-1" placeholder="Player Name (optional)" v-model="$v.form.name.$model" />
 			  </b-form-group>
 
-			  <b-form-group label="Email (optional)">
-				<b-form-input v-model="$v.form.email.$model" />
+				<b-form-input class="mb-1" placeholder="Reply Email (optional)" v-model="$v.form.email.$model" />
 			  </b-form-group>
 
-			  <b-form-group label="Message (max 255)">
-				<b-form-textarea rows="8" v-model="$v.form.content.$model" />
+				<b-form-textarea rows="3" class="mb-1" placeholder="Type your message....." v-model="$v.form.content.$model" />
 			  </b-form-group>
 
 			  <div class="d-flex justify-content-end">
-				<b-button @click="sendMessage" variant="secondary">Send</b-button>
+				<b-button @click="sendMessage" variant="primary">Send</b-button>
 			  </div>
 			</b-form>
 		  </div>
@@ -31,6 +29,8 @@
 		  </div>
 		</div>
 	</div>
+  </div>
+</div>
 </template>
 <script>
 import {required} from "vuelidate/lib/validators";

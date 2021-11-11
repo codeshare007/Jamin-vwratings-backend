@@ -1,24 +1,28 @@
 <template>
-                       <div class="position-relative page-right">
-                            <div class="tm-bg-dark content-pad text-center">
-                                <p class="mb-4">
-                                   Nominate and vote on your favorite players and the worst players you know.<br>Peeps will get treats.<br>Creeps are just creeps.
-                                </p>
-                                <h2 class="mb-4">
-                                  COMING SOON 
-                                </h2>								
-                                <div class="sidey text-center">
-                                    <b-button :to="{name: ''}">Peeps</b-button>
-                                    <br>
-									Peeps = Decent players
-                                </div>
-                                <div class="sidey text-center">
-                                    <b-button :to="{name: ''}">Creeps</b-button>
-									<br>
-									Creeps = Not so decent
-                                </div>
-                            </div>
-                        </div>
+    <div class="page-container text-center">      
+      <div class="container-fluid tm-content-container">
+            <div class="position-relative page-width-1 page-right">
+              <div class="tm-bg-dark content-pad">
+				<p class="mb-4">
+				   Nominate and vote on your favorite players and the worst players you know.<br>Peeps will get treats.<br>Creeps are just creeps.
+				</p>
+				<h2 class="mb-4">
+				  COMING SOON 
+				</h2>								
+				<div class="sidey text-center">
+					<b-button :to="{name: ''}">Peeps</b-button>
+					<br>
+					Peeps = Decent players
+				</div>
+				<div class="sidey text-center">
+					<b-button :to="{name: ''}">Creeps</b-button>
+					<br>
+					Creeps = Not so decent
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
 </template>
 <script>
   export default {
