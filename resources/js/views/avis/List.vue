@@ -25,7 +25,7 @@
 				  ok-only
 				  ok-title="Close"
 				  ok-variant="secondary"
-				  title="Wait">You must be logged in to perform this action
+				  title="No no no !!!">You must log in first. 
 				</b-modal>
 				<b-row class="d-flex justify-content-center mb-1">
 				  <div class="d-flex">
@@ -46,15 +46,15 @@
 				  </div>
 				</b-row>
 				
-				
+			<div class="namers">	
 				<router-link
 				  :key="key"
-				  class="d-block"
+				  class="d-block text-center"
 				  :to="{name: 'ratings.avis.view', params: {id: avi.id}}"
 				  v-for="(avi, key) in this.avis">
 				  {{ avi.name }}
 				</router-link>
-			  
+			 </div> 
 			  </div>
 		    </div>
 		  </div>
@@ -182,5 +182,10 @@ a:hover {
 
 .tm-bg-dark {
     min-height: 500px;
+}
+
+.namers {
+    width: fit-content;
+    margin: auto;
 }
 </style>
