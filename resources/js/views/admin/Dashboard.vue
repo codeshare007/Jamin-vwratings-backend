@@ -1,5 +1,5 @@
 <template>
-  <div class="admin-dashboard">
+  <div class="adminDashboard">
     <h1 class="mt-5">Welcome back, {{ profile.username }}!</h1>
     <b-row v-if="!loading">
       <b-col>
@@ -23,6 +23,18 @@
         </b-card>
       </b-col>
     </b-row>
+
+    <b-row>
+      <b-col cols="3">
+        <b-form class="mt-5">
+          <b-form-group label="Amount of hits to see promo page" class="text-white">
+            <b-form-input type="number" class="bg-dark text-white border-dark" v-model="form.hits" />
+          </b-form-group>
+
+          <b-button @click="changeAmount()">Change</b-button>
+        </b-form>
+      </b-col>
+    </b-row>
   </div>
 </template>
 <script>
@@ -30,7 +42,10 @@ export default {
   data() {
     return {
       information: {},
-      loading: true
+      loading: true,
+      form: {
+        hits: null
+      }
     }
   },
 
@@ -41,7 +56,8 @@ export default {
   },
 
   mounted() {
-    this.fetchInformation()
+    this.fetchInformation();
+    this.fetchHits();
   },
 
   methods: {
@@ -50,14 +66,30 @@ export default {
         this.information = response.data;
         this.loading = false;
       })
+    },
+
+    fetchHits() {
+      this.$api.adminDashboard.hits().then(response => {
+        this.form.hits = response.data;
+      })
+    },
+
+    changeAmount() {
+      this.$api.adminDashboard.changeHits(this.form.hits).then(response => {
+        if (response.data.status === 'success') {
+          this.fetchHits();
+        }
+      })
     }
   }
 }
 </script>
 <style lang="scss">
-.admin-dashboard {
-  padding-left: 100px;
-  padding-right: 100px;
+.adminDashboard {
+  background: #24252d;
+  padding: 25px;
+  border-radius: 5px;
+  margin-bottom: 100px;
 
   h1 {
     color: white;

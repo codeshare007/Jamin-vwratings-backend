@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdsCampaigns;
 use App\Models\AvisComments;
 use App\Models\Messages;
+use App\Models\Settings;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
@@ -46,7 +47,6 @@ class SiteController extends Controller
 
     public function promo(Request $request)
     {
-
         $campaign = (object) [
             'timer' => 0,
             'content' => 'Ads campaigns not set'
@@ -68,7 +68,6 @@ class SiteController extends Controller
         ]);
     }
 
-
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -83,8 +82,10 @@ class SiteController extends Controller
 
         $promo = false;
 
+        $amountOfHits = Settings::where('key', 'ads_hits')->first();
+
         $config = [
-            'amount_of_hits' => 10,
+            'amount_of_hits' => $amountOfHits ? $amountOfHits->value + 1 : 10,
             'promo_routes' => [
                 'ratings.avis.view'
             ]

@@ -4,6 +4,7 @@
       <UserEditDialog />
       <AviEditDialog />
       <AviCommentEditDialog />
+      <AdsCampaignEditDialog />
     </div>
     <b-container fluid class="pr-5 pl-5">
       <HeaderBar />

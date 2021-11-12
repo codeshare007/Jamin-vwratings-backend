@@ -3,10 +3,36 @@
     :title="campaign.id ? 'Edit Comment' : 'Create Comment'"
     :visible.sync="visible"
     @submit.prevent.native=""
+    size="lg"
     @hide="handleClose(null)"
   >
     <b-form>
+      <b-row>
+        <b-col>
+          <b-form-group label="Name">
+            <b-form-input v-model="campaign.name" />
+          </b-form-group>
+        </b-col>
+        <b-col>
+          <b-form-group label="Timer">
+            <b-form-input v-model="campaign.timer" />
+          </b-form-group>
+        </b-col>
+        <b-col>
+          <b-form-group label="Individual radios" v-slot="{ ariaDescribedby }">
+            <b-form-radio v-model="campaign.active" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Yes</b-form-radio>
+            <b-form-radio v-model="campaign.active" :aria-describedby="ariaDescribedby" name="some-radios" value="0">No</b-form-radio>
+          </b-form-group>
+        </b-col>
+      </b-row>
 
+      <b-form-group label="Description">
+        <b-form-textarea v-model="campaign.description" />
+      </b-form-group>
+
+      <b-form-group label="Content">
+        <b-form-textarea v-model="campaign.content" />
+      </b-form-group>
     </b-form>
 
     <template #modal-footer="{ ok, cancel }">
@@ -25,10 +51,11 @@ export default {
   data() {
     let initialState = {
       id: null,
-      user_id: null,
-      avis_id: null,
-      opinion: null,
-      content: null
+      name: null,
+      description: null,
+      timer: null,
+      content: null,
+      active: null
     };
     return {
       loading: false,

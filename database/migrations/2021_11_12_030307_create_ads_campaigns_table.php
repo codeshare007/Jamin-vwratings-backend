@@ -16,9 +16,9 @@ class CreateAdsCampaignsTable extends Migration
         Schema::create('ads_campaigns', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
-            $table->integer('timer');
-            $table->text('content');
+            $table->string('description')->nullable();
+            $table->integer('timer')->default(6);
+            $table->text('content')->nullable();
             $table->integer('active')->default(1);
             $table->timestamps();
         });
