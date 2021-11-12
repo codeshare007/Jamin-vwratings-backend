@@ -19,6 +19,7 @@
           {title: 'Dashboard', name: 'admin.dashboard'},
           {title: 'Users', name: 'admin.users'},
           {title: 'Messages', name: 'admin.messages'},
+          {title: 'Ads Campaigns', name: 'admin.ads_campaigns'},
           {title: 'Avis', name: 'admin.avis'},
           {title: 'Avis Comments', name: 'admin.comments'},
           {title: 'Avis Ratings', name: 'admin.ratings'},

@@ -23,13 +23,15 @@ import SidebarNav from "../components/admin/SidebarNav";
 import HeaderBar from "../components/layout/HeaderBar";
 import UserEditDialog from "../components/admin/dialogs/UserEditDialog";
 import AviEditDialog from '../components/admin/dialogs/AviEditDialog';
-import AviCommentEditDialog from '../components/admin/dialogs/AviCommentEditDialog'
+import AviCommentEditDialog from '../components/admin/dialogs/AviCommentEditDialog';
+import AdsCampaignEditDialog from "../components/admin/dialogs/AdsCampaignEditDialog";
 
 export default {
   components: {
     UserEditDialog,
     AviEditDialog,
     AviCommentEditDialog,
+    AdsCampaignEditDialog,
     HeaderBar,
     SidebarNav
   },

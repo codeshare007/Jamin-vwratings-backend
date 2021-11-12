@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
 
     // Public Methods
+    Route::post('tracker', 'App\Http\Controllers\Api\V1\Front\SiteController@sendTracker');
+    Route::post('end-promo', 'App\Http\Controllers\Api\V1\Front\SiteController@endPromo');
     Route::post('send-message', 'App\Http\Controllers\Api\V1\Front\SiteController@message');
 
     Route::prefix('avis')->group(function () {
@@ -51,6 +53,7 @@ Route::prefix('v1')->group(function () {
             Route::resource('avis', 'App\Http\Controllers\Api\V1\Admin\AvisController');
             Route::resource('comments', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController');
             Route::resource('ratings', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController');
+            Route::resource('campaigns', 'App\Http\Controllers\Api\V1\Admin\AdsCampaignsController');
 
             Route::post('users/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\UsersController@bulkDelete');
             Route::post('messages/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\MessagesController@bulkDelete');
@@ -60,7 +63,6 @@ Route::prefix('v1')->group(function () {
 
             Route::post('comments/bulk-opinion', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@bulkOpinion');
             Route::post('comments/{id}/opinion', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@changeOpinion');
-
         });
     });
 });

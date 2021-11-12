@@ -11,7 +11,8 @@ import apiAdminAvis from './methods/adminAvis'
 import apiAdminComments from './methods/adminCommments'
 import apiAdminMessages from './methods/adminMessages'
 import apiAdminRatings from './methods/adminRatings';
-import apiAdminUsers from './methods/adminUsers'
+import apiAdminUsers from './methods/adminUsers';
+import apiAdminAdsCampaigns from './methods/adminAdsCampaigns';
 
 export default {
   removeJWT() {
@@ -116,7 +117,8 @@ export default {
       adminComments: apiAdminComments(this.apiInstance),
       adminMessages: apiAdminMessages(this.apiInstance),
       adminRatings: apiAdminRatings(this.apiInstance),
-      adminUsers: apiAdminUsers(this.apiInstance)
+      adminUsers: apiAdminUsers(this.apiInstance),
+      adminAdsCampaigns: apiAdminAdsCampaigns(this.apiInstance)
     };
 
     Vue.prototype.$api = repositories;

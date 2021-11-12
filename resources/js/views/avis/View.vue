@@ -1,10 +1,10 @@
 <template>
   <div class="aviView">
-	<div class="page-container text-center">      
+	<div class="page-container text-center">
 	  <div class="container-fluid tm-content-container">
 		<div class="position-relative">
 		  <div class="tm-bg-dark content-pad">
-		  
+
 			<div class="aviView__info">
 			  <b-button class="back float-left mt-2" :to="{ name: 'ratings.avis.list' }">Back</b-button><p>You're peeking in.....</p>
 			  <p><span class="aviView__name">{{ avi.name }}</span>'s window</p>
@@ -14,11 +14,11 @@
 				  :increment="0.5"
 				  :read-only="true"
 				  :rating="avi.average_rating"
-				/>					
+				/>
 			  </div>
 			  <hr>
 			</div>
-		  
+
 			<div class="aviView__rate" v-if="loggedIn">
 			  <p>Fill the stars below. Change them anytime. Stars above
 				are the total average of all ratings.</p>
@@ -32,7 +32,7 @@
 			  </div>
 			   <hr>
 			</div>
-		  
+
 			<div class="aviView__comment">
 			  <div v-if="loggedIn">
 				<p>Choose your opinion about {{ avi.name }} before you can post</p>
@@ -91,8 +91,8 @@
 			  <div v-else>
 				<h2 class="text-danger text-center">Log in to rate and comment</h2>
 			  </div>
-			</div>			  
-		  
+			</div>
+
 			  <div class="comments" v-if="!loading">
 				  <div class="comments__sortBlock">
 					<button
@@ -111,11 +111,11 @@
 					<div v-if="!Object.keys(sortedComments).length">No comments</div>
 				  </div>
 				</div>
-			  </div>			  
+			  </div>
 		  </div>
 		</div>
 	  </div>
-	</div>    
+	</div>
 </template>
 <script>
 const {required, minLength} = require('vuelidate/lib/validators')
@@ -180,13 +180,6 @@ export default {
   },
 
   mounted() {
-    if (Cookie.get('promo')) {
-      let amount = parseInt(Cookie.get('promo'));
-      amount = amount + 1;
-      Cookie.set('promo', amount)
-    } else {
-      Cookie.set('promo', 1);
-    }
     this.fetchAvi();
   },
 
@@ -485,7 +478,7 @@ export default {
   .comments__list {
 	text-align: left;
 	}
-	
+
   .commentItem__content {
     background: #2083281a;
 	border-bottom: none;
@@ -495,6 +488,6 @@ export default {
 .badge {
     display: none;
 }
-	
+
 }
 </style>

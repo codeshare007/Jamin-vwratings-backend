@@ -50,6 +50,13 @@ export default [
   {
     name: 'admin.parties.ratings',
     path: 'parties/ratings',
-    component: () => import('../../../views/admin/PartiesRatings')
+    component: () => import('../../../views/admin/PartiesRatings'),
+    meta: {title: 'Parties Ratings'}
+  },
+  {
+    name: 'admin.ads_campaigns',
+    path: 'campaigns',
+    component: () => import('../../../views/admin/AdsCampaigns'),
+    meta: {title: 'Ads Campagins'}
   }
 ]

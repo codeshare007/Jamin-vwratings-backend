@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import Cookie from "js-cookie";
 import {mapState} from "vuex";
 export default {
   name: 'App',
@@ -23,13 +22,18 @@ export default {
 
   watch: {
     '$route'(to, from) {
-      if (Cookie.get('promo')) {
-        let amount = Cookie.get('promo');
-        if (amount > 10) {
-          Cookie.set('last_page', this.$route.path);
+      axios.post('/api/v1/tracker', {
+        last_page: this.$route.path,
+        route: this.$route.name
+      }).then(response => {
+        if (response.data['start_promo']) {
           window.location.href = '/promo';
         }
-      }
+      }).catch(error => {
+        if (error) {
+          window.location.href = '/promo'
+        }
+      });
     }
   },
 
@@ -37,10 +41,6 @@ export default {
     ...mapState('auth', {
       loggedIn: state => state.loggedIn,
     }),
-  },
-
-  mounted() {
-
   },
 
   methods: {
