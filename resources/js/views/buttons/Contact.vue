@@ -1,40 +1,36 @@
 <template>
-  <div class="contact-page">
-    <b-row>
-      <b-col cols="7">
-        <b-card bg-variant="dark" text-variant="white" style="min-height: 500px">
-          <div v-if="!sent">
-            <div class="w-75">
-              <h1>Message Us</h1>
-              <p>If you need us to reply to your message be sure to leave an email address.</p>
-              <p>If you are requesting an interview please leave your avi name and put interview in the message.</p>
-            </div>
+    <div class="page-container text-center">      
+      <div class="container-fluid tm-content-container">
+            <div class="position-relative page-width-1 page-right">
+              <div class="tm-bg-dark content-pad">
+		  <div v-if="!sent">
+			<div>
+			  <h1>Message Us</h1>
+			  <p>If you need us to reply to your message be sure to leave an email address.</p>
+			</div>
 
-            <b-form>
-              <b-form-group label="Avi Name (optional)">
-                <b-form-input v-model="$v.form.name.$model" />
-              </b-form-group>
+			  <b-form>
+				<b-form-input class="mb-1" placeholder="Player Name (optional)" v-model="$v.form.name.$model" />
+			  </b-form-group>
 
-              <b-form-group label="Email (optional)">
-                <b-form-input v-model="$v.form.email.$model" />
-              </b-form-group>
+				<b-form-input class="mb-1" placeholder="Reply Email (optional)" v-model="$v.form.email.$model" />
+			  </b-form-group>
 
-              <b-form-group label="Message (max 255)">
-                <b-form-textarea rows="8" v-model="$v.form.content.$model" />
-              </b-form-group>
+				<b-form-textarea rows="3" class="mb-1" placeholder="Type your message....." v-model="$v.form.content.$model" />
+			  </b-form-group>
 
-              <div class="d-flex justify-content-end">
-                <b-button @click="sendMessage" variant="secondary">Send</b-button>
-              </div>
-            </b-form>
-          </div>
-          <div v-else>
-            <h1>Message sent</h1>
-          </div>
-        </b-card>
-      </b-col>
-    </b-row>
+			  <div class="d-flex justify-content-end">
+				<b-button @click="sendMessage" variant="primary">Send</b-button>
+			  </div>
+			</b-form>
+		  </div>
+		  <div v-else>
+			<h1>Message sent</h1>
+		  </div>
+		</div>
+	</div>
   </div>
+</div>
 </template>
 <script>
 import {required} from "vuelidate/lib/validators";

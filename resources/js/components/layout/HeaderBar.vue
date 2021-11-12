@@ -4,8 +4,51 @@
       <b-navbar-brand :to="{ name: 'ratings.home' }">
         VW Ratings
       </b-navbar-brand>
+      <b-navbar-toggle
+          class="bg-transparent p-0"
+          target="nav-mobile"
+          @click="toggleMobileMenu"
+      />
+      <div id="nav-mobile" class="nav-mobile" :class="{'d-none': !isMobileMenu }">
+        <div class="d-flex justify-content-between mt-2">
+          <b-navbar-brand class="ml-3" :to="{ name: 'ratings.home' }">
+            VW Ratings
+          </b-navbar-brand>
+          <button>
+            <b-icon-x
+                @click="toggleMobileMenu"
+                variant="light"
+                height="3rem"
+                width="3rem"
+            />
+          </button>
+        </div>
+
+        <div>
+          <header-profile v-if="loggedIn" />
+        </div>
+
+        <b-navbar-nav class="ml-auto" v-if="!loading">
+          <b-nav-item
+              v-for="(item, key) in menu"
+              :to="item.path"
+              :key="key"
+              @click="isMobileMenu = !isMobileMenu"
+          >{{ item.name }}</b-nav-item>
+        </b-navbar-nav>
+      </div>
       <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav class="ml-auto">
+       <div v-if="loading" class="d-flex justify-content-end w-100">
+          <b-skeleton
+              class="mt-3 mr-3"
+              v-for="i in 3"
+              :key="i"
+              animation="wave"
+              height="30px"
+              width="140px"
+          />
+        </div>  
+        <b-navbar-nav class="ml-auto"v-else>
           <li v-for="(item, key) in menu" :key="key" class="nav-item">
             <a class="nav-link" :href="item.href" v-if="item.href" v-text="item.name"/>
             <router-link class="nav-link" :to="item.path" v-if="item.path" v-text="item.name"/>
@@ -51,8 +94,6 @@ export default {
 </script>
 <style lang="scss">
 .header-bar {
-  height: 120px;
-  //margin-bottom: 40px;
 
   .navbar-brand {
     font-family: 'Futura PT', sans-serif;
@@ -68,7 +109,6 @@ export default {
   }
 
   @media screen and (max-width: 994px) {
-    background: #00000066;
     height: 54px;
 
     .navbar-brand img {

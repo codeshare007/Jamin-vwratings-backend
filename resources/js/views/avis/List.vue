@@ -1,54 +1,65 @@
 <template>
-  <div class="aviList">
 
-    <b-modal
-      ref="createAvi"
-      ok-title="Add"
-      ok-variant="dark"
-      @ok="createAvi"
-      @cancel="form.name = ''"
-      title="Add a Name">
-      <b-form>
-        <b-form-group label="">
-          <b-form-input v-mask="mask" type="text" placeholder="Enter Name" v-model="form.name"/>
-        </b-form-group>
-      </b-form>
-    </b-modal>
 
-    <b-modal
-      ref="notRegistered"
-      ok-only
-      ok-title="Close"
-      ok-variant="secondary"
-      title="Wait">You must be logged in to perform this action
-    </b-modal>
+		<div class="page-container text-center">      
+		  <div class="container-fluid tm-content-container">
+            <div class="position-relative page-width-1 page-right">
+              <div class="tm-bg-dark content-pad">
+			  
+				<b-modal
+				  ref="createAvi"
+				  ok-title="Add"
+				  ok-variant="dark"
+				  @ok="createAvi"
+				  @cancel="form.name = ''"
+				  title="Add a Name">
+				  <b-form>
+					<b-form-group label="">
+					  <b-form-input v-mask="mask" type="text" placeholder="Enter Name" v-model="form.name"/>
+					</b-form-group>
+				  </b-form>
+				</b-modal>
 
-    <b-row class="d-flex justify-content-center">
-      <div class="w-50 d-flex justify-content-between pt-5">
-        <button class="aviList__button mr-2" @click="showAviDialog">{{ loggedIn ? 'Add' : 'Login to add' }}</button>
-        <b-form-select v-model="type" class="mr-2">
-          <b-form-select-option value="full_list">All</b-form-select-option>
-          <b-form-select-option value="good_list">Good</b-form-select-option>
-          <b-form-select-option value="bad_list">Bad</b-form-select-option>
-          <b-form-select-option value="comments">Comments</b-form-select-option>
-          <b-form-select-option value="pics">Pics</b-form-select-option>
-        </b-form-select>
-        <input class="form-control" placeholder="Search..." type="text" v-model="search">
-      </div>
-    </b-row>
+				<b-modal
+				  ref="notRegistered"
+				  ok-only
+				  ok-title="Close"
+				  ok-variant="secondary"
+				  title="No no no !!!">You must log in first. 
+				</b-modal>
+				<b-row class="d-flex justify-content-center mb-1">
+				  <div class="d-flex">
+					<button class="aviList__button mr-2" @click="showAviDialog">{{ loggedIn ? 'Add name' : 'Add name' }}</button>
+				  </div>
+				</b-row>
+				
+				<b-row class="d-flex justify-content-center">
+				  <div class="d-flex justify-content-between">
+					<b-form-select v-model="type" class="mr-2">
+					  <b-form-select-option value="full_list">All</b-form-select-option>
+					  <b-form-select-option value="good_list">Good</b-form-select-option>
+					  <b-form-select-option value="bad_list">Bad</b-form-select-option>
+					  <b-form-select-option value="comments">Comments</b-form-select-option>
+					  <b-form-select-option value="pics">Pics</b-form-select-option>
+					</b-form-select>
+					<input class="form-control mb-3" placeholder="Search..." type="text" v-model="search">
+				  </div>
+				</b-row>
+				
+			<div class="namers">	
+				<router-link
+				  :key="key"
+				  class="d-block text-center"
+				  :to="{name: 'ratings.avis.view', params: {id: avi.id}}"
+				  v-for="(avi, key) in this.avis">
+				  {{ avi.name }}
+				</router-link>
+			 </div> 
+			  </div>
+		    </div>
+		  </div>
+		</div>
 
-    <b-card style=""> <!-- min-height: 500px -->
-      <b-card-body class="d-flex align-items-center flex-column">
-        <router-link
-          :key="key"
-          class="d-block"
-          :to="{name: 'ratings.avis.view', params: {id: avi.id}}"
-          v-for="(avi, key) in this.avis">
-          {{ avi.name }}
-        </router-link>
-      </b-card-body>
-    </b-card>
-  </div>
 </template>
 <script>
 export default {
@@ -152,37 +163,29 @@ export default {
 }
 </script>
 <style lang="scss">
-.aviList {
-  background: #24252d;
-  border-radius: 5px;
+a {
+    color: #ffffff;
+    font-size: 20px;
+}
 
-  &__button {
-    width: 600px;
-    border: 0;
-    border-radius: 5px;
-    background: #40685d;
-    color: white;
+a:hover {
+    color: #02cf4a;
+}
 
-    &:hover {
-      transition: .3s;
-      background: #29413b;
-    }
+.custom-select {
+    height: calc(1.5em + 0.75rem - 4px);
+}
 
-    &:focus {
-      outline: 0;
-    }
-  }
+.form-control {
+    height: calc(1.5em + 0.75rem - 4px);
+}
 
-  p {
-    color: white;
-  }
+.tm-bg-dark {
+    min-height: 500px;
+}
 
-  .card {
-    background: transparent;
-
-    a {
-      color: white;
-    }
-  }
+.namers {
+    width: fit-content;
+    margin: auto;
 }
 </style>
