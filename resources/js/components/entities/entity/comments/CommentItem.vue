@@ -1,10 +1,7 @@
 <template>
   <div class="commentItem mt-2">
     <b-badge v-if="comment.opinion === 1" variant="success">{{ comment.opinion | opinion }}</b-badge>
-    <b-badge v-if="comment.opinion === 0" variant="danger">{{ comment.opinion | opinion }}</b-badge>
-    <div class="commentItem__attachments">
-
-    </div>
+    <b-badge v-if="comment.opinion === 2" variant="danger">{{ comment.opinion | opinion }}</b-badge>
     <div class="commentItem__content">
       <p>{{ comment.content }}</p>
       <div class="commentItem__attachments">
@@ -63,13 +60,15 @@ export default {
   }
 
   &__content {
-    padding: 10px 0;
     min-height: 100px;
     border-bottom: 1px solid #ffffff61;
     position: relative;
+    background: #2083281a;
+    border-bottom: none;
+    padding: 15px;
   }
 
-  &__attachments {
+  &__attachmentsList {
     display: flex;
   }
 

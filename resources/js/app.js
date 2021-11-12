@@ -38,6 +38,7 @@ Vue.use(Api, store, router)
 import './plugins/bootstrap-vue'
 import './plugins/vuelidate'
 import './plugins/v-viewer'
+import './plugins/vue-star-rating'
 import './plugins/vue-the-mask'
 import './plugins/vue-loading'
 import './assets/scss/main.scss'

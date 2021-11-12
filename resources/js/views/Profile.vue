@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import CommentItem from "../components/avis/CommentItem";
+import CommentItem from "../components/entities/entity/comments/CommentItem";
 export default {
   components: {CommentItem},
   data() {

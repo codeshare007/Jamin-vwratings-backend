@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import EntitiesList from "../../components/EntitiesList";
+import EntitiesList from "../../components/entities/EntitiesList";
 export default {
 
   components: {

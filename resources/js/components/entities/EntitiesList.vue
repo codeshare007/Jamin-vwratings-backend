@@ -1,32 +1,21 @@
 <template>
   <transition name="fade">
-    <div class="aviList" v-if="screenLoaded">
-      <b-modal
-        ref="createModal"
-        ok-title="Add"
-        ok-variant="dark"
-        @ok="create"
-        @cancel="form.name = ''"
-        title="Add a Name">
+    <div class="entitiesList" v-if="screenLoaded">
+      <b-modal ref="createModal" ok-title="Add" ok-variant="dark" @ok="create" @cancel="clear" title="Add a Name">
         <b-form>
-          <b-form-group label="">
+          <b-form-group label="Name">
             <b-form-input v-mask="mask" type="text" placeholder="Enter Name" v-model="form.name"/>
           </b-form-group>
         </b-form>
       </b-modal>
 
-      <b-modal
-        ref="notRegistered"
-        ok-only
-        ok-title="Close"
-        ok-variant="secondary"
-        title="No no no !!!"
-      >
+      <b-modal ref="notRegistered" ok-only ok-title="Close" ok-variant="secondary" title="No no no !!!">
         <div>You must log in first.</div>
       </b-modal>
+
       <b-row class="d-flex justify-content-center mb-1">
         <div class="d-flex">
-          <button class="aviList__button mr-2" @click="showAviDialog">Add name</button>
+          <button class="entitiesList__button mr-2" @click="showCreateDialog">Add name</button>
         </div>
       </b-row>
 
@@ -40,21 +29,26 @@
               v-html="item"
             />
           </b-form-select>
-          <input class="form-control mb-3" placeholder="Search..." type="text" v-model="search">
+          <input
+            class="form-control mb-3"
+            placeholder="Search..."
+            type="text"
+            v-model="search"
+          >
         </div>
       </b-row>
 
       <div class="namers d-flex align-items-center flex-column">
         <router-link
           class="d-block"
-          v-for="(avi, key) in this.avis" :key="key"
-          :to="{name: 'ratings.avis.view', params: {id: avi.id}}"
-          v-html="avi.name"
+          v-for="(item, i) in this.items" :key="i"
+          :to="redirectToItem(item.id)"
+          v-html="item.name"
         />
       </div>
 
       <div v-if="loading" class="d-flex justify-content-center mt-3 align-items-center" style="min-height: inherit;">
-        <b-spinner />
+        <b-spinner/>
       </div>
     </div>
   </transition>
@@ -67,7 +61,7 @@ export default {
   },
   data() {
     return {
-      avis: [],
+      items: [],
       search: null,
       currentPage: 1,
       loading: true,
@@ -110,7 +104,7 @@ export default {
     type(data) {
       this.currentPage = 1;
       this.params.type = data;
-      this.avis = [];
+      this.items = [];
       this.fetchItems();
     }
   },
@@ -121,39 +115,45 @@ export default {
   },
 
   methods: {
+    redirectToItem(id) {
+      const routeName = `ratings.${this.method}.view`
+      console.log(routeName);
+      return {name: routeName, params: {id: id}}
+    },
+
     fetchItems(lazy = false) {
       this.loading = true;
-      this.$api[[this.method]].fetch(this.currentPage, this.params).then(response => {
-        if (lazy) {
-          this.avis.push({...response.data});
-        } else {
-          this.avis = response.data; this.screenLoaded = true;
-        }
+      this.$api[this.method].fetch(this.currentPage, this.params).then(response => {
+        lazy ? this.items.push({...response.data}) : this.items = response.data;
+        if (!lazy) this.screenLoaded = true;
         this.loading = false;
       })
     },
 
-    showAviDialog() {
+    showCreateDialog() {
       this.loggedIn ? this.$refs['createModal'].show() : this.$refs['notRegistered'].show()
     },
 
     create() {
       this.$api[this.method].create(this.form).then(response => {
-        const avi = response.data.data;
-        this.$router.push({name: 'ratings.avis.view', params: {id: avi.id}})
+        const item = response.data.data;
+        this.$router.push({name: `ratings.${this.method}.view`, params: {id: item.id}})
       })
+    },
+
+    clear() {
+      this.form.name = ''
     },
 
     lazyLoad() {
       window.onscroll = () => {
-        let bottomOfWindow =
-          (document.documentElement.scrollTop + window.innerHeight) ===
+        let bottomOfWindow = (document.documentElement.scrollTop + window.innerHeight) ===
           document.documentElement.offsetHeight;
 
         if (bottomOfWindow) {
-          if (this.$route.name === 'ratings.avis.list') {
-            this.loading = true;
+          if (this.$route.name === `ratings.${this.method}.list`) {
             this.currentPage = this.currentPage + 1;
+            this.loading = true;
             this.fetchItems(true)
           }
         }
@@ -163,7 +163,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.aviList {
+.entitiesList {
   background: black;
   padding-top: 40px;
   margin-bottom: 40px;

@@ -1,10 +1,11 @@
 <template>
   <div>
-    <EntitiesList entity="party" method="parties" />
+    <EntitiesList entity="party" method="parties"/>
   </div>
 </template>
 <script>
-import EntitiesList from "../../components/EntitiesList";
+import EntitiesList from "../../components/entities/EntitiesList";
+
 export default {
 
   components: {
@@ -12,9 +13,7 @@ export default {
   },
 
   data() {
-    return {
-
-    }
+    return {}
   }
 }
 </script>
