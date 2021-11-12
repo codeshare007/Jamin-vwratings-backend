@@ -5,7 +5,8 @@ import apiAuth from './methods/auth';
 import apiProfile from './methods/profile';
 import apiComments from './methods/comments';
 import apiAvis from './methods/avis';
-
+import apiParties from './methods/parties'
+// admin methods
 import apiAdminDashboard from './methods/adminDashboard'
 import apiAdminAvis from './methods/adminAvis'
 import apiAdminComments from './methods/adminCommments'
@@ -111,6 +112,7 @@ export default {
       auth: apiAuth(this.apiInstance),
       profile: apiProfile(this.apiInstance),
       avis: apiAvis(this.apiInstance),
+      parties: apiParties(this.apiInstance),
       comments: apiComments(this.apiInstance),
       adminDashboard: apiAdminDashboard(this.apiInstance),
       adminAvis: apiAdminAvis(this.apiInstance),

@@ -19,13 +19,15 @@ Route::prefix('v1')->group(function () {
     Route::post('end-promo', 'App\Http\Controllers\Api\V1\Front\SiteController@endPromo');
     Route::post('send-message', 'App\Http\Controllers\Api\V1\Front\SiteController@message');
 
-    Route::prefix('avis')->group(function () {
-        Route::get('', 'App\Http\Controllers\Api\V1\Front\AvisController@index');
-        Route::post('create', 'App\Http\Controllers\Api\V1\Front\AvisController@create');
-        Route::get('{id}', 'App\Http\Controllers\Api\V1\Front\AvisController@show');
-        Route::post('{id}/rate', 'App\Http\Controllers\Api\V1\Front\AvisController@rate');
-        Route::post('{id}/comment', 'App\Http\Controllers\Api\V1\Front\AvisController@comment');
-    });
+    // Parties
+    Route::resource('parties', 'App\Http\Controllers\Api\V1\Front\PartiesController');
+    Route::post('parties/{id}/rate', 'App\Http\Controllers\Api\V1\Front\PartiesController@rate');
+    Route::post('parties/{id}/comment', 'App\Http\Controllers\Api\V1\Front\PartiesController@comment');
+
+    // Avis
+    Route::resource('avis', 'App\Http\Controllers\Api\V1\Front\AvisController');
+    Route::post('avis/{id}/rate', 'App\Http\Controllers\Api\V1\Front\AvisController@rate');
+    Route::post('avis/{id}/comment', 'App\Http\Controllers\Api\V1\Front\AvisController@comment');
 
     // Auth methods
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
@@ -52,7 +54,7 @@ Route::prefix('v1')->group(function () {
 
             Route::resource('users', 'App\Http\Controllers\Api\V1\Admin\UsersController');
             Route::resource('messages', 'App\Http\Controllers\Api\V1\Admin\MessagesController');
-            Route::resource('avis', 'App\Http\Controllers\Api\V1\Admin\AvisController');
+            Route::resource('avis', 'App\Http\Controllers\Api\V1\Admin\AvisController')->names('admin.avis');
             Route::resource('comments', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController');
             Route::resource('ratings', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController');
             Route::resource('campaigns', 'App\Http\Controllers\Api\V1\Admin\AdsCampaignsController');

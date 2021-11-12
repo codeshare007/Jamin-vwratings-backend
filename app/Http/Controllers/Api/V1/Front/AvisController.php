@@ -45,7 +45,7 @@ class AvisController extends Controller
             endswitch;
         }
 
-        return response()->json($avis->get());
+        return $avis->get();
     }
 
     /**
