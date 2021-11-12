@@ -10,7 +10,7 @@
 </template>
 
 <script>
-
+import Cookie from "js-cookie";
 import {mapState} from "vuex";
 export default {
   name: 'App',
@@ -22,9 +22,15 @@ export default {
   },
 
   watch: {
-    $route() {
-   //   this.preloader();
-    },
+    '$route'(to, from) {
+      if (Cookie.get('promo')) {
+        let amount = Cookie.get('promo');
+        if (amount > 10) {
+          Cookie.set('last_page', this.$route.path);
+          window.location.href = '/promo';
+        }
+      }
+    }
   },
 
   computed: {
@@ -33,8 +39,13 @@ export default {
     }),
   },
 
+  mounted() {
+
+  },
+
   methods: {
     preloader() {
+      this.preloader();
       this.isLoading = true;
       setTimeout(() => {
         this.isLoading = false

@@ -174,15 +174,14 @@ export default {
   },
 
   mounted() {
-    this.fetchAvi();
-
     if (Cookie.get('promo')) {
-      let amount = Cookie.get('promo');
-      Cookie.set('promo', parseInt(amount + 1))
-
+      let amount = parseInt(Cookie.get('promo'));
+      amount = amount + 1;
+      Cookie.set('promo', amount)
     } else {
       Cookie.set('promo', 1);
     }
+    this.fetchAvi();
   },
 
   computed: {

@@ -41,4 +41,9 @@ class SiteController extends Controller
             'message' => 'Message successfully sent'
         ]);
     }
+
+    public function promo()
+    {
+        return view('promo');
+    }
 }

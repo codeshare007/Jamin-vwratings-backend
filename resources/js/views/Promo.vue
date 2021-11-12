@@ -14,10 +14,12 @@
   </div>
 </template>
 <script>
+import Cookie from "js-cookie";
+
 export default {
   data() {
     return {
-      timerCount: 30
+      timerCount: 10
     }
   },
 
@@ -28,6 +30,16 @@ export default {
           setTimeout(() => {
             this.timerCount--;
           }, 1000);
+        } else {
+          Cookie.set('promo', 1);
+          if (Cookie.get('last_page')) {
+            let lastPage = Cookie.get('last_page');
+            Cookie.remove('last_page')
+            this.$router.push({ path: lastPage })
+          } else {
+            this.$router.push({ name: 'ratings.home' })
+          }
+
         }
       },
       immediate: true
@@ -36,7 +48,7 @@ export default {
 
 
   mounted() {
-
+    //Cookie.set('promo', 1)
   }
 }
 </script>

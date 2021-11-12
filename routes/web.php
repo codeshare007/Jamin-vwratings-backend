@@ -13,4 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('{any}', function () { return view('app'); })->where('any', '^(?!api).*$');
+Route::get('/promo', 'App\Http\Controllers\Api\V1\Front\SiteController@promo');
+Route::get('{any}', function () { return view('app'); })->where('any', '^(?!promo).*$');
