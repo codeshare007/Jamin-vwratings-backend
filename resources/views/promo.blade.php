@@ -11,7 +11,7 @@
 <body>
 <div class="promoPage">
     <div class="promoPage__header">
-        <h1>Continue staling in <span id="countdown">{{ $campaign->timer }}</span></h1>
+        <h1>Continue stalking in <span id="countdown">{{ $campaign->timer }}</span></h1>
 
         <hr>
     </div>

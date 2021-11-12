@@ -1,5 +1,5 @@
 <template>
-    <div class="page-container text-center">      
+    <div class="page-container text-center">
       <div class="container-fluid tm-content-container">
             <div class="position-relative page-width-1 page-right">
               <div class="tm-bg-dark content-pad">
@@ -40,7 +40,7 @@
                 </div>
                 <p class="mb-0">
                     Rate and comment about other vw players that you think are exceptional or just plain
-                    trouble.<br> Everything is anonymous....</p>				
+                    trouble.<br> Everything is anonymous....</p>
       <div class="d-flex justify-content-center">
         <div class="homePage__gallery">
           <viewer>

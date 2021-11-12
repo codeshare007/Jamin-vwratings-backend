@@ -65,14 +65,9 @@ export default {
   margin-top: 60px;
 }
 
-body {
-  min-height: 100vh;
-}
-
 .app {
   background-attachment: fixed;
   background-repeat: no-repeat;
-  background-size: cover;
   background-image: url('/img/background.jpg');
 }
 </style>

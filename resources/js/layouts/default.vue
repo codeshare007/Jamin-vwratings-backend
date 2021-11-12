@@ -1,11 +1,9 @@
 <template>
   <div class="default-theme">
-    <HeaderBar />
-    <div class="default-theme__main">
-      <b-container class="p-0">
-        <router-view />
-      </b-container>
-    </div>
+    <HeaderBar class="mb-3" />
+    <b-container class="default-theme__main p-0">
+      <router-view />
+    </b-container>
   </div>
 </template>
 <script>
@@ -18,18 +16,12 @@ export default {
 </script>
 <style lang="scss">
 .default-theme {
-  min-height: 100vh;
+	color: white;
+
   &__main {
-   // padding-bottom: 70px;
-
-    .container {
-      min-height: calc(100vh - 110px);
-    }
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
-
-  //min-height: 100vh;
-	
-	color: white; 
-  
 }
 </style>

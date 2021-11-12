@@ -1,121 +1,125 @@
 <template>
-  <div class="aviView">
-	<div class="page-container text-center">
-	  <div class="container-fluid tm-content-container">
-		<div class="position-relative">
-		  <div class="tm-bg-dark content-pad">
+  <transition name="fade">
+    <div class="aviView" v-if="screenLoaded">
+      <div class="page-container text-center">
+        <div class="container-fluid tm-content-container">
+          <div class="position-relative">
+            <div class="tm-bg-dark content-pad">
 
-			<div class="aviView__info">
-			  <b-button class="back float-left mt-2" :to="{ name: 'ratings.avis.list' }">Back</b-button><p>You're peeking in.....</p>
-			  <p><span class="aviView__name">{{ avi.name }}</span>'s window</p>
-			  <div class="d-flex w-100 justify-content-center justify-items-center">
-				<star-rating
-				  :max-rating="12"
-				  :increment="0.5"
-				  :read-only="true"
-				  :rating="avi.average_rating"
-				/>
-			  </div>
-			  <hr>
-			</div>
+              <div class="aviView__info">
+                <b-button class="back float-left mt-2" :to="{ name: 'ratings.avis.list' }">Back</b-button>
+                <p>You're peeking in.....</p>
+                <p><span class="aviView__name">{{ avi.name }}</span>'s window</p>
+                <div class="d-flex w-100 justify-content-center justify-items-center">
+                  <star-rating
+                    :max-rating="12"
+                    :increment="0.5"
+                    :read-only="true"
+                    :rating="avi.average_rating"
+                  />
+                </div>
+                <hr>
+              </div>
 
-			<div class="aviView__rate" v-if="loggedIn">
-			  <p>Fill the stars below. Change them anytime. Stars above
-				are the total average of all ratings.</p>
-			  <div class="d-flex w-100 justify-content-center justify-items-center">
-				<star-rating
-				  :max-rating="12"
-				  :increment="0.5"
-				  @rating-selected="setRating"
-				  :rating="avi.user_rating"
-				/>
-			  </div>
-			   <hr>
-			</div>
+              <div class="aviView__rate" v-if="loggedIn">
+                <p>Fill the stars below. Change them anytime. Stars above
+                  are the total average of all ratings.</p>
+                <div class="d-flex w-100 justify-content-center justify-items-center">
+                  <star-rating
+                    :max-rating="12"
+                    :increment="0.5"
+                    @rating-selected="setRating"
+                    :rating="avi.user_rating"
+                  />
+                </div>
+                <hr>
+              </div>
 
-			<div class="aviView__comment">
-			  <div v-if="loggedIn">
-				<p>Choose your opinion about {{ avi.name }} before you can post</p>
-				<b-form class="d-flex flex-column" ref="commentForm">
-				  <b-row class="justify-content-between align-items-center">
-					<b-col>
+              <div class="aviView__comment">
+                <div v-if="loggedIn">
+                  <p>Choose your opinion about {{ avi.name }} before you can post</p>
+                  <b-form class="d-flex flex-column" ref="commentForm">
+                    <b-row class="justify-content-between align-items-center">
+                      <b-col>
 
-					</b-col>
-					<b-col class="d-flex justify-content-center">
-					  <b-form-group class="m-0">
-						<b-form-radio-group
-						  :class="{ 'form-group__error': !errorRefreshed && $v.opinion.$error }"
-						  v-model="$v.opinion.$model"
-						  :state="validateState('opinion')"
-						  :options="options"
-						  buttons
-						/>
-					  </b-form-group>
-					</b-col>
-					<b-col class="d-flex justify-content-end">
-					  <div class="mt-2 pt-2 ml-3" v-if="this.$v.opinion.$model !== null">
-						<b-button class="aviView__uploadButton" @click="openUploadDialog">
-						  <b-icon-paperclip/>
-						</b-button>
-						<input type="file" ref="file" @change="onFileChange" class="d-none" multiple="multiple"/>
-					  </div>
-					</b-col>
-				  </b-row>
+                      </b-col>
+                      <b-col class="d-flex justify-content-center">
+                        <b-form-group class="m-0">
+                          <b-form-radio-group
+                            :class="{ 'form-group__error': !errorRefreshed && $v.opinion.$error }"
+                            v-model="$v.opinion.$model"
+                            :state="validateState('opinion')"
+                            :options="options"
+                            buttons
+                          />
+                        </b-form-group>
+                      </b-col>
+                      <b-col class="d-flex justify-content-end">
+                        <div class="mt-2 pt-2 ml-3" v-if="this.$v.opinion.$model !== null">
+                          <b-button class="aviView__uploadButton" @click="openUploadDialog">
+                            <b-icon-paperclip/>
+                          </b-button>
+                          <input type="file" ref="file" @change="onFileChange" class="d-none" multiple="multiple"/>
+                        </div>
+                      </b-col>
+                    </b-row>
 
-				  <div class="text-center text-danger" style="height: 30px">
-					<p class="m-0" v-if="$v.$error && !errorRefreshed">You need to make a post or upload an image or both</p>
-				  </div>
+                    <div class="text-center text-danger" style="height: 30px">
+                      <p class="m-0" v-if="$v.$error && !errorRefreshed">You need to make a post or upload an image or
+                        both</p>
+                    </div>
 
-				  <b-form-textarea
-					v-if="$v.opinion.$model !== null"
-					v-model="$v.comment.$model"
-					:state="validateState('comment')"
-					ref="commentArea"
-					placeholder="Type here... but we delete pathetic posts"
-				  />
-				  <div class="mt-3 d-flex justify-content-between">
-					<div>
-					  <div class="d-flex mt-3">
-						<viewer :images="previews">
-						  <img alt class="imagePreview" v-for="src in previews" :key="src" :src="src">
-						</viewer>
-					  </div>
-					  <span class="m-2 text-danger d-block" v-if="previews.length">If this isn't the pic you wanted just hit upload again.</span>
-					</div>
-					<div v-if="this.$v.opinion.$model !== null">
-					  <b-button @click="send">Send</b-button>
-					</div>
-				  </div>
-				</b-form>
-			  </div>
-			  <div v-else>
-				<h2 class="text-danger text-center">Log in to rate and comment</h2>
-			  </div>
-			</div>
+                    <b-form-textarea
+                      v-if="$v.opinion.$model !== null"
+                      v-model="$v.comment.$model"
+                      :state="validateState('comment')"
+                      ref="commentArea"
+                      placeholder="Type here... but we delete pathetic posts"
+                    />
+                    <div class="mt-3 d-flex justify-content-between">
+                      <div>
+                        <div class="d-flex mt-3">
+                          <viewer :images="previews">
+                            <img alt class="imagePreview" v-for="src in previews" :key="src" :src="src">
+                          </viewer>
+                        </div>
+                        <span class="m-2 text-danger d-block" v-if="previews.length">If this isn't the pic you wanted just hit upload again.</span>
+                      </div>
+                      <div v-if="this.$v.opinion.$model !== null">
+                        <b-button @click="send">Send</b-button>
+                      </div>
+                    </div>
+                  </b-form>
+                </div>
+                <div v-else>
+                  <h2 class="text-danger text-center">Log in to rate and comment</h2>
+                </div>
+              </div>
 
-			  <div class="comments" v-if="!loading">
-				  <div class="comments__sortBlock">
-					<button
-					  v-for="(item, key) in filters" :key="key"
-					  @click="changeFilter(item.value)"
-					  :class="{'active': item.value === currentFilter}"
-					>{{ item.name }}
-					</button>
-				  </div>
-				  <div class="comments__list">
-					<CommentItem
-					  v-for="(comment, key) in sortedComments"
-					  :key="key"
-					  :comment="comment"
-					/>
-					<div v-if="!Object.keys(sortedComments).length">No comments</div>
-				  </div>
-				</div>
-			  </div>
-		  </div>
-		</div>
-	  </div>
-	</div>
+              <div class="comments" v-if="!loading">
+                <div class="comments__sortBlock">
+                  <button
+                    v-for="(item, key) in filters" :key="key"
+                    @click="changeFilter(item.value)"
+                    :class="{'active': item.value === currentFilter}"
+                  >{{ item.name }}
+                  </button>
+                </div>
+                <div class="comments__list">
+                  <CommentItem
+                    v-for="(comment, key) in sortedComments"
+                    :key="key"
+                    :comment="comment"
+                  />
+                  <div v-if="!Object.keys(sortedComments).length">No comments</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
 </template>
 <script>
 const {required, minLength} = require('vuelidate/lib/validators')
@@ -136,6 +140,7 @@ export default {
       previews: [],
       errorRefreshed: false,
       currentFilter: 1,
+      screenLoaded: false,
       filters: [
         {name: 'Newest', value: 1},
         {name: 'Oldest', value: 2},
@@ -245,6 +250,7 @@ export default {
     fetchAvi() {
       this.$api.avis.get(this.id).then(response => {
         this.avi = response.data;
+        this.screenLoaded = true;
         this.loading = false;
       })
     },
@@ -475,19 +481,20 @@ export default {
       }
     }
   }
+
   .comments__list {
-	text-align: left;
-	}
+    text-align: left;
+  }
 
   .commentItem__content {
     background: #2083281a;
-	border-bottom: none;
-	padding: 15px;
-}
+    border-bottom: none;
+    padding: 15px;
+  }
 
-.badge {
+  .badge {
     display: none;
-}
+  }
 
 }
 </style>
