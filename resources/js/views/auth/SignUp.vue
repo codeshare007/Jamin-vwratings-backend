@@ -1,7 +1,7 @@
 <template>
   <div class="auth-signup" style="min-height: inherit">
     <b-row class="d-flex justify-content-center align-items-center" style="min-height: inherit">
-      <b-col cols="5" class="auth-container">
+      <div class="auth-container">
         <h2 class="mb-4">Create Account</h2>
         <span v-for="(error, key) in errors" :key="key" class="text-danger d-block mb-4">{{ error }}</span>
         <b-form>
@@ -45,7 +45,7 @@
 
           <router-link :to="{ name: 'auth.signin'}">Already a member? Login</router-link>
         </b-form>
-      </b-col>
+      </div>
     </b-row>
   </div>
 </template>

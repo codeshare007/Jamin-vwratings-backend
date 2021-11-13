@@ -1,8 +1,7 @@
 <template>
   <div class="entityInfo">
     <b-button class="back float-left mt-2" :to="{ name: screen }">Back</b-button>
-    <p>{{ placeholder }}</p>
-    <p><span class="entityInfo__name">{{ name }}</span>'s window</p>
+    <p class="entityInfo__name">{{ name }}</p>
     <div class="entityInfo__rating">
       <star-rating
         :max-rating="12"

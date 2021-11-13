@@ -3,7 +3,6 @@
     <div class="entityView" v-if="screenLoaded">
 
       <EntityInfo
-        placeholder="You're peeking in....."
         :average-rating="item.average_rating"
         :screen="screenBack"
         :name="item.name"
