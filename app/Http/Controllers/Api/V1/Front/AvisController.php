@@ -132,7 +132,7 @@ class AvisController extends Controller
             $comment = $avi->comments()->create([
                 'content' => $request->get('comment'),
                 'opinion' => $request->get('opinion'),
-                'user_id' => auth()->user()->id
+                'user_id' => auth()->user()->getAuthIdentifier()
             ]);
 
             if ($request->has('attachments')) {

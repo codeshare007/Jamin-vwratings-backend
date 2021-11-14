@@ -1,23 +1,24 @@
 <template>
   <div class="headerProfile">
     <div class="headerProfile__button" @click="hidden = !hidden">
-        <span class="headerProfile__name">{{ profile.username }}</span>
-        <b-avatar :src="profile.avatar" size="1.5rem" />
+      <span class="headerProfile__name">{{ profile.username }}</span>
+      <b-avatar :src="profile.avatar" size="1.5rem"/>
     </div>
     <transition name="fade">
       <div class="headerProfile__menu" v-if="!hidden">
         <button @click="$router.push({ name: 'ratings.profile' }).catch(err => {}); hidden = true">profile</button>
-        <button v-if="isAdmin" @click="$router.push({ name: 'admin.dashboard' }).catch(err => {}); hidden = true">admin</button>
+        <button v-if="isAdmin" @click="$router.push({ name: 'admin.dashboard' }).catch(err => {}); hidden = true">
+          admin
+        </button>
         <button @click="emitLogout">logout</button>
       </div>
     </transition>
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import {mapActions} from "vuex";
 
 export default {
-
   data() {
     return {
       hidden: true,
@@ -49,6 +50,7 @@ export default {
 <style lang="scss">
 .headerProfile {
   position: relative;
+  margin-left: 30px;
 
   button {
     background: unset;

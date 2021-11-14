@@ -8,7 +8,7 @@ export default axios => ({
     return axios.get(`avis/${id}`)
   },
   create(payload) {
-    return axios.post('avis/create', payload)
+    return axios.post('avis/store', payload)
   },
   rating(id, payload) {
     return axios.post(`avis/${id}/rate`, payload)

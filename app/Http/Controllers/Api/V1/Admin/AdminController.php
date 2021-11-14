@@ -18,12 +18,14 @@ class AdminController extends Controller
         $avis = Avi::all()->count();
         $avisComments = AvisComments::all()->count();
         $avisRatings = AvisRatings::all()->count();
+        $ttl = auth('api')->factory()->getTTL();
 
         return response()->json([
             'users' => $users,
             'avis' => $avis,
             'comments' => $avisComments,
-            'ratings' => $avisRatings
+            'ratings' => $avisRatings,
+            'ttl' => $ttl
         ]);
     }
 

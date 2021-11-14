@@ -60,8 +60,12 @@
         />
       </div>
 
+      <div v-if="items.length === 0">
+        <p class="text-center">No name matches your search... you can add it.</p>
+      </div>
+
       <div v-if="loading" class="d-flex justify-content-center mt-3 align-items-center" style="min-height: inherit;">
-        <b-spinner/>
+        <b-spinner />
       </div>
     </div>
   </transition>
@@ -118,6 +122,9 @@ export default {
     search(data) {
       if (data) {
         this.params.search = data;
+        this.fetchItems();
+      } else {
+        delete this.params.search;
         this.fetchItems();
       }
     },

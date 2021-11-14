@@ -16,7 +16,7 @@
 
     <b-card class="mt-5" header="Last comments" bg-variant="dark" text-variant="white">
       <b-card-body style="min-height: 500px; padding: 0">
-        <CommentItem v-for="(comment, key) in comments" :key="key" :comment="comment" />
+        <CommentItem v-for="(comment, key) in comments" :key="key" :comment="comment"/>
       </b-card-body>
     </b-card>
 
@@ -26,6 +26,7 @@
 </template>
 <script>
 import CommentItem from "../components/entities/entity/comments/CommentItem";
+
 export default {
   components: {CommentItem},
   data() {
@@ -53,7 +54,7 @@ export default {
 
   methods: {
     fetchComments() {
-      this.$api.comments.fetch().then(response => {
+      this.$api.profile.comments().then(response => {
         this.comments = response.data;
       })
     }

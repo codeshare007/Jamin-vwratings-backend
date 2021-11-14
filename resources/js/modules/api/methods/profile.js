@@ -5,6 +5,9 @@ export default axios => ({
   update(payload) {
     return axios.post('profile', payload)
   },
+  comments() {
+    return axios.get('comments');
+  },
   changeAvatar(payload) {
     return axios.post('profile/change-avatar', payload, {
       headers: {'content-type': 'multipart/form-data'}
