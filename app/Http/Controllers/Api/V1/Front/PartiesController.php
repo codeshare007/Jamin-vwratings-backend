@@ -113,7 +113,7 @@ class PartiesController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function create(Request $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $this->validate($request, ['name' => 'required|string']);
         $party = Parties::firstOrCreate(['name' => $request->get('name')]);

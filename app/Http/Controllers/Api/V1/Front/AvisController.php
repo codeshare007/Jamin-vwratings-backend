@@ -106,7 +106,7 @@ class AvisController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $this->validate($request, ['name' => 'required|string']);
         $avi = Avi::firstOrCreate(['name' => $request->get('name')]);
