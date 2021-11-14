@@ -18,7 +18,6 @@ export default {
   props: {
     screen: String,
     name: String,
-    placeholder: String,
     averageRating: {}
   }
 }

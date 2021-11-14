@@ -20,6 +20,7 @@
         :id="id"
         :method="method"
         :name="item.name"
+        @send="fetchItem"
         :comments="item.comments"
       />
 

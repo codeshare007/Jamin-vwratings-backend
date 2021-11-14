@@ -40,12 +40,14 @@
         <div>
           <span class="m-2 text-danger d-block" v-if="previews.length">
             If this isn't the pic you wanted just hit upload again.
-          </span>		
+          </span>
           <div class="d-flex mt-3">
-            <viewer :images="previews"><img alt class="imagePreview" v-for="src in previews" :key="src" :src="src"></viewer>
+            <viewer :images="previews">
+              <img alt class="imagePreview" v-for="src in previews" :key="src" :src="src">
+            </viewer>
           </div>
         </div>
-        <div v-if="this.$v.form.opinion.$model !== null">
+        <div v-if="$v.form.opinion.$model !== null">
           <b-button @click="send">Send</b-button>
         </div>
       </div>
@@ -59,7 +61,8 @@ export default {
   props: {
     id: {},
     name: String,
-    comments: Array
+    comments: Array,
+    method: String
   },
 
   data() {
@@ -82,12 +85,12 @@ export default {
       comment: {
         minLength: minLength(1),
         required(v) {
-          return this.files || required(v)
+          return this.form.files.length || required(v)
         }
       },
       files: {
         required(v) {
-          return this.comment || required(v)
+          return this.form.comment || required(v)
         }
       }
     }
@@ -105,9 +108,9 @@ export default {
     },
 
     onFileChange(e) {
-      this.files = e.target.files;
-      for (let i in this.files) {
-        const file = this.files[i];
+      this.form.files = e.target.files;
+      for (let i in this.form.files) {
+        const file = this.form.files[i];
         if (!file) continue;
         if (typeof file.type === 'undefined') continue;
         if (!file.type.match('image.*')) continue;
@@ -145,7 +148,7 @@ export default {
       }
 
       this.$api[this.method].comment(this.id, formData).then(() => {
-        this.fetchItem();
+        this.$emit('send');
         this.$v.form.comment.$model = '';
         this.$v.form.opinion.$model = null;
         this.$v.form.files.$model = [];

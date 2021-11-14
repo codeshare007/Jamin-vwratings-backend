@@ -1,11 +1,24 @@
 <template>
   <transition name="fade">
     <div class="entitiesList" v-if="screenLoaded">
-      <b-modal ref="createModal" ok-title="Add" ok-variant="dark" @ok="create" @cancel="clear" title="Add a Name">
+      <b-modal ref="createModal" ok-title="Add" size="lg" ok-variant="dark" @ok="create" @cancel="clear" title="Add a Name">
         <b-form>
-          <b-form-group label="Name">
-            <b-form-input v-mask="mask" type="text" placeholder="Enter Name" v-model="form.name"/>
-          </b-form-group>
+          <b-row class="justify-content-center">
+            <b-col cols="6">
+              <b-form-group label="Name">
+                <b-form-input v-mask="mask" type="text" placeholder="Enter Name" v-model="form.name"/>
+              </b-form-group>
+            </b-col>
+          </b-row>
+
+          <b-row v-if="form.name">
+            <b-col v-for="(item, key) in this.suggestions" :key="key" cols="4">
+              <div>
+                {{ item.name }}
+              </div>
+            </b-col>
+          </b-row>
+
         </b-form>
       </b-modal>
 
@@ -62,6 +75,7 @@ export default {
   data() {
     return {
       items: [],
+      suggestions: [],
       search: null,
       currentPage: 1,
       loading: true,
@@ -95,6 +109,12 @@ export default {
   },
 
   watch: {
+    'form.name'(value) {
+      console.log(value.length);
+      if (value.length >= 2) {
+        this.searchItems();
+      }
+    },
     search(data) {
       if (data) {
         this.params.search = data;
@@ -120,6 +140,19 @@ export default {
       return {name: routeName, params: {id: id}}
     },
 
+    create() {
+      this.$api[this.method].create(this.form).then(response => {
+        const item = response.data.data;
+        this.$router.push({name: `ratings.${this.method}.view`, params: {id: item.id}})
+      })
+    },
+
+    searchItems() {
+      this.$api[this.method].fetch(1, {search: this.form.name, per_page: 5000}).then(response => {
+        this.suggestions = response.data
+      })
+    },
+
     fetchItems(lazy = false) {
       this.loading = true;
       this.$api[this.method].fetch(this.currentPage, this.params).then(response => {
@@ -131,13 +164,6 @@ export default {
 
     showCreateDialog() {
       this.loggedIn ? this.$refs['createModal'].show() : this.$refs['notRegistered'].show()
-    },
-
-    create() {
-      this.$api[this.method].create(this.form).then(response => {
-        const item = response.data.data;
-        this.$router.push({name: `ratings.${this.method}.view`, params: {id: item.id}})
-      })
     },
 
     clear() {

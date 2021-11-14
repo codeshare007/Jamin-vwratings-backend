@@ -73,6 +73,19 @@ export default [
     meta: {title: 'Buttons'}
   },
   {
+    name: 'ratings.parties.list',
+    path: 'parties',
+    component: () => import('../../../views/parties/List'),
+    meta: {title: 'Parties'}
+  },
+  {
+    name: 'ratings.parties.view',
+    path: 'parties/:id',
+    component: () => import('../../../views/parties/View'),
+    meta: {title: 'Party View'},
+    props: true
+  },
+  {
     name: 'ratings.notfound',
     path: '404',
     component: () => import('../../../views/NotFound'),

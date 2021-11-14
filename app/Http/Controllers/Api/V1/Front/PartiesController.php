@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
-use App\Models\Parties;
+use App\Models\{Parties, PartiesComments, PartiesRatings};
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\{Collection, Builder};
 use Illuminate\Validation\ValidationException;
