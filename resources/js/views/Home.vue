@@ -4,7 +4,7 @@
       <div class="position-relative page-width-1 page-right">
         <div class="tm-bg-dark content-pad">
           <h3 class="mb-4">
-            Welcome to vwRatings<br><span style="font-size:20px">Behaviour ratings of vwcharacters to highlight the awesome and expose the rotten.</span></h3>
+            Welcome to vwRatings<br><span style="font-size:20px">Behaviour ratings of vw players to highlight the awesome and expose the rotten.</span></h3>
 
           <div class="content">
             <div class="row row-deck">

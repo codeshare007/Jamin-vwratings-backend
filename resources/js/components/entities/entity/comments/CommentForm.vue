@@ -38,12 +38,12 @@
       />
       <div class="mt-3 d-flex justify-content-between">
         <div>
+          <span class="m-2 text-danger d-block" v-if="previews.length">
+            If this isn't the pic you wanted just hit upload again.
+          </span>		
           <div class="d-flex mt-3">
             <viewer :images="previews"><img alt class="imagePreview" v-for="src in previews" :key="src" :src="src"></viewer>
           </div>
-          <span class="m-2 text-danger d-block" v-if="previews.length">
-            If this isn't the pic you wanted just hit upload again.
-          </span>
         </div>
         <div v-if="this.$v.form.opinion.$model !== null">
           <b-button @click="send">Send</b-button>
