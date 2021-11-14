@@ -117,14 +117,13 @@ export default {
   methods: {
     redirectToItem(id) {
       const routeName = `ratings.${this.method}.view`
-      console.log(routeName);
       return {name: routeName, params: {id: id}}
     },
 
     fetchItems(lazy = false) {
       this.loading = true;
       this.$api[this.method].fetch(this.currentPage, this.params).then(response => {
-        lazy ? this.items.push({...response.data}) : this.items = response.data;
+        lazy ? this.items = [...this.items, ...response.data] : this.items = response.data;
         if (!lazy) this.screenLoaded = true;
         this.loading = false;
       })
