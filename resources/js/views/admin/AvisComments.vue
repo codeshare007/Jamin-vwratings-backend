@@ -43,7 +43,7 @@
       </b-col>
     </div>
     <b-table
-      table-variant="dark"
+      table-variant="light"
       ref="userTable"
       no-local-sorting
       :sort-by.sync="sortBy"
@@ -265,7 +265,7 @@ export default {
 </script>
 <style lang="scss">
   .admin-comments {
-    background: #24252d;
+    background: #fff;
     padding: 25px;
     border-radius: 5px;
     margin-bottom: 100px;

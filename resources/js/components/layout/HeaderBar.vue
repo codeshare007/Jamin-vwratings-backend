@@ -53,9 +53,9 @@
             <a class="nav-link" :href="item.href" v-if="item.href" v-text="item.name"/>
             <router-link class="nav-link" :to="item.path" v-if="item.path" v-text="item.name"/>
           </li>
-          <li class="nav-item" v-if="!loggedIn">
+         <!--  <li class="nav-item" v-if="!loggedIn">
             <router-link class="nav-link" :to="{ name: 'auth.signin'}">Login/Join</router-link>
-          </li>
+          </li> -->
         </b-navbar-nav>
         <header-profile v-if="loggedIn"/>
       </b-collapse>
@@ -72,7 +72,8 @@ export default {
       menu: [
         {name: 'Players', path: {name: 'ratings.avis.list'}},
         {name: 'Parties', path: {name: 'ratings.parties.list'}},
-        {name: 'Buttons', path: {name: 'ratings.buttons'}}
+        {name: 'Buttons', path: {name: 'ratings.buttons'}},
+        {name: 'Login/Join', path: {name: 'auth.signin'}}
       ],
       isMobileMenu: false,
       loading: false,
@@ -156,6 +157,10 @@ export default {
 
   .navbar-nav .nav-item a:not(.dropdown-toggle):not(.dropdown-item) {
     margin: 0 10px;
+  }
+
+  .nav-mobile button{
+    background-color: #676767;
   }
 }
 </style>

@@ -26,7 +26,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 col-xl-4">
+              <div class="col-md-6 offset-md-3 offset-xl-0 col-xl-4">
                 <div class="block block-rounded">
                   <div class="block-content fs-sm texting">
                     <p>
