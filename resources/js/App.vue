@@ -68,6 +68,7 @@ export default {
 .app {
   background-attachment: fixed;
   background-repeat: no-repeat;
+  background-size: cover;
   background-image: url('/img/background.jpg');
 }
 </style>
