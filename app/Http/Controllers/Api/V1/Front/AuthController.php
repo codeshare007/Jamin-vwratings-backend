@@ -41,12 +41,12 @@ class AuthController extends Controller
 
     protected function sendResetResponse(Request $request, $response)
     {
-        return response()->json(['message' => 'Password reset successfully.']);
+        return response()->json(['status' => 'success', 'message' => 'Password reset successfully.']);
     }
 
     protected function sendResetFailedResponse(Request $request, $response)
     {
-        return response()->json(['message' => 'Failed, Invalid Token.']);
+        return response()->json(['errors' => ['email' => ['Failed, Invalid Token.']]], 422);
     }
 
     public function sendPasswordResetLink(Request $request)
@@ -54,9 +54,14 @@ class AuthController extends Controller
         return $this->sendResetLinkEmail($request);
     }
 
+    /**
+     * @param Request $request
+     * @param $response
+     * @return JsonResponse
+     */
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
-        return response()->json(['message' => 'Email could not be sent to this email address.']);
+        return response()->json(['errors' => ['email' => ['Email does not exist or already sent']]], 422);
     }
 
     /**
@@ -115,6 +120,19 @@ class AuthController extends Controller
             'password' => 'required|min:6',
             'password_repeat' => 'required_with:password|same:password|min:6'
         ]);
+
+        $user = User::query()
+            ->orWhere('username', '=', $request->get('username'));
+
+        if ($request->get('email')) {
+            $user->orWhere('email', '=', $request->get('email'));
+        }
+
+        if ($user->exists()) {
+            return response()->json([
+                'errors' => ['email' => ['User with this email or username already exists']]
+            ], 422);
+        }
 
         $user = new User();
         $user->username = $request->get('username');

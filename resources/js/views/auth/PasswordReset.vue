@@ -3,18 +3,38 @@
     <b-row class="d-flex justify-content-center align-items-center" style="min-height: inherit">
       <div class="auth-container">
         <b-row class="d-flex justify-content-center align-items-center">
+          <div class="d-flex flex-column mb-2">
+            <span v-for="(error, key) in errors" :key="key" class="text-center text-danger d-block mb-2">{{
+                error
+              }}</span>
+          </div>
           <b-col cols="12">
-            <b-form-group label="Email">
-              <b-form-input v-model="form.email"/>
-            </b-form-group>
-            <b-form-group label="Password">
-              <b-form-input v-model="form.password" type="password" />
-            </b-form-group>
-            <b-form-group label="Password Repeat">
-              <b-form-input v-model="form.password_confirmation" type="password" />
-            </b-form-group>
+            <b-form-input
+              v-model="$v.form.email.$model"
+              type="email"
+              :state="validateState('email')"
+              placeholder="Email"
+              class="mb-4"
+            />
+            <b-form-input
+              v-model="$v.form.password.$model"
+              type="password"
+              :state="validateState('password')"
+              placeholder="Password (must be 8 characters minimal length)"
+              class="mb-4"
+            />
+            <b-form-input
+              v-model="$v.form.password_confirmation.$model"
+              type="password"
+              :state="validateState('password_confirmation')"
+              placeholder="Password confirmation"
+              class="mb-4"
+            />
 
-            <b-button @click="changePassword">Change</b-button>
+            <div class="d-flex">
+              <button class="btn-submit mr-2" @click="changePassword">Change</button>
+              <b-button :to="{name: 'auth.signin'}">Back</b-button>
+            </div>
           </b-col>
         </b-row>
       </div>
@@ -22,7 +42,7 @@
   </div>
 </template>
 <script>
-const {required} = require('vuelidate/lib/validators')
+const {required, email, minLength} = require('vuelidate/lib/validators')
 
 export default {
   props: {
@@ -30,6 +50,7 @@ export default {
   },
   data() {
     return {
+      errors: [],
       form: {
         email: '',
         password: '',
@@ -40,14 +61,28 @@ export default {
 
   validations: {
     form: {
-      password: {required},
-      password_repeat: {required}
+      email: {required, email},
+      password: {
+        required: required,
+        minLength: minLength(8)
+      },
+      password_confirmation: {
+        required: required,
+        minLength: minLength(8)
+      },
     }
   },
 
   methods: {
     changePassword() {
+      this.$v.form.$touch();
+      if (this.$v.form.$anyError) {
+        this.errorRefreshed = false;
+        return;
+      }
+
       if (this.token) {
+
         const payload = {
           token: this.token,
           password: this.form.password,
@@ -56,7 +91,15 @@ export default {
         }
 
         this.$api.auth.resetPassword(payload).then(response => {
-          this.$router.push({name: 'auth.signin'})
+          console.log(response);
+        //  this.$router.push({name: 'auth.signin'})
+        }).catch(error => {
+          this.errors = [];
+          const errors = error.response.data.errors;
+          for (let i in errors) {
+            let error = errors[i][0]
+            this.errors.push(error)
+          }
         })
       }
     },
@@ -77,32 +120,15 @@ export default {
     font-family: 'Futura PT', sans-serif;
   }
 
-  a {
-    color: #9F6;
-  }
+  .btn-submit {
+    color: #fff;
+    background-color: #508f3e;
+    border-radius: 5px;
+    border: 0;
+    padding: 6px 12px;
 
-  .password-group {
-    position: relative;
-
-    .is-valid {
-      background-image: unset;
-    }
-  }
-
-  .password-reveal {
-    right: 0;
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 47px;
-    height: 100%;
-    cursor: pointer;
-    position: absolute;
-
-    svg {
-      width: 20px;
-      height: 20px;
+    &:focus {
+      outline: 0;
     }
   }
 
@@ -117,7 +143,7 @@ export default {
   .auth-container {
     background: #000;
     padding: 25px;
-    width: 340px;
+    width: 430px;
     border-radius: 5px;
     margin-bottom: 100px;
   }

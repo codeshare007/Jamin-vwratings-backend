@@ -12,6 +12,12 @@ export default [
     meta: {title: 'Registration'}
   },
   {
+    name: 'auth.forgot',
+    path: 'forgot-password',
+    component: () => import('../../../views/auth/ForgotPassword'),
+    meta: {title: 'Forgot Password'}
+  },
+  {
     name: 'auth.reset',
     path: 'reset-password/:token',
     component: () => import('../../../views/auth/PasswordReset'),

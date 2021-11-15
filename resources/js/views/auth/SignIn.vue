@@ -7,8 +7,8 @@
         </div>
         <b-row class="d-flex justify-content-center align-items-center">
           <b-col cols="12">
-            <div class="auth-page__signin" @keyup.enter="submitLogin()" v-if="this.signin_form">
-              <span class="error-message text-center text-danger d-block">{{ this.error }}</span>
+            <div class="auth-page__signin" @keyup.enter="submitLogin" v-if="this.signin_form">
+              <span class="error-message text-center text-danger d-block text-center">{{ this.error }}</span>
               <b-form-group class="m-0 mb-1">
                 <b-form-input
                   size="lg"
@@ -30,48 +30,15 @@
                   :state="validateState('password')"
                   v-model="form.password"
                 />
-                <div class="password-reveal" @click="passwordReveal()">
-                  <b-icon
-                    variant="primary"
-                    :icon="this.password_reveal ? 'eye-slash' : 'eye'"
-                  />
+                <div class="password-reveal" @click="passwordReveal">
+                  <b-icon variant="primary" :icon="this.password_reveal ? 'eye-slash' : 'eye'" />
                 </div>
               </b-form-group>
               <b-button size="large" variant="dark" class="w-100" type="submit" @click="submitLogin()">Login</b-button>
               <div class="text-center mt-2">
-                <router-link :to="{ name: 'auth.signup'}" style="font-size: 20px;">Not signed up? Go Register
-                </router-link>
+                <router-link :to="{ name: 'auth.signup'}" style="font-size: 20px;">Not signed up? Go Register</router-link>
               </div>
-              <a class="text-center mt-3 d-block cursor-pointer" @click="signin_form = false">Forgot password?</a>
-
-            </div>
-            <div class="auth-page__forgot" v-else>
-
-              <div v-if="!forget_sent">
-                <h3 class="font-weight-bold text-center">Password reset</h3>
-
-                <span class="d-block mb-1 text-white-50">Enter your email to reset your password</span>
-
-                <b-form-input
-                  class="pt-4 pb-4"
-                  placeholder="Email you signed up with"
-                  type="text"
-                  v-model="$v.forgetForm.email.$model"
-                  @keyup.enter="submitForgetPassword"
-                  autofocus
-                />
-
-                <div class="mt-3 text-center">
-                  <b-button variant="primary" class="mr-2" type="submit" @click="submitForgetPassword">Send</b-button>
-                  <b-button @click="signin_form = true">Back</b-button>
-                </div>
-              </div>
-
-              <div class="auth-page__sent mb-3" v-if="forget_sent">
-                <h2 class="font-weight-bold">Check your mail</h2>
-                <p>We sent the instructions to: <br> {{ forgetForm.email }}</p>
-                <b-button @click="signin_form = true">Back</b-button>
-              </div>
+              <router-link class="text-center mt-3 d-block cursor-pointer" :to="{ name: 'auth.forgot' }">Forgot password?</router-link>
             </div>
           </b-col>
         </b-row>
@@ -94,10 +61,6 @@ export default {
         username: '',
         password: ''
       },
-      forgetForm: {
-        email: ''
-      }
-
     }
   },
 
@@ -106,9 +69,6 @@ export default {
       username: {required},
       password: {required}
     },
-    forgetForm: {
-      email: {required}
-    }
   },
 
   methods: {
@@ -123,19 +83,6 @@ export default {
     validateState(name) {
       const {$dirty, $error} = this.$v.form[name];
       return $dirty ? !$error : null;
-    },
-
-    submitForgetPassword() {
-      this.$v.forgetForm.email.$touch();
-      if (this.$v.forgetForm.email.$error) {
-        return;
-      }
-
-      this.$api.auth.forgotPass(this.forgetForm).then(response => {
-        if (response.data.data === 'passwords.sent') {
-          this.forget_sent = true;
-        }
-      })
     },
 
     submitLogin() {

@@ -1,52 +1,50 @@
 <template>
-  <div class="auth-signup" style="min-height: inherit">
-    <b-row class="d-flex justify-content-center align-items-center" style="min-height: inherit">
-      <div class="auth-container">
-        <h2 class="mb-4">Create Account</h2>
-        <span v-for="(error, key) in errors" :key="key" class="text-danger d-block mb-4">{{ error }}</span>
-        <b-form>
-          <b-form-input
-            class="mb-3"
-            v-model="$v.form.username.$model"
-            type="text"
-            :state="validateState('username')"
-            placeholder="Username"
-          />
-          <b-form-input
-            class="mb-3"
-            v-model="$v.form.email.$model"
-            :state="validateState('email')"
-            type="text"
-            placeholder="Email (optional for password reset & Prizes)"
-          />
-          <b-form-input
-            class="mb-3"
-            v-model="$v.form.password.$model"
-            type="password"
-            :state="validateState('password')"
-            placeholder="Password"
-          />
-          <b-form-input
-            class="mb-3"
-            v-model="$v.form.password_repeat.$model"
-            type="password"
-            :state="validateState('password_repeat')"
-            placeholder="Confirm password"
-          />
-          <b-check
-            class="mb-3"
-            :state="validateState('eighteen')"
-            v-model="$v.form.eighteen.$model"
-          >I am at least 18yrs old
-          </b-check>
-          <div class="mb-3">
-            <b-button type="submit" @click="register">Register</b-button>
-          </div>
+  <div class="signupPage">
+    <div class="signupPage__container">
+      <h2 class="mb-4">Create Account</h2>
+      <span v-for="(error, key) in errors" :key="key" class="text-center text-danger d-block mb-4">{{ error }}</span>
+      <b-form>
+        <b-form-input
+          class="mb-3"
+          v-model="$v.form.username.$model"
+          type="text"
+          :state="validateState('username')"
+          placeholder="Username"
+        />
+        <b-form-input
+          class="mb-3"
+          v-model="$v.form.email.$model"
+          :state="validateState('email')"
+          type="text"
+          placeholder="Email (optional for password reset & Prizes)"
+        />
+        <b-form-input
+          class="mb-3"
+          v-model="$v.form.password.$model"
+          type="password"
+          :state="validateState('password')"
+          placeholder="Password (must be 6 characters minimal length)"
+        />
+        <b-form-input
+          class="mb-3"
+          v-model="$v.form.password_repeat.$model"
+          type="password"
+          :state="validateState('password_repeat')"
+          placeholder="Confirm password"
+        />
+        <b-check
+          class="mb-3"
+          :state="validateState('eighteen')"
+          v-model="$v.form.eighteen.$model"
+        >I am at least 18yrs old
+        </b-check>
+        <div class="mb-3">
+          <button type="submit" @click="register">Register</button>
+        </div>
 
-          <router-link :to="{ name: 'auth.signin'}">Already a member? Login</router-link>
-        </b-form>
-      </div>
-    </b-row>
+        <router-link :to="{ name: 'auth.signin'}">Already a member? Login</router-link>
+      </b-form>
+    </div>
   </div>
 </template>
 <script>
@@ -126,7 +124,11 @@ export default {
 }
 </script>
 <style lang="scss">
-.auth-signup {
+.signupPage {
+  min-height: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   h2, a, label {
     color: white;
@@ -136,6 +138,36 @@ export default {
     font-family: 'Futura PT', sans-serif;
   }
 
+  button {
+    background: unset;
+    padding: 7px 15px;
+    border-radius: 5px;
+    border: 1px solid #9f6;
+    color: white;
+
+    &:focus {
+      outline: 0;
+    }
+
+    &:hover {
+      background: #9f6;
+      color: black;
+    }
+  }
+
+  &__container {
+    background: #000;
+    padding: 25px;
+    width: 450px;
+    border-radius: 5px;
+    margin-bottom: 100px;
+  }
+}
+
+.auth-signup {
+
+
+
   .form-control {
     border-radius: 0;
   }
@@ -143,22 +175,22 @@ export default {
   .auth-container {
     background: #000;
     padding: 25px;
-    width: 340px;
+    width: 400px;
     border-radius: 5px;
     margin-bottom: 100px;
   }
-  
+
   .btn-secondary {
     color: #fff;
     background-color: transparent;
     border-color: #99ff66;
-	font-size: 1rem;
-}
+    font-size: 1rem;
 
-.btn-secondary:hover {
-    color: #57bd25;
-    background-color: #ffffff;
-    border-color: #57bd25;
-}
+    &:hover {
+      color: #57bd25;
+      background-color: #ffffff;
+      border-color: #57bd25;
+    }
+  }
 }
 </style>
