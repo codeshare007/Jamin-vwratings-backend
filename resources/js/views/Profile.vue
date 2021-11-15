@@ -1,12 +1,28 @@
 <template>
-  <div class="profile-page">
+
+    <div class="page-container text-center">      
+      <div class="container-fluid tm-content-container">
+            <div class="row">
+              <div class="col-md-12 col-lg-8">
+                
+                  <div class="tm-bg-dark col-md-12 section1"></div>
+                  <div class="tm-bg-dark col-md-12 section2"></div>
+                
+              </div>
+              <div class="col-md-12  col-lg-4">
+                  <div class="tm-bg-dark col-md-12 section3"></div>                
+              </div>
+            </div>
+      </div>
+
+
+
+
+
     <b-row class="mt-5">
       <b-col cols="6">
         <b-card header="Profile" bg-variant="dark" text-variant="white">
           <h2>{{ profile.username }}</h2>
-          <p>{{ profile.role | role }}</p>
-
-          <b-button @click="emitLogout" class="mt-3">Logout</b-button>
         </b-card>
       </b-col>
       <b-col cols="6">
@@ -66,3 +82,18 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.section1{
+  padding: 180px 30px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+.section2{
+  padding: 101px 30px;
+}
+.section3{
+  padding: 296px 30px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+</style>
