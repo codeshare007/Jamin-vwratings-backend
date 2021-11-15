@@ -8,16 +8,74 @@ use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class AuthController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    use SendsPasswordResetEmails, ResetsPasswords {
+        SendsPasswordResetEmails::broker insteadof ResetsPasswords;
+        ResetsPasswords::credentials insteadof SendsPasswordResetEmails;
     }
 
+    protected function resetPassword($user, $password)
+    {
+        $user->password = Hash::make($password);
+        $user->save();
+        event(new PasswordReset($user));
+    }
+
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => [
+            'login',
+            'register',
+            'sendPasswordResetLink',
+            'callResetPassword'
+        ]]);
+    }
+
+    protected function sendResetResponse(Request $request, $response)
+    {
+        return response()->json(['message' => 'Password reset successfully.']);
+    }
+
+    protected function sendResetFailedResponse(Request $request, $response)
+    {
+        return response()->json(['message' => 'Failed, Invalid Token.']);
+    }
+
+    public function sendPasswordResetLink(Request $request)
+    {
+        return $this->sendResetLinkEmail($request);
+    }
+
+    protected function sendResetLinkFailedResponse(Request $request, $response)
+    {
+        return response()->json(['message' => 'Email could not be sent to this email address.']);
+    }
+
+    /**
+     * Handle reset password
+     * @param Request $request
+     * @return mixed
+     */
+    public function callResetPassword(Request $request)
+    {
+        return $this->reset($request);
+    }
+
+    protected function sendResetLinkResponse(Request $request, $response)
+    {
+        return response()->json([
+            'message' => 'Password reset email sent.',
+            'data' => $response
+        ]);
+    }
 
     /**
      * @param Request $request
@@ -52,10 +110,10 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $this->validate($request, [
-           'username' => 'required|string|unique:users|max:255',
-           'email' => 'email|nullable',
-           'password' => 'required|min:6',
-           'password_repeat' => 'required_with:password|same:password|min:6'
+            'username' => 'required|string|unique:users|max:255',
+            'email' => 'email|nullable',
+            'password' => 'required|min:6',
+            'password_repeat' => 'required_with:password|same:password|min:6'
         ]);
 
         $user = new User();
@@ -110,5 +168,51 @@ class AuthController extends Controller
             'expires_in' => auth('api')->factory()->getTTL() * 60,
             'user' => auth()->user()
         ]);
+    }
+
+    public function postReset(Request $request)
+    {
+        print_r($request->all());
+    }
+
+    public function forgotPassword(Request $request)
+    {
+
+        $this->validate($request, [
+            'email' => 'required|email'
+        ]);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+
+        /*
+        $input = $request->all();
+        $rules = array(
+            'email' => "required|email",
+        );
+        $validator = Validator::make($input, $rules);
+        if ($validator->fails()) {
+            $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
+        } else {
+            try {
+                $response = Password::sendResetLink($request->only('email'), function (Message $message) {
+                    $message->subject($this->getEmailSubject());
+                });
+                switch ($response) {
+                    case Password::RESET_LINK_SENT:
+                        return \Response::json(array("status" => 200, "message" => trans($response), "data" => array()));
+                    case Password::INVALID_USER:
+                        return \Response::json(array("status" => 400, "message" => trans($response), "data" => array()));
+                }
+            } catch (\Swift_TransportException $ex) {
+                $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []);
+            } catch (Exception $ex) {
+                $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []);
+            }
+        }
+        return \Response::json($arr);
+        */
     }
 }

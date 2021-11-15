@@ -6,7 +6,7 @@
           <h2>{{ profile.username }}</h2>
           <p>{{ profile.role | role }}</p>
 
-          <b-button class="mt-3">Logout</b-button>
+          <b-button @click="emitLogout" class="mt-3">Logout</b-button>
         </b-card>
       </b-col>
       <b-col cols="6">
@@ -53,6 +53,11 @@ export default {
   },
 
   methods: {
+    emitLogout() {
+      this.logout().then(() => {
+        this.$router.push({name: 'auth.signin'})
+      })
+    },
     fetchComments() {
       this.$api.profile.comments().then(response => {
         this.comments = response.data;

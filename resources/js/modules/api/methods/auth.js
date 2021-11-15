@@ -32,5 +32,11 @@ export default axios => ({
     return axios.post('auth/register', payload).then(response => {
       return response.data;
     })
+  },
+  forgotPass(payload) {
+    return axios.post('reset-password', payload)
+  },
+  resetPassword(payload) {
+    return axios.post('reset/password', payload)
   }
 })
