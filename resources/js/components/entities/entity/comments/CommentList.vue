@@ -44,9 +44,9 @@ export default {
     sorted() {
       switch (this.sort) {
         case('asc'):
-          return this.comments.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-        case('desc'):
           return this.comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        case('desc'):
+          return this.comments.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
         case('pics'):
           return this.comments.filter(item => {
             if (Object.keys(item.attachments).length) return item;

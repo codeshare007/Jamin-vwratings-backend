@@ -7,7 +7,7 @@
         <b-col class="d-flex justify-content-center">
           <b-form-group class="m-0">
             <b-form-radio-group
-              :class="{ 'form-group__error': !errorRefreshed && $v.form.opinion.$error }"
+              :class="{ 'form-group__error': !errorRefreshed && $v.form.opinion.$error, 'form-group__selected': $v.form.opinion.$model !== null }"
               v-model="$v.form.opinion.$model"
               :state="validateState('opinion')"
               :options="[{text: 'Positive', value: 1}, {text: 'Negative', value: 2}]"
@@ -36,20 +36,20 @@
         ref="commentArea"
         placeholder="Type here... but we delete pathetic posts"
       />
+
       <div class="mt-3 d-flex justify-content-between">
-        <div>
-          <span class="m-2 text-danger d-block" v-if="previews.length">
+          <span class="text-danger d-block" v-if="previews.length">
             If this isn't the pic you wanted just hit upload again.
           </span>
-          <div class="d-flex mt-3">
-            <viewer :images="previews">
-              <img alt class="imagePreview" v-for="src in previews" :key="src" :src="src">
-            </viewer>
-          </div>
+        <div class="d-flex mt-3">
+          <viewer :images="previews">
+            <img alt class="imagePreview" v-for="src in previews" :key="src" :src="src">
+          </viewer>
         </div>
-        <div v-if="$v.form.opinion.$model !== null">
-          <b-button @click="send">Send</b-button>
-        </div>
+      </div>
+
+      <div class="d-flex justify-content-end w-100" v-if="$v.form.opinion.$model !== null">
+        <b-button @click="send">Send</b-button>
       </div>
     </b-form>
   </div>
@@ -205,6 +205,25 @@ export default {
 
     &::placeholder {
       color: white;
+    }
+  }
+
+  .btn-group-toggle {
+
+    .btn {
+      &:first-child {
+        background: #218838;
+      }
+
+      &:last-child {
+        background: #c82333;
+      }
+    }
+  }
+
+  .form-group__selected {
+    .btn:not(.active) {
+      background: #5a6268;
     }
   }
 
