@@ -27,20 +27,7 @@ class StalkalotParserService
             'avis_notes' => 1
         ];
 
-        Config::set("database.connections.stalkalot", [
-            'driver' => 'mysql',
-            'host' => 'localhost',
-            'database' => 'stalkalot',
-            'username' => 'root',
-            'password' => 'root',
-            'port' => 8889,
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
-            'strict' => false,
-        ]);
-
-        $database = DB::connection('stalkalot');
+        $database = DB::connection('old');
 
         if ($config['users']) {
             $users = $database->select('SELECT * FROM user');
