@@ -3,9 +3,36 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Promo</title>
+    <style>
+        body {
+            background: #2c3e50;
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
 
-    <script type="text/javascript" src="/assets/js/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="/assets/css/styles.css">
+        h1 {
+            font-family: 'Helvetica', sans-serif;
+            font-weight: normal;
+            margin-bottom: 30px;
+        }
+
+        .promoPage {
+            min-height: inherit;
+        }
+
+        .promoPage__header {
+            padding: 10px;
+        }
+
+        .promoPage__content {
+            display: block;
+            padding: 20px;
+            height: calc(100% - 118px);
+            min-height: inherit;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,21 +47,31 @@
     </div>
 </div>
 <script>
-    $(function () {
-        var timeleft = {{ $campaign->timer }};
-        var downloadTimer = setInterval(function () {
-            if (timeleft <= 0) {
-                clearInterval(downloadTimer);
-                $.post("/api/v1/end-promo", { csrf: "{{ @csrf_token() }}" }).done(function (data) {
-                    window.location.href = data.last_page;
-                });
+    var timeleft = {{ $campaign->timer }};
+    var downloadTimer = setInterval(function () {
+        if (timeleft <= 0) {
+            clearInterval(downloadTimer);
 
-            } else {
-                document.getElementById("countdown").innerHTML = timeleft;
+            var http = new XMLHttpRequest();
+            var params = new FormData();
+            params.append('csrf', "{{ @csrf_token() }}");
+
+            http.open('POST', '/api/v1/end-promo', true);
+
+            http.onreadystatechange = function () {//Call a function when the state changes.
+                if (http.readyState == 4 && http.status == 200) {
+                    var response = JSON.parse(http.response);
+                    window.location.href = response.last_page;
+                }
             }
-            timeleft -= 1;
-        }, 1000);
-    })
+
+            http.send(params);
+
+        } else {
+            document.getElementById("countdown").innerHTML = timeleft;
+        }
+        timeleft -= 1;
+    }, 1000);
 </script>
 </body>
 </html>
