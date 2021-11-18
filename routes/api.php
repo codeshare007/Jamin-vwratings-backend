@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 Route::prefix('v1')->group(function () {
 
-
     Route::post('reset-password', 'App\Http\Controllers\Api\V1\Front\AuthController@sendPasswordResetLink');
     Route::post('reset/password', 'App\Http\Controllers\Api\V1\Front\AuthController@callResetPassword');
 
