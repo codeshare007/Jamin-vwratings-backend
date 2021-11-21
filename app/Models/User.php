@@ -82,4 +82,15 @@ class User extends Authenticatable implements JWTSubject
     {
         $this->notify(new \App\Notifications\MailResetPasswordNotification($token));
     }
+
+    public function avisClaimed()
+    {
+        return $this->hasMany(AvisClaims::class, 'user_id', 'id');
+    }
+
+    public function partiesClaimed()
+    {
+        return $this->hasMany(PartiesClaims::class, 'user_id', 'id');
+    }
+
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Avi;
+use App\Models\AvisClaims;
 use App\Models\AvisRatings;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -30,17 +31,23 @@ class AvisController extends Controller
 
         if ($request->has('type')) {
             switch ($request->get('type')):
-                case('full_list'): $avis->select(['id', 'name'])->latest();
+                case('full_list'):
+                    $avis->select(['id', 'name'])->latest();
                     break;
-                case('good_list'): $avis->averageRating('>', 9);
+                case('good_list'):
+                    $avis->averageRating('>', 9);
                     break;
-                case('bad_list'): $avis->averageRating('<',  4, 'ASC');
+                case('bad_list'):
+                    $avis->averageRating('<', 4, 'ASC');
                     break;
-                case('recent_list'): $avis->recentRated();
+                case('recent_list'):
+                    $avis->recentRated();
                     break;
-                case('comments'): $avis->latestComments();
+                case('comments'):
+                    $avis->latestComments();
                     break;
-                case('pics'): $avis->latestAttachments();
+                case('pics'):
+                    $avis->latestAttachments();
                     break;
             endswitch;
         }
@@ -54,7 +61,23 @@ class AvisController extends Controller
      */
     public function show($id)
     {
-        return Avi::with(['comments', 'comments.attachments'])->find($id)->append(['average_rating', 'user_rating']);
+
+        $avi = Avi::with(['comments.attachments', 'comments', 'claim'])->find($id);
+        $avi->append(['average_rating', 'user_rating']);
+
+        if (AvisClaims::where('avis_id', '=', $id)->count()) {
+            $comments = array_values($avi->comments->filter(function($item) {
+                if ($item->attachments->count() || $item->opinion !== 2 ) return $item;
+                return false;
+            })->toArray());
+
+            $avi->unsetRelation('comments');
+
+            $avi['comments'] = $comments;
+
+        }
+
+        return $avi;
     }
 
     /**
