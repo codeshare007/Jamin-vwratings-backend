@@ -46,6 +46,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
 
         Route::get('comments', 'App\Http\Controllers\Api\V1\Front\SiteController@comments');
+        Route::post('claim', 'App\Http\Controllers\Api\V1\Front\ClaimsController@claim');
 
         Route::prefix('auth')->group(function () {
             Route::post('logout', 'App\Http\Controllers\Api\V1\Front\AuthController@logout');
