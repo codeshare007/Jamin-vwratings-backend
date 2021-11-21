@@ -38,6 +38,10 @@ Route::prefix('v1')->group(function () {
         Route::post('register', 'App\Http\Controllers\Api\V1\Front\AuthController@register');
     });
 
+    Route::group(['middleware' => 'api', 'prefix' => 'admin/auth'], function () {
+        Route::post('login', 'App\Http\Controllers\Api\V1\Admin\AuthController@login');
+    });
+
     // Authenticated methods
     Route::middleware('auth:api')->group(function () {
 
@@ -51,6 +55,13 @@ Route::prefix('v1')->group(function () {
 
         // Admin methods
         Route::prefix('admin')->group(function () {
+
+            Route::prefix('auth')->group(function () {
+                Route::post('logout', 'App\Http\Controllers\Api\V1\Admin\AuthController@logout');
+                Route::post('refresh', 'App\Http\Controllers\Api\V1\Admin\AuthController@refresh');
+                Route::get('me', 'App\Http\Controllers\Api\V1\Admin\AuthController@me');
+            });
+
             Route::get('dashboard', 'App\Http\Controllers\Api\V1\Admin\AdminController@dashboard');
             Route::get('dashboard/hits', 'App\Http\Controllers\Api\V1\Admin\AdminController@getHits');
             Route::post('dashboard/hits', 'App\Http\Controllers\Api\V1\Admin\AdminController@changeHits');
@@ -61,6 +72,8 @@ Route::prefix('v1')->group(function () {
             Route::resource('comments', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController');
             Route::resource('ratings', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController');
             Route::resource('campaigns', 'App\Http\Controllers\Api\V1\Admin\AdsCampaignsController');
+            Route::resource('parties', 'App\Http\Controllers\Api\V1\Admin\PartiesController')->names('admin.parties');
+            Route::resource('parties-comments', 'App\Http\Controllers\Api\V1\Admin\PartiesCommentsController');
 
             Route::post('users/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\UsersController@bulkDelete');
             Route::post('messages/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\MessagesController@bulkDelete');
@@ -71,5 +84,6 @@ Route::prefix('v1')->group(function () {
             Route::post('comments/bulk-opinion', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@bulkOpinion');
             Route::post('comments/{id}/opinion', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@changeOpinion');
         });
+
     });
 });
