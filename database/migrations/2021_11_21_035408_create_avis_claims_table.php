@@ -18,6 +18,7 @@ class CreateAvisClaimsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('avis_id');
             $table->dateTime('claimed_until');
+            $table->timestamps();
         });
     }
 

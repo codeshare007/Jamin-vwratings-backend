@@ -18,6 +18,7 @@ class CreatePartiesClaimsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('party_id');
             $table->dateTime('claimed_until');
+            $table->timestamps();
         });
     }
 

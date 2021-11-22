@@ -19,4 +19,9 @@ class AvisClaims extends Model
     {
         return $this->hasOne(Avi::class, 'id', 'avis_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }
