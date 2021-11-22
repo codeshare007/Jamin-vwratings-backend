@@ -3,42 +3,27 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\AvisComments;
+use App\Models\PartiesClaims;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\{JsonResponse, Request};
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class AvisCommentsController extends Controller
+class PartiesClaimsController extends Controller
 {
-
     /**
      * @param Request $request
      * @return LengthAwarePaginator
      */
     public function index(Request $request)
     {
-
-        $comments = AvisComments::query();
-        $comments->with('attachments');
-        $comments->leftJoin('users', 'users.id', '=', 'avis_comments.user_id');
-        $comments->leftJoin('avis', 'avis.id', '=', 'avis_comments.avis_id');
-        $comments->select([
-            'avis_comments.id',
-            'users.username',
-            'avis.name',
-            'avis_comments.content',
-            'avis_comments.opinion',
-            'avis_comments.created_at'
-        ]);
+        $comments = PartiesClaims::query()->with('user');
 
         if ($request->has('sortBy') && $request->has('sort')) {
             $comments->orderBy($request->get('sortBy'), $request->get('sort'));
         }
 
         if ($query = $request->get('search')) {
-            $comments->where('users.username', 'LIKE', '%' . $query . '%')
-                ->orWhere('avis.name', 'LIKE', '%' . $query . '%')
-                ->orWhere('avis_comments.content', 'LIKE', '%' . $query . '%');
+
         }
 
         return $comments->paginate(100);
@@ -50,7 +35,7 @@ class AvisCommentsController extends Controller
      */
     public function show($id)
     {
-        return AvisComments::findOrFail($id);
+        return PartiesClaims::findOrFail($id);
     }
 
     /**
@@ -62,33 +47,45 @@ class AvisCommentsController extends Controller
     public function update($id, Request $request)
     {
         $this->validate($request, [
-            'avis_id' => 'required|int',
-            'opinion' => 'required',
             'user_id' => 'nullable|int',
-            'content' => 'nullable|string',
+            'party_id' => 'required|int',
+            'claimed_until' => 'nullable|date'
         ]);
 
-        if ($aviComment = AvisComments::findOrFail($id)) {
+        if ($claim = PartiesClaims::find($id)) {
+            $claim->avis_id = $request->get('party_id');
 
-            $aviComment->avis_id = $request->get('avis_id');
-            $aviComment->content = $request->get('content');
-            $aviComment->opinion = $request->get('opinion');
-
-            if ($userId = $request->get('user_id')) {
-                $aviComment->user_id = $userId;
+            if ($request->get('user_id')) {
+                $claim->user_id = $request->get('user_id');
             }
 
-            $aviComment->save();
+            $claim->claimed_until = $request->get('claimed_until');
+            $claim->save();
 
             return response()->json(['status' => 'success']);
         }
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => ''
+            'user_id' => 'nullable|int',
+            'avis_id' => 'required|int',
+            'claimed_until' => 'nullable|date'
         ]);
+
+        $claim = new PartiesClaims();
+
+        $claim->avis_id = $request->get('avis_id');
+
+        if ($request->get('user_id')) {
+            $claim->user_id = $request->get('user_id');
+        }
+
+        $claim->claimed_until = $request->get('claimed_until');
+        $claim->save();
+
+        return response()->json(['status' => 'success']);
     }
 
     /**
@@ -97,30 +94,10 @@ class AvisCommentsController extends Controller
      */
     public function destroy($id)
     {
-        if ($user = AvisComments::findOrFail($id)) {
+        if ($user = PartiesClaims::findOrFail($id)) {
             $user->delete();
             return response()->json(['status' => 'success']);
         }
-    }
-
-    public function bulkOpinion(Request $request)
-    {
-        $this->validate($request, [
-            'ids' => 'array|required',
-            'opinion' => 'required'
-        ]);
-
-        AvisComments::whereIn('id', $request->get('ids'))->update(['opinion' => $request->get('opinion')]);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Users Deleted successfully.'
-        ]);
-    }
-
-    public function changeOpinion()
-    {
-
     }
 
     /**
@@ -134,7 +111,7 @@ class AvisCommentsController extends Controller
             'ids' => 'array|required'
         ]);
 
-        AvisComments::whereIn('id', $request->get('ids'))->delete();
+        PartiesClaims::whereIn('id', $request->get('ids'))->delete();
 
         return response()->json([
             'status' => 'success',

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Parties, PartiesComments, PartiesRatings};
+use App\Models\{Parties, PartiesClaims, PartiesComments, PartiesRatings};
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\{Collection, Builder};
 use Illuminate\Validation\ValidationException;
@@ -60,8 +60,22 @@ class PartiesController extends Controller
      */
     public function show($id)
     {
-        return Parties::with(['comments', 'comments.attachments'])->find($id)
-            ->append(['average_rating', 'user_rating']);
+        $avi = Parties::with(['comments.attachments', 'comments', 'claim'])->find($id);
+        $avi->append(['average_rating', 'user_rating']);
+
+        if (PartiesClaims::where('party_id', '=', $id)->count()) {
+            $comments = array_values($avi->comments->filter(function($item) {
+                if ($item->attachments->count() || $item->opinion !== 2 ) return $item;
+                return false;
+            })->toArray());
+
+            $avi->unsetRelation('comments');
+
+            $avi['comments'] = $comments;
+
+        }
+
+        return $avi;
     }
 
     /**

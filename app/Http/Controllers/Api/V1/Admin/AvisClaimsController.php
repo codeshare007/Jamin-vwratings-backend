@@ -24,9 +24,7 @@ class AvisClaimsController extends Controller
         }
 
         if ($query = $request->get('search')) {
-            $comments->where('users.username', 'LIKE', '%' . $query . '%')
-                ->orWhere('avis.name', 'LIKE', '%' . $query . '%')
-                ->orWhere('avis_comments.content', 'LIKE', '%' . $query . '%');
+
         }
 
         return $comments->paginate(100);
@@ -50,33 +48,45 @@ class AvisClaimsController extends Controller
     public function update($id, Request $request)
     {
         $this->validate($request, [
-            'avis_id' => 'required|int',
-            'opinion' => 'required',
             'user_id' => 'nullable|int',
-            'content' => 'nullable|string',
+            'avis_id' => 'required|int',
+            'claimed_until' => 'nullable|date'
         ]);
 
-        if ($aviComment = AvisComments::findOrFail($id)) {
+        if ($claim = AvisClaims::find($id)) {
+            $claim->avis_id = $request->get('avis_id');
 
-            $aviComment->avis_id = $request->get('avis_id');
-            $aviComment->content = $request->get('content');
-            $aviComment->opinion = $request->get('opinion');
-
-            if ($userId = $request->get('user_id')) {
-                $aviComment->user_id = $userId;
+            if ($request->get('user_id')) {
+                $claim->user_id = $request->get('user_id');
             }
 
-            $aviComment->save();
+            $claim->claimed_until = $request->get('claimed_until');
+            $claim->save();
 
             return response()->json(['status' => 'success']);
         }
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => ''
+            'user_id' => 'nullable|int',
+            'avis_id' => 'required|int',
+            'claimed_until' => 'nullable|date'
         ]);
+
+        $claim = new AvisClaims();
+
+        $claim->avis_id = $request->get('avis_id');
+
+        if ($request->get('user_id')) {
+            $claim->user_id = $request->get('user_id');
+        }
+
+        $claim->claimed_until = $request->get('claimed_until');
+        $claim->save();
+
+        return response()->json(['status' => 'success']);
     }
 
     /**
