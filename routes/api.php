@@ -84,17 +84,26 @@ Route::prefix('v1')->group(function () {
             Route::resource('parties', 'App\Http\Controllers\Api\V1\Admin\PartiesController')
                 ->names('admin.parties');
 
+            Route::resource('parties-claims', 'App\Http\Controllers\Api\V1\Admin\PartiesClaimsController');
             Route::resource('parties-comments', 'App\Http\Controllers\Api\V1\Admin\PartiesCommentsController');
+            Route::resource('parties-ratings', 'App\Http\Controllers\Api\V1\Admin\PartiesRatingsController');
 
             Route::post('users/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\UsersController@bulkDelete');
             Route::post('messages/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\MessagesController@bulkDelete');
-            Route::post('avis/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\AvisController@bulkDelete');
-            Route::post('avis-ratings/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController@bulkDelete');
 
+            Route::post('avis/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\AvisController@bulkDelete');
+            Route::post('avis-claims/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\AvisClaimsController@bulkDelete');
+            Route::post('avis-ratings/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController@bulkDelete');
             Route::post('avis-comments/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@bulkDelete');
             Route::post('avis-comments/bulk-opinion', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@bulkOpinion');
             Route::post('avis-comments/{id}/opinion', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController@changeOpinion');
-        });
 
+            Route::post('parties/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\PartiesController@bulkDelete');
+            Route::post('parties-claims/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\PartiesClaimsController@bulkDelete');
+            Route::post('parties-ratings/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\PartiesRatingsController@bulkDelete');
+            Route::post('parties-comments/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\PartiesCommentsController@bulkDelete');
+            Route::post('parties-comments/bulk-opinion', 'App\Http\Controllers\Api\V1\Admin\PartiesCommentsController@bulkOpinion');
+            Route::post('parties-comments/{id}/opinion', 'App\Http\Controllers\Api\V1\Admin\PartiesCommentsController@changeOpinion');
+        });
     });
 });

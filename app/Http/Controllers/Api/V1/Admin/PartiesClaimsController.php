@@ -53,7 +53,7 @@ class PartiesClaimsController extends Controller
         ]);
 
         if ($claim = PartiesClaims::find($id)) {
-            $claim->avis_id = $request->get('party_id');
+            $claim->party_id = $request->get('party_id');
 
             if ($request->get('user_id')) {
                 $claim->user_id = $request->get('user_id');
@@ -70,13 +70,13 @@ class PartiesClaimsController extends Controller
     {
         $this->validate($request, [
             'user_id' => 'nullable|int',
-            'avis_id' => 'required|int',
+            'party_id' => 'required|int',
             'claimed_until' => 'nullable|date'
         ]);
 
         $claim = new PartiesClaims();
 
-        $claim->avis_id = $request->get('avis_id');
+        $claim->party_id = $request->get('party_id');
 
         if ($request->get('user_id')) {
             $claim->user_id = $request->get('user_id');

@@ -19,4 +19,9 @@ class PartiesClaims extends Model
     {
         return $this->hasOne(Parties::class, 'id', 'party_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }
