@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,16 +22,25 @@ class AvisComments extends Model
         'opinion'
     ];
 
-    public function attachments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * @return HasMany
+     */
+    public function attachments()
     {
         return $this->hasMany(AvisCommentsAttachments::class, 'comment_id', 'id');
     }
 
+    /**
+     * @return HasOne
+     */
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
+    /**
+     * @return HasOne
+     */
     public function avi()
     {
         return $this->hasOne(Avi::class, 'id', 'avis_id');

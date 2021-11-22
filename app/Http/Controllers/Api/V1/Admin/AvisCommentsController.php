@@ -17,15 +17,16 @@ class AvisCommentsController extends Controller
      */
     public function index(Request $request)
     {
-
         $comments = AvisComments::query();
-        $comments->with('attachments');
+        $comments->with(['attachments']);
         $comments->leftJoin('users', 'users.id', '=', 'avis_comments.user_id');
         $comments->leftJoin('avis', 'avis.id', '=', 'avis_comments.avis_id');
+        $comments->leftJoin('avis_claims', 'avis_claims.avis_id', '=', 'avis_comments.avis_id');
         $comments->select([
             'avis_comments.id',
             'users.username',
             'avis.name',
+            'avis_claims.claimed_until',
             'avis_comments.content',
             'avis_comments.opinion',
             'avis_comments.created_at'
