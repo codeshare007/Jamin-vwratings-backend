@@ -12,18 +12,10 @@
             height: 100%;
         }
 
-        h1 {
-            font-family: 'Helvetica', sans-serif;
-            font-weight: normal;
-            margin-bottom: 30px;
-        }
+
 
         .promoPage {
             min-height: inherit;
-        }
-
-        .promoPage__header {
-            padding: 10px;
         }
 
         .promoPage__content {
@@ -32,19 +24,38 @@
             height: calc(100% - 118px);
             min-height: inherit;
         }
+		
+		.promowords {
+			margin-top: 70px;
+			width: fit-content;
+			border: 1px solid black;
+			margin-left: auto;
+			margin-right: auto;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
     </style>
 </head>
 
 <body>
 <div class="promoPage">
-    <div class="promoPage__header">
-        <h1>Continue stalking in <span id="countdown">{{ $campaign->timer }}</span></h1>
 
-        <hr>
-    </div>
-    <div class="promoPage__content">
-        {!! $campaign->content !!}
-    </div>
+   <div class="page-container">      
+      <div class="container-fluid tm-content-container">
+            <div class="row">
+              <div class="col-md-12">
+					<div align="center" class="promowords">
+						<h2>Take a break, relax and enjoy this ad!</h2>
+					</div>
+                     <div align="center" class="promoPage__content" >
+						{!! $campaign->content !!}
+					<br><br>
+						<span id="countdown">{{ $campaign->timer }}</span>
+					</div>
+              </div>             
+            </div>
+      </div>
+</div>
 </div>
 <script>
     var timeleft = {{ $campaign->timer }};
