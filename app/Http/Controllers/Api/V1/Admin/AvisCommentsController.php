@@ -19,6 +19,7 @@ class AvisCommentsController extends Controller
     {
 
         $comments = AvisComments::query();
+        $comments->with('attachments');
         $comments->leftJoin('users', 'users.id', '=', 'avis_comments.user_id');
         $comments->leftJoin('avis', 'avis.id', '=', 'avis_comments.avis_id');
         $comments->select([

@@ -11,7 +11,7 @@ class AvisClaims extends Model
 
     protected $with = ['avi'];
 
-    protected $fillable = ['user_id', 'avis_id'];
+    protected $fillable = ['user_id', 'avis_id', 'claimed_until'];
 
     public $timestamps = false;
 

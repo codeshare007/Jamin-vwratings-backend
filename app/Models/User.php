@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -27,7 +28,6 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * The attributes that are mass assignable.
-     *
      * @var string[]
      */
     protected $fillable = [
@@ -42,7 +42,6 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * The attributes that should be hidden for serialization.
-     *
      * @var array
      */
     protected $hidden = [
@@ -50,6 +49,9 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
+    /**
+     * @return HasMany
+     */
     public function notes()
     {
         return $this->hasMany(UsersNotes::class, 'user_id', 'id');
@@ -57,7 +59,6 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
-     *
      * @return mixed
      */
     public function getJWTIdentifier()
@@ -67,7 +68,6 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
-     *
      * @return array
      */
     public function getJWTCustomClaims()
@@ -77,17 +77,24 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Override the mail body for reset password notification mail.
+     * @param string $token
      */
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new \App\Notifications\MailResetPasswordNotification($token));
+        $this->notify(new MailResetPasswordNotification($token));
     }
 
+    /**
+     * @return HasMany
+     */
     public function avisClaimed()
     {
         return $this->hasMany(AvisClaims::class, 'user_id', 'id');
     }
 
+    /**
+     * @return HasMany
+     */
     public function partiesClaimed()
     {
         return $this->hasMany(PartiesClaims::class, 'user_id', 'id');
