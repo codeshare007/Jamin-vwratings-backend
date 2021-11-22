@@ -45,7 +45,7 @@
             <div class="row">
               <div class="col-md-12">
 					<div align="center" class="promowords">
-						<h2>Take a break, relax and enjoy this ad!</h2>
+						<h2>Take a break and enjoy this ad while the system does it's thing!</h2>
 					</div>
                      <div align="center" class="promoPage__content" >
 						{!! $campaign->content !!}
