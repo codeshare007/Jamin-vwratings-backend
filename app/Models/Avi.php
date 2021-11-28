@@ -18,6 +18,7 @@ class Avi extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'user_id',
         'status',
         'name',

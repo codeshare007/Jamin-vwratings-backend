@@ -14,6 +14,7 @@ class AvisRatings extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'user_id',
         'avis_id',
         'rating'
