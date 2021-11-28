@@ -32,19 +32,18 @@ class Avi extends Model
             ->leftJoin('avis_comments', 'avis_comments.avis_id', '=', 'avis.id')
             ->select(['avis.id', 'avis.name', DB::raw('COUNT(avis_comments.id) as avis_count')])
             ->groupBy(DB::raw('`avis_comments`.`avis_id`'))
-            ->orderBy(DB::raw('`avis_comments`.`created_at`'), 'desc')
-            ->orderBy('avis_count', 'DESC');
+            ->orderBy(DB::raw('`avis_comments`.`created_at`'), 'desc');
     }
 
     public function scopeLatestAttachments($query)
     {
         return $query->has('comments')
             ->leftJoin('avis_comments', 'avis_comments.avis_id', '=', 'avis.id')
-            ->rightJoin('avis_comments_attachments', 'avis_comments_attachments.comment_id', '=', 'avis_comments.id')
+            ->leftJoin('avis_comments_attachments', 'avis_comments_attachments.comment_id', '=', 'avis_comments.id')
             ->select(['avis.id', 'avis.name', DB::raw('COUNT(avis_comments_attachments.id) as attachments_count')])
             ->groupBy(DB::raw('`avis_comments`.`avis_id`'))
-            ->having('attachments_count', '>', '0')
-            ->orderBy(DB::raw('`avis_comments_attachments`.`created_at`'), 'desc');
+            ->orderBy(DB::raw('`avis_comments`.`updated_at`'), 'desc')
+            ->having('attachments_count', '>', '0');
     }
 
     public function scopeRecentRated($query)
