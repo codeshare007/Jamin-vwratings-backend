@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers\Api\V1\Front;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use App\Http\Controllers\Controller;
-use App\Models\Avi;
-use App\Models\AvisClaims;
-use App\Models\AvisRatings;
-use Illuminate\Http\File;
-use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
-use Psy\Util\Str;
+use App\Models\{Avi, AvisClaims, AvisRatings};
+use Illuminate\Http\{Request, UploadedFile};
 
 class AvisController extends Controller
 {
     /**
-     * @return Avi[]|\Illuminate\Database\Eloquent\Collection
+     * @param Request $request
+     * @return Builder[]|Collection
      */
     public function index(Request $request)
     {

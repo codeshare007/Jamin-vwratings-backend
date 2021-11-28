@@ -42,9 +42,8 @@ class Avi extends Model
             ->rightJoin('avis_comments_attachments', 'avis_comments_attachments.comment_id', '=', 'avis_comments.id')
             ->select(['avis.id', 'avis.name', DB::raw('COUNT(avis_comments_attachments.id) as attachments_count')])
             ->groupBy(DB::raw('`avis_comments`.`avis_id`'))
-            ->orderBy(DB::raw('`avis_comments_attachments`.`created_at`'), 'desc')
             ->having('attachments_count', '>', '0')
-            ->orderBy('attachments_count', 'DESC');
+            ->orderBy(DB::raw('`avis_comments_attachments`.`created_at`'), 'desc');
     }
 
     public function scopeRecentRated($query)
