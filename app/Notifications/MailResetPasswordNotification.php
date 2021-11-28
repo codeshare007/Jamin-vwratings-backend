@@ -13,13 +13,18 @@ class MailResetPasswordNotification extends ResetPassword
 {
     use Queueable;
 
+    public $email;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($token)
+    public function __construct($token, $email)
     {
+
+        $this->email = $email;
+
         parent::__construct($token);
     }
 
@@ -42,7 +47,7 @@ class MailResetPasswordNotification extends ResetPassword
      */
     public function toMail($notifiable)
     {
-        $link = url( '/auth/reset-password/' . $this->token);
+        $link = url( '/auth/reset-password/' . $this->token . '?email=' . $this->email);
 
         return ( new MailMessage )
             ->subject( 'Reset Password Notification' )

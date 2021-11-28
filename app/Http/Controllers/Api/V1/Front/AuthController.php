@@ -100,6 +100,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'token' => 'required',
+            'email' => 'required|email',
             'password' => ['required', 'confirmed', 'min:6'],
         ], $this->validationErrorMessages());
 
