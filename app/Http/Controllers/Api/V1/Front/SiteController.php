@@ -13,7 +13,12 @@ class SiteController extends Controller
 {
     public function comments()
     {
-        return AvisComments::where('user_id', '=', auth()->user()->getAuthIdentifier())->get();
+
+        $user = auth()->user();
+
+        return $user->comments()->with(['attachments', 'avi'])->limit(5)->latest()->get();
+
+        //return AvisComments::where('user_id', '=', auth()->user()->getAuthIdentifier())->limit(5)->get();
     }
 
     /**

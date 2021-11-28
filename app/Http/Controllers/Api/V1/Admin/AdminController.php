@@ -8,6 +8,7 @@ use App\Models\AvisComments;
 use App\Models\AvisRatings;
 use App\Models\Settings;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller

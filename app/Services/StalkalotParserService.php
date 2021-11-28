@@ -9,11 +9,26 @@ use App\Models\AvisSubscribers;
 use App\Models\Messages;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
 class StalkalotParserService
 {
+
+    public function opinions()
+    {
+        $database = DB::connection('opinions');
+
+        $comments = $database->select('SELECT * FROM avis_comments');
+
+        foreach ($comments as $comment) {
+            if ($storedComment = AvisComments::find($comment->id)) {
+                $storedComment->opinion = $comment->opinion;
+                $storedComment->save();
+            }
+        }
+
+    }
+
     public function execute()
     {
         $config = [

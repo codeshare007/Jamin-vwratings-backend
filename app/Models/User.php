@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
+use App\Models\AvisComments;
 use App\Notifications\MailResetPasswordNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -23,7 +24,6 @@ class User extends Authenticatable implements JWTSubject
 
     const ROLE_ADMIN = 1;
     const ROLE_USER = 2;
-
     const STATUS_NEW = 1;
 
     /**
@@ -98,6 +98,11 @@ class User extends Authenticatable implements JWTSubject
     public function partiesClaimed()
     {
         return $this->hasMany(PartiesClaims::class, 'user_id', 'id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(AvisComments::class, 'user_id', 'id');
     }
 
 }
