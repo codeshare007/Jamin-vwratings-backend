@@ -3,32 +3,25 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Http\Request;
 use Validator;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Http\{Request, JsonResponse, RedirectResponse};
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
-use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\{Password, Hash};
+use Illuminate\Foundation\Auth\{ResetsPasswords, SendsPasswordResetEmails};
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-
     use SendsPasswordResetEmails, ResetsPasswords {
         SendsPasswordResetEmails::broker insteadof ResetsPasswords;
         ResetsPasswords::credentials insteadof SendsPasswordResetEmails;
     }
 
-    protected function resetPassword($user, $password)
-    {
-        $user->password = Hash::make($password);
-        $user->save();
-        event(new PasswordReset($user));
-    }
-
+    /**
+     * AuthController constructor.
+     */
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => [
@@ -39,16 +32,50 @@ class AuthController extends Controller
         ]]);
     }
 
-    protected function sendResetResponse(Request $request, $response)
+    /**
+     * @param $user
+     * @param $password
+     */
+    protected function resetPassword($user, $password)
     {
-        return response()->json(['status' => 'success', 'message' => 'Password reset successfully.']);
+        $user->password = Hash::make($password);
+        $user->save();
+
+        event(new PasswordReset($user));
     }
 
+    /**
+     * @param Request $request
+     * @param $response
+     * @return JsonResponse
+     */
+    protected function sendResetResponse(Request $request, $response)
+    {
+        if ($user = User::where('email', '=', $request->get('email'))->first()) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $user->username,
+                'message' => 'Password reset successfully.'
+            ]);
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    /**
+     * @param Request $request
+     * @param $response
+     * @return JsonResponse
+     */
     protected function sendResetFailedResponse(Request $request, $response)
     {
         return response()->json(['errors' => ['email' => ['Failed, Invalid Token.']]], 422);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
+     */
     public function sendPasswordResetLink(Request $request)
     {
         return $this->sendResetLinkEmail($request);
@@ -71,9 +98,26 @@ class AuthController extends Controller
      */
     public function callResetPassword(Request $request)
     {
-        return $this->reset($request);
+        $request->validate([
+            'token' => 'required',
+            'password' => ['required', 'confirmed', 'min:6'],
+        ], $this->validationErrorMessages());
+
+        $response = $this->broker()->reset(
+            $this->credentials($request), function ($user, $password) {
+            $this->resetPassword($user, $password);
+        });
+
+        return $response == Password::PASSWORD_RESET
+            ? $this->sendResetResponse($request, $response)
+            : $this->sendResetFailedResponse($request, $response);
     }
 
+    /**
+     * @param Request $request
+     * @param $response
+     * @return JsonResponse
+     */
     protected function sendResetLinkResponse(Request $request, $response)
     {
         return response()->json([
@@ -110,7 +154,8 @@ class AuthController extends Controller
 
     /**
      * @param Request $request
-     * @throws \Illuminate\Validation\ValidationException
+     * @return JsonResponse
+     * @throws ValidationException
      */
     public function register(Request $request)
     {
@@ -167,7 +212,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function me()
     {
@@ -176,7 +221,7 @@ class AuthController extends Controller
 
     /**
      * @param $token
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function createNewToken($token)
     {
@@ -188,49 +233,18 @@ class AuthController extends Controller
         ]);
     }
 
-    public function postReset(Request $request)
-    {
-        print_r($request->all());
-    }
-
+    /**
+     * @param Request $request
+     * @throws ValidationException
+     */
     public function forgotPassword(Request $request)
     {
-
         $this->validate($request, [
             'email' => 'required|email'
         ]);
 
-        $status = Password::sendResetLink(
+        Password::sendResetLink(
             $request->only('email')
         );
-
-
-        /*
-        $input = $request->all();
-        $rules = array(
-            'email' => "required|email",
-        );
-        $validator = Validator::make($input, $rules);
-        if ($validator->fails()) {
-            $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
-        } else {
-            try {
-                $response = Password::sendResetLink($request->only('email'), function (Message $message) {
-                    $message->subject($this->getEmailSubject());
-                });
-                switch ($response) {
-                    case Password::RESET_LINK_SENT:
-                        return \Response::json(array("status" => 200, "message" => trans($response), "data" => array()));
-                    case Password::INVALID_USER:
-                        return \Response::json(array("status" => 400, "message" => trans($response), "data" => array()));
-                }
-            } catch (\Swift_TransportException $ex) {
-                $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []);
-            } catch (Exception $ex) {
-                $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []);
-            }
-        }
-        return \Response::json($arr);
-        */
     }
 }
