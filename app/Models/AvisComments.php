@@ -20,7 +20,9 @@ class AvisComments extends Model
         'user_id',
         'avis_id',
         'content',
-        'opinion'
+        'opinion',
+        'created_at',
+        'updated_at'
     ];
 
     /**

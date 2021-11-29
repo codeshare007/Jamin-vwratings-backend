@@ -103,6 +103,8 @@ class StalkalotParserService
                     'avis_id' => $comment->item,
                     'content' => $comment->content,
                     'opinion' => null,
+                    'created_at' => Carbon::rawParse($comment->created),
+                    'updated_at' => Carbon::rawParse($comment->modified)
                 ]);
 
                 if ($comment->file_url !== '' && $comment->file_url !== null) {

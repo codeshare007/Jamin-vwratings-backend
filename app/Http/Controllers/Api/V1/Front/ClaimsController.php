@@ -44,14 +44,14 @@ class ClaimsController extends Controller
 
         if ($type === 'avi') {
             foreach ($user->avisClaimed as $claim) {
-                $claim->claimed_until = Carbon::now()->addDays(5)->toDateTimeString();
+                $claim->claimed_until = Carbon::now()->addDays(3)->toDateTimeString();
                 $claim->save();
             }
         }
 
         if ($type === 'party') {
             foreach ($user->partiesClaimed as $claim) {
-                $claim->claimed_until = Carbon::now()->addDays(5)->toDateTimeString();
+                $claim->claimed_until = Carbon::now()->addDays(3)->toDateTimeString();
                 $claim->save();
             }
         }
