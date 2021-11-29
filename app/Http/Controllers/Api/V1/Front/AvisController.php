@@ -129,7 +129,7 @@ class AvisController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, ['name' => 'required|string']);
-        $avi = Avi::firstOrCreate(['name' => $request->get('name')]);
+        $avi = Avi::firstOrCreate(['name' => $request->get('name'), 'user_id' => auth()->user()->getAuthIdentifier()]);
         return response()->json(['status' => 'success', 'data' => $avi]);
     }
 
