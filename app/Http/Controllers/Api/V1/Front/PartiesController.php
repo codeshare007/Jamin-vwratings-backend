@@ -130,7 +130,10 @@ class PartiesController extends Controller
     public function store(Request $request): JsonResponse
     {
         $this->validate($request, ['name' => 'required|string']);
-        $party = Parties::firstOrCreate(['name' => $request->get('name')]);
+        $party = Parties::firstOrCreate([
+            'name' => $request->get('name'),
+            'user_id' => auth()->user()->getAuthIdentifier()
+        ]);
         return response()->json(['status' => 'success', 'data' => $party]);
     }
 

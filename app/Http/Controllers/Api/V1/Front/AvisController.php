@@ -59,22 +59,26 @@ class AvisController extends Controller
     public function show($id)
     {
 
-        $avi = Avi::with(['comments.attachments', 'comments', 'claim'])->find($id);
-        $avi->append(['average_rating', 'user_rating']);
+        if ($avi = Avi::with(['comments.attachments', 'comments', 'claim'])->find($id)) {
+            $avi->append(['average_rating', 'user_rating']);
 
-        if (AvisClaims::where('avis_id', '=', $id)->count()) {
-            $comments = array_values($avi->comments->filter(function($item) {
-                if ($item->attachments->count() || $item->opinion !== 2 ) return $item;
-                return false;
-            })->toArray());
+            if (AvisClaims::where('avis_id', '=', $id)->count()) {
+                $comments = array_values($avi->comments->filter(function($item) {
+                    if ($item->attachments->count() || $item->opinion !== 2 ) return $item;
+                    return false;
+                })->toArray());
 
-            $avi->unsetRelation('comments');
+                $avi->unsetRelation('comments');
 
-            $avi['comments'] = $comments;
+                $avi['comments'] = $comments;
 
+            }
+
+            return $avi;
         }
 
-        return $avi;
+        return response()->json(['status' => 'error', 'message' => 'avi not found']);
+
     }
 
     /**
@@ -129,7 +133,7 @@ class AvisController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, ['name' => 'required|string']);
-        $avi = Avi::firstOrCreate(['name' => $request->get('name'), 'user_id' => auth()->user()->getAuthIdentifier()]);
+        $avi = Avi::firstOrCreate(['name' => $request->get('name'), 'user_id' => auth()->user()->getAuthIdentifier() ]);
         return response()->json(['status' => 'success', 'data' => $avi]);
     }
 

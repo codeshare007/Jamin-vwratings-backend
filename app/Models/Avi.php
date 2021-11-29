@@ -28,10 +28,13 @@ class Avi extends Model
 
     public function scopeLatestComments($query)
     {
+
         return $query
-            ->with('comments')
-            ->join('avis_comments', 'avis_comments.avis_id', '=', 'avis.id')
-            ->orderBy('avis_comments.created_at', 'desc')->get();
+            ->has('comments')
+            ->select(['avis.*'])
+            ->join('avis_comments', 'avis.id', '=', 'avis_comments.avis_id')
+            ->groupBy('avis_comments.avis_id')
+            ->orderBy('avis_comments.created_at', 'desc');
     }
 
     public function scopeLatestAttachments($query)
