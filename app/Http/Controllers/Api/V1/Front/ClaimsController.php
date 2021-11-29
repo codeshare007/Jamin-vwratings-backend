@@ -82,7 +82,7 @@ class ClaimsController extends Controller
                     } else {
                         $avi->claim()->create([
                             'user_id' => $user->id,
-                            'claimed_until' => Carbon::now()->addDays(5)->toDateTimeString()
+                            'claimed_until' => Carbon::now()->addDays(3)->toDateTimeString()
                         ]);
 
                         return response()->json(['status' => 'success']);
@@ -103,7 +103,7 @@ class ClaimsController extends Controller
                     } else {
                         $party->claim()->create([
                             'user_id' => $user->id,
-                            'claimed_until' => Carbon::now()->addDays(5)->toDateTimeString()
+                            'claimed_until' => Carbon::now()->addDays(3)->toDateTimeString()
                         ]);
 
                         return response()->json(['status' => 'success']);
