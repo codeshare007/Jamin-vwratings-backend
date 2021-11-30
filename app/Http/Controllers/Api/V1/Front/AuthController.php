@@ -134,7 +134,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string',
+            'username' => 'required|string|max:16',
             'password' => 'required|string|min:6',
         ]);
 
@@ -161,7 +161,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $this->validate($request, [
-            'username' => 'required|string|unique:users|max:255',
+            'username' => 'required|string|unique:users|max:16',
             'email' => 'email|nullable',
             'password' => 'required|min:6',
             'password_repeat' => 'required_with:password|same:password|min:6'
