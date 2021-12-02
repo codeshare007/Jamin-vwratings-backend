@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::prefix('v1')->group(function () {
 
-    Route::get('test', function() {
-        echo Carbon::rawParse('2019-05-04T22:02:35.695Z');
-    });
+    Route::get('test', 'App\Http\Controllers\Api\V1\Front\TestController@index');
 
     Route::post('reset-password', 'App\Http\Controllers\Api\V1\Front\AuthController@sendPasswordResetLink');
     Route::post('reset/password', 'App\Http\Controllers\Api\V1\Front\AuthController@callResetPassword');
