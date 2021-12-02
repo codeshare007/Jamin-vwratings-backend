@@ -23,9 +23,11 @@ class UsersController extends Controller
             $users->orderBy($request->get('sortBy'), $request->get('sort'));
         }
 
-        if ($query = $request->get('search')) {
-            $users->where('username', 'LIKE', '%' . $query . '%')
-                ->orWhere('email', 'LIKE', '%' . $query . '%');
+        if ($request->has('field') && $request->has('search')) {
+            $field = $request->get('field');
+            $query = $request->get('search');
+
+            $users->where($field, 'LIKE', '%' . $query . '%');
         }
 
         return $users->paginate(100);
