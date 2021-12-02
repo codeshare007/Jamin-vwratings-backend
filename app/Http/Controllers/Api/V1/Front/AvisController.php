@@ -1,12 +1,12 @@
 <?php
-
 namespace App\Http\Controllers\Api\V1\Front;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\{Avi, AvisClaims, AvisRatings, User};
 use App\Http\Controllers\Controller;
-use App\Models\{Avi, AvisClaims, AvisRatings};
-use Illuminate\Http\{Request, UploadedFile};
+use Illuminate\Validation\ValidationException;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\{Collection, Builder};
+use Illuminate\Http\{Request, UploadedFile, JsonResponse};
 
 class AvisController extends Controller
 {
@@ -62,30 +62,31 @@ class AvisController extends Controller
         if ($avi = Avi::with(['comments.attachments', 'comments', 'claim'])->find($id)) {
             $avi->append(['average_rating', 'user_rating']);
 
+            // remove negative comments if avi claimed
             if (AvisClaims::where('avis_id', '=', $id)->count()) {
-                $comments = array_values($avi->comments->filter(function($item) {
-                    if ($item->attachments->count() || $item->opinion !== 2 ) return $item;
+                $comments = array_values($avi->comments->filter(function ($item) {
+                    if ($item->attachments->count() || $item->opinion !== 2) return $item;
                     return false;
                 })->toArray());
 
                 $avi->unsetRelation('comments');
-
                 $avi['comments'] = $comments;
-
             }
 
             return $avi;
         }
 
-        return response()->json(['status' => 'error', 'message' => 'avi not found']);
-
+        return response()->json([
+            'status' => 'error',
+            'message' => 'avi not found'
+        ]);
     }
 
     /**
      * @param $id
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @return JsonResponse
+     * @throws ValidationException
      */
     public function rate($id, Request $request)
     {
@@ -93,14 +94,18 @@ class AvisController extends Controller
             'rating' => 'required'
         ]);
 
+        /** @var User $user */
+        $user = auth()->user();
+
         $rating = AvisRatings::firstOrCreate([
-            'user_id' => auth()->user()->getAuthIdentifier(),
+            'user_id' => $user->id,
             'avis_id' => $id
         ]);
 
-        if ($rating) {
-            $rating->update(['rating' => $request->get('rating')]);
-        }
+        if ($rating) $rating->update([
+            'rating' => $request->get('rating')
+        ]);
+
 
         return response()->json(['status' => 'success']);
     }
@@ -127,14 +132,32 @@ class AvisController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @return JsonResponse
+     * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        $this->validate($request, ['name' => 'required|string']);
-        $avi = Avi::firstOrCreate(['name' => $request->get('name'), 'user_id' => auth()->user()->getAuthIdentifier() ]);
-        return response()->json(['status' => 'success', 'data' => $avi]);
+        $this->validate($request, [
+            'name' => 'required|string'
+        ]);
+
+        /** @var User $user */
+        $user = auth()->user();
+        $name = $request->get('name');
+        $party = null;
+
+        try {
+            $party = Avi::firstOrCreate(['name' => $name, 'user_id' => $user->id]);
+        } catch (QueryException $e) {
+            $errorCode = $e->errorInfo[1];
+            if ($errorCode == '1062') {
+                return response()->json([
+                    'status' => 'error', 'message' => 'Avi already exists'
+                ], 422);
+            }
+        }
+
+        return response()->json(['status' => 'success', 'data' => $party]);
     }
 
     /**

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Parties, PartiesClaims, PartiesComments, PartiesRatings};
-use Illuminate\Http\Request;
+use App\Models\{Parties, PartiesClaims, PartiesRatings, User};
+use Illuminate\Http\{Request, JsonResponse};
+use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\{Collection, Builder};
 use Illuminate\Validation\ValidationException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
 class PartiesController extends Controller
@@ -129,11 +129,27 @@ class PartiesController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $this->validate($request, ['name' => 'required|string']);
-        $party = Parties::firstOrCreate([
-            'name' => $request->get('name'),
-            'user_id' => auth()->user()->getAuthIdentifier()
+        $this->validate($request, [
+            'name' => 'required|string'
         ]);
+
+        /** @var User $user */
+        $user = auth()->user();
+        $name = $request->get('name');
+        $party = null;
+
+        try {
+            $party = Parties::firstOrCreate(['name' => $name, 'user_id' => $user->id]);
+        } catch (QueryException $e) {
+            $errorCode = $e->errorInfo[1];
+            if ($errorCode == '1062') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Party already exists'
+                ], 422);
+            }
+        }
+
         return response()->json(['status' => 'success', 'data' => $party]);
     }
 
