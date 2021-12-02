@@ -182,7 +182,7 @@ class AuthController extends Controller
 
         $user = new User();
         $user->username = $request->get('username');
-        $user->ip_address = $request->ip() ?? null;
+        $user->ip_address = $_SERVER["HTTP_X_FORWARDED_FOR"];
         $user->password = Hash::make($request->get('password'));
 
         if ($request->get('email')) {
