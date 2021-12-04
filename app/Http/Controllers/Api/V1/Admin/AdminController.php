@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Avi;
 use App\Models\AvisComments;
 use App\Models\AvisRatings;
+use App\Models\PartiesComments;
+use App\Models\PartiesRatings;
+use App\Models\AvisClaims;
+use App\Models\PartiesClaims;
 use App\Models\Settings;
 use App\Models\User;
-use App\Models\AvisClaims;
+use App\Models\Parties;
 use App\Models\Messages;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,7 +26,11 @@ class AdminController extends Controller
         $avisComments = AvisComments::all()->count();
         $avisRatings = AvisRatings::all()->count();
 		$avisClaims = AvisClaims::all()->count();
-        $messages = Messages::all()->count();		
+        $messages = Messages::all()->count();
+        $parties = Parties::all()->count();	
+        $partiesComments = PartiesComments::all()->count();
+        $partiesRatings = PartiesRatings::all()->count();
+		$partiesClaims = PartiesClaims::all()->count();		
         $ttl = auth('api')->factory()->getTTL();
 
         return response()->json([
@@ -31,7 +39,11 @@ class AdminController extends Controller
             'comments' => $avisComments,
             'ratings' => $avisRatings,
 			'claims' => $avisClaims,
-			'messages' => $messages,			
+			'messages' => $messages,
+			'parties' => $parties,
+            'pcomments' => $partiesComments,
+            'pratings' => $partiesRatings,
+			'pclaims' => $partiesClaims,			
             'ttl' => $ttl
         ]);
     }
