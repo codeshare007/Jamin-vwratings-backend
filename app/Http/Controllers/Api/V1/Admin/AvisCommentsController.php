@@ -15,10 +15,10 @@ class AvisCommentsController extends Controller
      * @param Request $request
      * @return LengthAwarePaginator
      */
-    public function index(Request $request)
+    public function index(Request $request): LengthAwarePaginator
     {
         $comments = AvisComments::query();
-        $comments->with(['attachments']);
+        $comments->with('attachments');
         $comments->leftJoin('users', 'users.id', '=', 'avis_comments.user_id');
         $comments->leftJoin('avis', 'avis.id', '=', 'avis_comments.avis_id');
         $comments->leftJoin('avis_claims', 'avis_claims.avis_id', '=', 'avis_comments.avis_id');
@@ -26,7 +26,7 @@ class AvisCommentsController extends Controller
             'avis_comments.id',
             'users.username',
             'avis.name',
-            'avis.id as avis_id',
+            'avis.id as entity_id',
             'avis_claims.claimed_until',
             'avis_comments.content',
             'avis_comments.opinion',

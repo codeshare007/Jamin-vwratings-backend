@@ -4,29 +4,28 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PartiesComments;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Http\{JsonResponse, Request};
+use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class PartiesCommentsController extends Controller
 {
-
     /**
      * @param Request $request
      * @return LengthAwarePaginator
      */
-    public function index(Request $request)
+    public function index(Request $request): LengthAwarePaginator
     {
-
         $comments = PartiesComments::query();
         $comments->with('attachments');
-        $comments->leftJoin('users', 'users.id', '=', 'parties_comments.user_id');
+        $comments->leftJoin('users', 'users.id', '=', 'parties_comments.party_id');
         $comments->leftJoin('parties', 'parties.id', '=', 'parties_comments.party_id');
         $comments->leftJoin('parties_claims', 'parties_claims.party_id', '=', 'parties_comments.party_id');
         $comments->select([
             'parties_comments.id',
             'users.username',
             'parties.name',
+            'parties.id as entity_id',
             'parties_claims.claimed_until',
             'parties_comments.content',
             'parties_comments.opinion',
@@ -37,10 +36,20 @@ class PartiesCommentsController extends Controller
             $comments->orderBy($request->get('sortBy'), $request->get('sort'));
         }
 
-        if ($query = $request->get('search')) {
-            $comments->where('users.username', 'LIKE', '%' . $query . '%')
-                ->orWhere('parties.name', 'LIKE', '%' . $query . '%')
-                ->orWhere('parties_comments.content', 'LIKE', '%' . $query . '%');
+        if ($request->has('id')) {
+            $comments->where('parties_comments.id', 'LIKE', '%' . $request->get('id') . '%');
+        }
+
+        if ($request->has('username')) {
+            $comments->where('username', 'LIKE', '%' . $request->get('username') . '%');
+        }
+
+        if ($request->has('name')) {
+            $comments->where('name', 'LIKE', '%' . $request->get('name') . '%');
+        }
+
+        if ($request->has('content')) {
+            $comments->where('content', 'LIKE', '%' . $request->get('content') . '%');
         }
 
         return $comments->paginate(100);
