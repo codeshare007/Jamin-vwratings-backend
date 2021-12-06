@@ -26,6 +26,7 @@ class AvisCommentsController extends Controller
             'avis_comments.id',
             'users.username',
             'avis.name',
+            'avis.id as avis_id',
             'avis_claims.claimed_until',
             'avis_comments.content',
             'avis_comments.opinion',

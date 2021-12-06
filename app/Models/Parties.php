@@ -36,19 +36,23 @@ class Parties extends Model
         return $query
             ->has('comments')
             ->has('comments.attachments')
-            ->select(['parties.*'])
             ->leftJoin('parties_comments', 'parties.id', '=', 'parties_comments.party_id')
+            ->leftJoin('parties_comments_attachments', 'parties_comments_attachments.comment_id', '=', 'parties_comments.id')
+            ->select(['parties.*',  DB::raw('COUNT(parties_comments_attachments.id) as attachments_count')])
             ->groupBy('parties_comments.party_id')
-            ->orderBy('parties_comments.created_at', 'desc');
+            ->orderBy('parties_comments_attachments.created_at', 'desc')
+            ->having('attachments_count', '>', '0');
     }
 
     public function scopeRecentRated($query)
     {
-        return $query->distinct()->has('ratings')
-            ->leftJoin('parties_ratings', 'parties_ratings.party_id', '=', 'parties.id')
-            ->select(['parties.id', 'parties.name'])
-            ->groupBy(DB::raw('`parties_ratings`.`updated_at`'))
-            ->orderBy(DB::raw('`parties_ratings`.`updated_at`'), 'desc');
+        return $query->has('comments')
+            ->rightJoin('avis_comments', 'avis_comments.avis_id', '=', 'avis.id')
+            ->rightJoin('avis_comments_attachments', 'avis_comments_attachments.comment_id', '=', 'avis_comments.id')
+            ->select(['avis.id', 'avis.name', DB::raw('COUNT(avis_comments_attachments.id) as attachments_count')])
+            ->groupBy(DB::raw('`avis_comments`.`avis_id`'))
+            ->orderBy(DB::raw('`avis_comments`.`created_at`'), 'desc')
+            ->having('attachments_count', '>', '0');
     }
 
     public function scopeAverageRating($query, $operator, $rating, $sort = 'DESC')
