@@ -17,7 +17,7 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $users = User::query();
-        $users->select(['id', 'username', 'email', 'role', 'created_at']);
+        $users->select(['id', 'username', 'email', 'ip_address', 'role', 'created_at']);
 
         if ($request->has('sortBy') && $request->has('sort')) {
             $users->orderBy($request->get('sortBy'), $request->get('sort'));
