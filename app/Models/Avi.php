@@ -30,8 +30,8 @@ class Avi extends Model
     {
         return $query
             ->leftJoin('avis_comments', 'avis.id', '=', 'avis_comments.avis_id')
-            ->select(['avis.name', 'avis.id'])
-            ->groupBy('avis_comments.id')
+            ->select(['avis.name', 'avis.id', 'avis_comments.id as comment_id'])
+            ->groupBy('comment_id')
             ->distinct()
             ->orderBy('avis_comments.created_at', 'desc');
     }
@@ -41,8 +41,12 @@ class Avi extends Model
         return $query
             ->leftJoin('avis_comments', 'avis.id', '=', 'avis_comments.avis_id')
             ->leftJoin('avis_comments_attachments', 'avis_comments_attachments.comment_id', '=', 'avis_comments.id')
-            ->select(['avis.name', 'avis.id',  DB::raw('COUNT(avis_comments_attachments.id) as attachments_count')])
-            ->groupBy('avis_comments.id')
+            ->select([
+                'avis.name',
+                'avis.id',
+                'avis_comments.id as comment_id',
+                DB::raw('COUNT(avis_comments_attachments.id) as attachments_count')])
+            ->groupBy('comment_id')
             ->distinct()
             ->orderBy('avis_comments_attachments.created_at', 'desc')
             ->having('attachments_count', '>', '0');
