@@ -58,7 +58,7 @@ class AvisCommentsController extends Controller
     /**
      * @param $id
      * @param Request $request
-     * @return JsonResponse|void
+     * @return JsonResponse
      * @throws ValidationException
      */
     public function update($id, Request $request)
@@ -88,14 +88,12 @@ class AvisCommentsController extends Controller
 
     public function create(Request $request)
     {
-        $this->validate($request, [
-            'name' => ''
-        ]);
+        //
     }
 
     /**
      * @param $id
-     * @return JsonResponse|void
+     * @return JsonResponse
      */
     public function destroy($id)
     {
@@ -105,24 +103,25 @@ class AvisCommentsController extends Controller
         }
     }
 
-    public function bulkOpinion(Request $request)
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function bulkOpinion(Request $request): JsonResponse
     {
         $this->validate($request, [
             'ids' => 'array|required',
             'opinion' => 'required'
         ]);
 
-        AvisComments::whereIn('id', $request->get('ids'))->update(['opinion' => $request->get('opinion')]);
+        AvisComments::whereIn('id', $request->get('ids'))
+            ->update(['opinion' => $request->get('opinion')]);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Users Deleted successfully.'
         ]);
-    }
-
-    public function changeOpinion()
-    {
-
     }
 
     /**
@@ -136,7 +135,8 @@ class AvisCommentsController extends Controller
             'ids' => 'array|required'
         ]);
 
-        AvisComments::whereIn('id', $request->get('ids'))->delete();
+        AvisComments::whereIn('id', $request->get('ids'))
+            ->delete();
 
         return response()->json([
             'status' => 'success',

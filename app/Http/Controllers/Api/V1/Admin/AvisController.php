@@ -14,10 +14,15 @@ class AvisController extends Controller
     public function index(Request $request)
     {
 
-        $avis = Avi::with(['user']);
+        $avis = Avi::query();
 
-        $avis->leftJoin('users', 'users.id', '=', 'avis.user_id');
-        $avis->select(['avis.id', 'avis.name', 'users.username', 'avis.created_at']);
+        $avis->rightJoin('users', 'users.id', '=', 'avis.user_id');
+
+        $avis->select([
+            'avis.id',
+            'avis.name',
+            'users.username as username',
+            'avis.created_at']);
 
         if ($request->has('sortBy') && $request->has('sort')) {
             $avis->orderBy($request->get('sortBy'), $request->get('sort'));
