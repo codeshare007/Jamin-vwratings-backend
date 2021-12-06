@@ -15,22 +15,20 @@ class PartiesRatingsController extends Controller
      */
     public function index(Request $request): LengthAwarePaginator
     {
-        $ratings = PartiesRatings::with(['user', 'avi']);
+        $ratings = PartiesRatings::with(['user', 'party']);
 
-        $ratings->leftJoin('users', 'users.id', '=', 'avis_ratings.user_id');
-        $ratings->leftJoin('avis', 'avis.id', '=', 'avis_ratings.avis_id');
-        $ratings->select(['avis_ratings.*', 'users.username', 'avis.name']);
+        $ratings->leftJoin('users', 'users.id', '=', 'parties_ratings.user_id');
+        $ratings->leftJoin('parties', 'parties.id', '=', 'parties_ratings.party_id');
+        $ratings->select(['parties_ratings.*', 'users.username', 'parties.name']);
 
-        if ($request->has('sortBy') && $request->has('sort')) {
+        if ($request->has('sortBy') && $request->has('sort'))
             $ratings->orderBy($request->get('sortBy'), $request->get('sort'));
-        }
 
-        if ($request->has('field') && $request->has('search')) {
-            $field = $request->get('field');
-            $query = $request->get('search');
+        if ($request->has('username'))
+            $ratings->where('username', 'LIKE', '%' . $request->get('username') . '%');
 
-            $ratings->where($field, 'LIKE', '%' . $query . '%');
-        }
+        if ($request->has('name'))
+            $ratings->where('name', 'LIKE', '%' . $request->get('name') . '%');
 
         return $ratings->paginate(100);
     }
@@ -53,14 +51,15 @@ class PartiesRatingsController extends Controller
     public function update($id, Request $request): JsonResponse
     {
         $this->validate($request, [
-            'avis_id' => 'required|int',
+            'party_id' => 'required|int',
             'user_id' => 'required|int',
             'rating' => 'required'
         ]);
 
         if ($rating = PartiesRatings::findOrFail($id)) {
+
             $rating->update([
-                'avis_id' => $request->get('avis_id') ?? null,
+                'party_id' => $request->get('party_id') ?? null,
                 'user_id' => $request->get('user_id') ?? null,
                 'rating' => $request->get('rating')
             ]);

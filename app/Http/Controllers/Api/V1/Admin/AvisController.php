@@ -24,21 +24,17 @@ class AvisController extends Controller
             'users.username as username',
             'avis.created_at']);
 
-        if ($request->has('sortBy') && $request->has('sort')) {
+        if ($request->has('sortBy') && $request->has('sort'))
             $avis->orderBy($request->get('sortBy'), $request->get('sort'));
-        }
 
-        if ($request->has('id')) {
+        if ($request->has('id'))
             $avis->where('avis.id', 'LIKE', '%' . $request->get('id') . '%');
-        }
 
-        if ($request->has('username')) {
+        if ($request->has('username'))
             $avis->where('username', 'LIKE', '%' . $request->get('username') . '%');
-        }
 
-        if ($request->has('name')) {
+        if ($request->has('name'))
             $avis->where('name', 'LIKE', '%' . $request->get('name') . '%');
-        }
 
         return $avis->paginate(100);
     }

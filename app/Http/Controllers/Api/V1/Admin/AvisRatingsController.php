@@ -21,16 +21,14 @@ class AvisRatingsController extends Controller
         $ratings->leftJoin('avis', 'avis.id', '=', 'avis_ratings.avis_id');
         $ratings->select(['avis_ratings.*', 'users.username', 'avis.name']);
 
-        if ($request->has('sortBy') && $request->has('sort')) {
+        if ($request->has('sortBy') && $request->has('sort'))
             $ratings->orderBy($request->get('sortBy'), $request->get('sort'));
-        }
 
-        if ($request->has('field') && $request->has('search')) {
-            $field = $request->get('field');
-            $query = $request->get('search');
+        if ($request->has('username'))
+            $ratings->where('username', 'LIKE', '%' . $request->get('username') . '%');
 
-            $ratings->where($field, 'LIKE', '%' . $query . '%');
-        }
+        if ($request->has('name'))
+            $ratings->where('name', 'LIKE', '%' . $request->get('name') . '%');
 
         return $ratings->paginate(100);
     }
