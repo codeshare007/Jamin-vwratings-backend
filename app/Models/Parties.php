@@ -23,24 +23,23 @@ class Parties extends Model
 
     public function scopeLatestComments($query)
     {
-        return $query->has('comments')
-            ->leftJoin('parties_comments', 'parties_comments.party_id', '=', 'parties.id')
-            ->select(['parties.id', 'parties.name', DB::raw('COUNT(parties_comments.id) as parties_count')])
-            ->groupBy(DB::raw('`parties_comments`.`party_id`'))
-            ->orderBy(DB::raw('`parties_comments`.`created_at`'), 'desc')
-            ->orderBy('parties_count', 'DESC');
+        return $query
+            ->has('comments')
+            ->select(['parties.*'])
+            ->join('parties_comments', 'parties.id', '=', 'parties_comments.party_id')
+            ->groupBy('parties_comments.party_id')
+            ->orderBy('parties_comments.created_at', 'desc');
     }
 
     public function scopeLatestAttachments($query)
     {
-        return $query->has('comments')
-            ->leftJoin('parties_comments', 'parties_comments.party_id', '=', 'parties.id')
-            ->rightJoin('parties_comments_attachments', 'parties_comments_attachments.comment_id', '=', 'parties_comments.id')
+        return $query->has('parties_comments')
+            ->rightJoin('parties_comments', 'parties_comments.party_id', '=', 'parties.id')
+            ->rightJoin('parties_comments_attachments', 'parties_comments.comment_id', '=', 'parties_comments.id')
             ->select(['parties.id', 'parties.name', DB::raw('COUNT(parties_comments_attachments.id) as attachments_count')])
             ->groupBy(DB::raw('`parties_comments`.`party_id`'))
-            ->orderBy(DB::raw('`parties_comments_attachments`.`created_at`'), 'desc')
-            ->having('attachments_count', '>', '0')
-            ->orderBy('attachments_count', 'DESC');
+            ->orderBy(DB::raw('`parties_comments`.`created_at`'), 'desc')
+            ->having('attachments_count', '>', '0');
     }
 
     public function scopeRecentRated($query)

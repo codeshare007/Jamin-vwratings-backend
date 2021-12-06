@@ -28,7 +28,6 @@ class Avi extends Model
 
     public function scopeLatestComments($query)
     {
-
         return $query
             ->has('comments')
             ->select(['avis.*'])
