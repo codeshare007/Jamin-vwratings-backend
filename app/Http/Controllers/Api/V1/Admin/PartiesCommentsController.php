@@ -18,7 +18,7 @@ class PartiesCommentsController extends Controller
     {
         $comments = PartiesComments::query();
         $comments->with('attachments');
-        $comments->leftJoin('users', 'users.id', '=', 'parties_comments.party_id');
+        $comments->leftJoin('users', 'users.id', '=', 'parties_comments.user_id');
         $comments->leftJoin('parties', 'parties.id', '=', 'parties_comments.party_id');
         $comments->leftJoin('parties_claims', 'parties_claims.party_id', '=', 'parties_comments.party_id');
         $comments->select([
