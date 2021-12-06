@@ -19,7 +19,7 @@ class AvisController extends Controller
     public function index(Request $request): LengthAwarePaginator
     {
         $avis = Avi::query();
-        $avis->rightJoin('users', 'users.id', '=', 'avis.user_id');
+        $avis->leftJoin('users', 'users.id', '=', 'avis.user_id');
         $avis->select([
             'avis.id',
             'avis.name',

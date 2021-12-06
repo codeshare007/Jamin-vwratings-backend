@@ -20,13 +20,14 @@ class PartiesController extends Controller
     {
         $parties = Parties::query();
 
-        $parties->rightJoin('users', 'users.id', '=', 'parties.user_id');
+        $parties->leftJoin('users', 'users.id', '=', 'parties.user_id');
 
         $parties->select([
             'parties.id',
             'parties.name',
             'users.username as username',
-            'parties.created_at']);
+            'parties.created_at'
+        ]);
 
         if ($request->has('sortBy') && $request->has('sort'))
             $parties->orderBy($request->get('sortBy'), $request->get('sort'));
