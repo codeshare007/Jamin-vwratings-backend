@@ -35,7 +35,7 @@ class Parties extends Model
     {
         return $query->has('comments')
             ->rightJoin('parties_comments', 'parties_comments.party_id', '=', 'parties.id')
-            ->rightJoin('parties_comments_attachments', 'parties_comments.comment_id', '=', 'parties_comments.id')
+            ->rightJoin('parties_comments_attachments', 'parties_comments_attachments.comment_id', '=', 'parties_comments.id')
             ->select(['parties.id', 'parties.name', DB::raw('COUNT(parties_comments_attachments.id) as attachments_count')])
             ->groupBy(DB::raw('`parties_comments`.`party_id`'))
             ->orderBy(DB::raw('`parties_comments`.`created_at`'), 'desc')
