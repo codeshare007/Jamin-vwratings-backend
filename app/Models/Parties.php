@@ -25,11 +25,7 @@ class Parties extends Model
     {
         return $query
             ->leftJoin('parties_comments', 'parties.id', '=', 'parties_comments.party_id')
-            ->select([
-                'parties.name',
-                'parties.id',
-                'parties_comments.id as comment_id'
-            ])
+            ->select(['parties.*'])
             ->groupBy('comment_id')
             ->distinct()
             ->orderBy('parties_comments.created_at', 'desc');
@@ -40,11 +36,7 @@ class Parties extends Model
         return $query
             ->leftJoin('parties_comments', 'parties.id', '=', 'parties_comments.party_id')
             ->leftJoin('parties_comments_attachments', 'parties_comments_attachments.comment_id', '=', 'parties_comments.id')
-            ->select([
-                'parties.name',
-                'parties.id',
-                'parties_comments.id as comment_id',
-                DB::raw('COUNT(parties_comments_attachments.id) as attachments_count')])
+            ->select(['parties.*', DB::raw('COUNT(parties_comments_attachments.id) as attachments_count')])
             ->groupBy('comment_id')
             ->distinct()
             ->orderBy('parties_comments_attachments.created_at', 'desc')
