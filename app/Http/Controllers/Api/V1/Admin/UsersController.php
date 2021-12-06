@@ -51,7 +51,7 @@ class UsersController extends Controller
     {
         $this->validate($request, [
             'username' => 'required',
-            'email' => 'nullable',
+            'email' => 'nullable|email',
             'role' => 'required|int',
             'password' => 'required|string'
         ]);
@@ -60,9 +60,7 @@ class UsersController extends Controller
         $user->username = $request->get('username');
         $user->role = $request->get('role');
         $user->password = Hash::make($request->get('password'));
-        if ($email = $request->get('email')) {
-            $user->email = $email;
-        };
+        $user->email = $request->get('email') ?? null;
 
         $user->save();
 
@@ -92,9 +90,7 @@ class UsersController extends Controller
                 $user->password = Hash::make($password);
             }
 
-            if ($email = $request->get('email')) {
-                $user->email = $email;
-            }
+            $user->email = $request->get('email') ?? null;
 
             $user->save();
 
