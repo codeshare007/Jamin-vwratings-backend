@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @method static firstOrCreate(array $array)
  * @method static updateOrCreate(array $array)
+ * @method static findOrFail($id)
  */
 class AvisRatings extends Model
 {

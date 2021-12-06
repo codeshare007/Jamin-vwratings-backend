@@ -19,16 +19,20 @@ class UsersController extends Controller
         $users = User::query();
         $users->select(['id', 'username', 'email', 'ip_address', 'role', 'created_at']);
 
-        if ($request->has('sortBy') && $request->has('sort')) {
+        if ($request->has('sortBy') && $request->has('sort'))
             $users->orderBy($request->get('sortBy'), $request->get('sort'));
-        }
 
-        if ($request->has('field') && $request->has('search')) {
-            $field = $request->get('field');
-            $query = $request->get('search');
+        if ($request->has('id'))
+            $users->where('id', 'LIKE', '%' . $request->get('id') . '%');
 
-            $users->where($field, 'LIKE', '%' . $query . '%');
-        }
+        if ($request->has('username'))
+            $users->where('username', 'LIKE', '%' . $request->get('username') . '%');
+
+        if ($request->has('email'))
+            $users->where('email', 'LIKE', '%' . $request->get('email') . '%');
+
+        if ($request->has('ip'))
+            $users->where('ip_address', 'LIKE', '%' . $request->get('ip') . '%');
 
         return $users->paginate(100);
     }

@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static findOrFail($id)
+ * @method static whereIn(string $string, mixed $get)
+ */
 class PartiesRatings extends Model
 {
     use HasFactory;

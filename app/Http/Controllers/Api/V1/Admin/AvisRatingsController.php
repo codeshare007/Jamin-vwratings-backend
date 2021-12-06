@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api\V1\Admin;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Models\AvisRatings;
@@ -8,7 +9,11 @@ use Illuminate\Http\{JsonResponse, Request};
 
 class AvisRatingsController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * @param Request $request
+     * @return LengthAwarePaginator
+     */
+    public function index(Request $request): LengthAwarePaginator
     {
         $ratings = AvisRatings::with(['user', 'avi']);
 
@@ -37,6 +42,33 @@ class AvisRatingsController extends Controller
     public function show($id)
     {
         return AvisRatings::findOrFail($id);
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function update($id, Request $request): JsonResponse
+    {
+        $this->validate($request, [
+            'avis_id' => 'required|int',
+            'user_id' => 'required|int',
+            'rating' => 'required'
+        ]);
+
+        if ($rating = AvisRatings::findOrFail($id)) {
+            $rating->update([
+               'avis_id' => $request->get('avis_id') ?? null,
+               'user_id' => $request->get('user_id') ?? null,
+               'rating' => $request->get('rating')
+            ]);
+
+            return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'error'], 422);
     }
 
     /**
