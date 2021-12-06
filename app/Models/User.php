@@ -24,6 +24,8 @@ class User extends Authenticatable implements JWTSubject
 
     const ROLE_ADMIN = 1;
     const ROLE_USER = 2;
+    const ROLE_USER_LIMITED = 3;
+
     const STATUS_NEW = 1;
 
     /**
