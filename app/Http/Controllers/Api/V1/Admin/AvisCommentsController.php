@@ -37,10 +37,11 @@ class AvisCommentsController extends Controller
             $comments->orderBy($request->get('sortBy'), $request->get('sort'));
         }
 
-        if ($query = $request->get('search')) {
-            $comments->where('users.username', 'LIKE', '%' . $query . '%')
-                ->orWhere('avis.name', 'LIKE', '%' . $query . '%')
-                ->orWhere('avis_comments.content', 'LIKE', '%' . $query . '%');
+        if ($request->has('field') && $request->has('search')) {
+            $field = $request->get('field');
+            $query = $request->get('search');
+
+            $comments->where($field, 'LIKE', '%' . $query . '%');
         }
 
         return $comments->paginate(100);
