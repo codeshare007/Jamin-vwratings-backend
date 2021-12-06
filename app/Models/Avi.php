@@ -29,10 +29,10 @@ class Avi extends Model
     public function scopeLatestComments($query)
     {
         return $query
-            ->has('comments')
-            ->select(['avis.*'])
-            ->join('avis_comments', 'avis.id', '=', 'avis_comments.avis_id')
-            ->groupBy('avis_comments.avis_id')
+            ->leftJoin('avis_comments', 'avis.id', '=', 'avis_comments.avis_id')
+            ->select(['avis.name'])
+            ->groupBy('avis_comments.id')
+            ->distinct()
             ->orderBy('avis_comments.created_at', 'desc');
     }
 

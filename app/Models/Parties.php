@@ -24,22 +24,21 @@ class Parties extends Model
     public function scopeLatestComments($query)
     {
         return $query
-            ->has('comments')
-            ->select(['parties.*'])
             ->leftJoin('parties_comments', 'parties.id', '=', 'parties_comments.party_id')
-            ->groupBy('parties_comments.party_id')
+            ->select(['parties.name'])
+            ->groupBy('parties_comments.id')
+            ->distinct()
             ->orderBy('parties_comments.created_at', 'desc');
     }
 
     public function scopeLatestAttachments($query)
     {
         return $query
-            ->has('comments')
-            ->has('comments.attachments')
             ->leftJoin('parties_comments', 'parties.id', '=', 'parties_comments.party_id')
             ->leftJoin('parties_comments_attachments', 'parties_comments_attachments.comment_id', '=', 'parties_comments.id')
-            ->select(['parties.*',  DB::raw('COUNT(parties_comments_attachments.id) as attachments_count')])
-            ->groupBy('parties_comments.party_id')
+            ->select(['parties.name',  DB::raw('COUNT(parties_comments_attachments.id) as attachments_count')])
+            ->groupBy('parties_comments.id')
+            ->distinct()
             ->orderBy('parties_comments_attachments.created_at', 'desc')
             ->having('attachments_count', '>', '0');
     }

@@ -7,18 +7,25 @@ use App\Models\AdsCampaigns;
 use App\Models\AvisComments;
 use App\Models\Messages;
 use App\Models\Settings;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
 {
-    public function comments()
+    /**
+     * @return Collection
+     */
+    public function comments(): Collection
     {
-
+        /** @var User $user */
         $user = auth()->user();
-
-        return $user->comments()->with(['attachments', 'avi'])->limit(5)->latest()->get();
-
-        //return AvisComments::where('user_id', '=', auth()->user()->getAuthIdentifier())->limit(5)->get();
+        return $user
+            ->comments()
+            ->with(['attachments', 'avi'])
+            ->limit(5)
+            ->latest()
+            ->get();
     }
 
     /**
