@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Models\Avi;
@@ -11,18 +12,20 @@ use Illuminate\Http\Request;
 class AvisController extends Controller
 {
 
-    public function index(Request $request)
+    /**
+     * @param Request $request
+     * @return LengthAwarePaginator
+     */
+    public function index(Request $request): LengthAwarePaginator
     {
-
         $avis = Avi::query();
-
         $avis->rightJoin('users', 'users.id', '=', 'avis.user_id');
-
         $avis->select([
             'avis.id',
             'avis.name',
             'users.username as username',
-            'avis.created_at']);
+            'avis.created_at'
+        ]);
 
         if ($request->has('sortBy') && $request->has('sort'))
             $avis->orderBy($request->get('sortBy'), $request->get('sort'));
@@ -53,7 +56,7 @@ class AvisController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $this->validate($request, [
             'user_id' => 'nullable|int',
@@ -76,7 +79,7 @@ class AvisController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function update($id, Request $request)
+    public function update($id, Request $request): JsonResponse
     {
         $this->validate($request, [
             'user_id' => 'nullable|int',
@@ -95,6 +98,7 @@ class AvisController extends Controller
             return response()->json(['status' => 'success']);
         }
 
+        return response()->json(['status' => 'error'], 422);
     }
 
     /**

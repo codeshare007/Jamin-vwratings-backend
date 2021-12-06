@@ -32,25 +32,20 @@ class PartiesCommentsController extends Controller
             'parties_comments.created_at'
         ]);
 
-        if ($request->has('sortBy') && $request->has('sort')) {
+        if ($request->has('sortBy') && $request->has('sort'))
             $comments->orderBy($request->get('sortBy'), $request->get('sort'));
-        }
 
-        if ($request->has('id')) {
+        if ($request->has('id'))
             $comments->where('parties_comments.id', 'LIKE', '%' . $request->get('id') . '%');
-        }
 
-        if ($request->has('username')) {
+        if ($request->has('username'))
             $comments->where('username', 'LIKE', '%' . $request->get('username') . '%');
-        }
 
-        if ($request->has('name')) {
+        if ($request->has('name'))
             $comments->where('name', 'LIKE', '%' . $request->get('name') . '%');
-        }
 
-        if ($request->has('content')) {
+        if ($request->has('content'))
             $comments->where('content', 'LIKE', '%' . $request->get('content') . '%');
-        }
 
         return $comments->paginate(100);
     }
