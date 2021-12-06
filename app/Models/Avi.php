@@ -39,12 +39,11 @@ class Avi extends Model
     public function scopeLatestAttachments($query)
     {
         return $query
-            ->has('comments')
-            ->has('comments.attachments')
             ->leftJoin('avis_comments', 'avis.id', '=', 'avis_comments.avis_id')
             ->leftJoin('avis_comments_attachments', 'avis_comments_attachments.comment_id', '=', 'avis_comments.id')
-            ->select(['avis.*',  DB::raw('COUNT(avis_comments_attachments.id) as attachments_count')])
-            ->groupBy('avis_comments.avis_id')
+            ->select(['avis.name',  DB::raw('COUNT(avis_comments_attachments.id) as attachments_count')])
+            ->groupBy('avis_comments.id')
+            ->distinct()
             ->orderBy('avis_comments_attachments.created_at', 'desc')
             ->having('attachments_count', '>', '0');
     }
