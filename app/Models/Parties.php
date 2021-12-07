@@ -26,8 +26,7 @@ class Parties extends Model
         return $query
             ->leftJoin('parties_comments', 'parties.id', '=', 'parties_comments.party_id')
             ->select(['parties.*'])
-            ->groupBy('comment_id')
-            ->distinct()
+            ->groupBy('parties_comments.id')
             ->orderBy('parties_comments.created_at', 'desc');
     }
 
@@ -51,7 +50,8 @@ class Parties extends Model
             ->select(['parties.id', 'parties.name', DB::raw('COUNT(parties_comments_attachments.id) as attachments_count')])
             ->groupBy(DB::raw('`parties_comments`.`party_id`'))
             ->orderBy(DB::raw('`parties_comments`.`created_at`'), 'desc')
-            ->having('attachments_count', '>', '0');
+            ->having('attachments_count', '>', '0')
+            ->distinct();
     }
 
     public function scopeAverageRating($query, $operator, $rating, $sort = 'DESC')
