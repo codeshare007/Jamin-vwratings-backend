@@ -3,16 +3,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Promo</title>
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TV2N64S6FN"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-TV2N64S6FN');
+	</script>
+	
     <style>
         body {
             background: #2c3e50;
             color: white;
             margin: 0;
             padding: 0;
-            height: 100%;
         }
-
-
 
         .promoPage {
             min-height: inherit;
@@ -26,7 +34,8 @@
         }
 		
 		.promowords {
-			margin-top: 70px;
+			font-family: monospace;
+			margin-top: 20px;
 			width: fit-content;
 			border: 1px solid black;
 			margin-left: auto;
@@ -50,7 +59,7 @@
                      <div align="center" class="promoPage__content" >
 						{!! $campaign->content !!}
 					<br><br>
-						<span id="countdown">{{ $campaign->timer }}</span>
+						<span id="countdown">{{ $campaign->timer }}</span> seconds left
 					</div>
               </div>             
             </div>
