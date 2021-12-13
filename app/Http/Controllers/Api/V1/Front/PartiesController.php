@@ -8,13 +8,15 @@ use Illuminate\Http\{Request, JsonResponse};
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\{Collection, Builder};
 use Illuminate\Validation\ValidationException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 
 class PartiesController extends Controller
 {
+
     /**
      * @param Request $request
-     * @return Builder[]|Collection
+     * @return LengthAwarePaginator
      */
     public function index(Request $request)
     {
@@ -22,10 +24,6 @@ class PartiesController extends Controller
 
         if ($request->has('search')) {
             $parties->where('name', 'LIKE', "%{$request->get('search')}%");
-        }
-
-        if ($request->has('per_page')) {
-            $parties->paginate($request->get('per_page'));
         }
 
         if ($request->has('type')) {
@@ -51,7 +49,7 @@ class PartiesController extends Controller
             endswitch;
         }
 
-        return $parties->get();
+        return $parties->paginate($request->get('per_page'));
     }
 
     /**

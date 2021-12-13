@@ -14,6 +14,22 @@ use Illuminate\Support\Facades\DB;
 class StalkalotParserService
 {
 
+    public function comments()
+    {
+        $database = DB::connection('old');
+
+        $comments = $database->select('SELECT * from vid_comment');
+
+        foreach ($comments as $comment) {
+            if ($avisComment = AvisComments::find($comment->id)) {
+                $avisComment->update([
+                    'created_at' => Carbon::rawParse($comment->created),
+                    'updated_at' => Carbon::rawParse($comment->modified)
+                ]);
+            }
+        }
+    }
+
     public function opinions()
     {
         $database = DB::connection('opinions');

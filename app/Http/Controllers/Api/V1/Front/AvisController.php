@@ -5,6 +5,7 @@ use App\Models\{Avi, AvisClaims, AvisRatings, User};
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\QueryException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\{Collection, Builder};
 use Illuminate\Http\{Request, UploadedFile, JsonResponse};
 
@@ -12,7 +13,7 @@ class AvisController extends Controller
 {
     /**
      * @param Request $request
-     * @return Builder[]|Collection
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function index(Request $request)
     {
@@ -20,10 +21,6 @@ class AvisController extends Controller
 
         if ($request->has('search')) {
             $avis->where('name', 'LIKE', "%{$request->get('search')}%");
-        }
-
-        if ($request->has('per_page')) {
-            $avis->paginate($request->get('per_page'));
         }
 
         if ($request->has('type')) {
@@ -49,7 +46,7 @@ class AvisController extends Controller
             endswitch;
         }
 
-        return $avis->get();
+        return $avis->paginate($request->get('per_page'));
     }
 
     /**

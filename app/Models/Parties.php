@@ -23,23 +23,37 @@ class Parties extends Model
 
     public function scopeLatestComments($query)
     {
-        return $query
-            ->leftJoin('parties_comments', 'parties.id', '=', 'parties_comments.party_id')
-            ->select(['parties.*'])
-            ->groupBy('parties_comments.id')
-            ->orderBy('parties_comments.created_at', 'desc');
+        return $query->has('comments')
+            ->select([
+                'parties.id',
+                'parties.name',
+                'parties_comments.id as parties_comment_id',
+                DB::raw('MAX(CAST(parties_comments.created_at AS CHAR)) as comment_created_at')])
+            ->join('parties_comments', function ($join) {
+                $join->on('parties.id', '=', 'parties_comments.party_id');
+            })
+            ->groupBy('parties.id')
+            ->orderBy('comment_created_at', 'desc');
     }
 
     public function scopeLatestAttachments($query)
     {
-        return $query
-            ->leftJoin('parties_comments', 'parties.id', '=', 'parties_comments.party_id')
-            ->leftJoin('parties_comments_attachments', 'parties_comments_attachments.comment_id', '=', 'parties_comments.id')
-            ->select(['parties.*', DB::raw('COUNT(parties_comments_attachments.id) as attachments_count')])
-            ->groupBy('comment_id')
-            ->distinct()
-            ->orderBy('parties_comments_attachments.created_at', 'desc')
-            ->having('attachments_count', '>', '0');
+        return $query->has('comments')
+            ->select([
+                'parties.id',
+                'parties.name',
+                'parties_comments.id as parties_comment_id',
+                DB::raw('COUNT(parties_comments_attachments.id) as attachments_count'),
+                DB::raw('MAX(CAST(parties_comments_attachments.created_at AS CHAR)) as attachment_created_at')])
+            ->join('parties_comments', function ($join) {
+                $join->on('parties.id', '=', 'parties_comments.party_id')
+                    ->join('parties_comments_attachments', function($a) {
+                        $a->on('parties_comments_attachments.comment_id', '=', 'parties_comments.id');
+                    });
+            })
+            ->groupBy('parties.id')
+            ->orderBy('attachment_created_at', 'desc')
+            ->having('attachments_count', '>', 0);
     }
 
     public function scopeRecentRated($query)

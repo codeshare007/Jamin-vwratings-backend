@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @method static firstOrCreate(array $array)
@@ -26,39 +27,67 @@ class Avi extends Model
         'updated_at'
     ];
 
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopeLatestComments($query)
     {
-        return $query
-            ->leftJoin('avis_comments', 'avis.id', '=', 'avis_comments.avis_id')
-            ->select(['avis.*'])
-            ->groupBy('avis_comments.id')
-            ->distinct()
-            ->orderBy('avis_comments.created_at', 'desc');
+        return $query->has('comments')
+            ->select([
+                'avis.id',
+                'avis.name',
+                'avis_comments.id as avis_comment_id',
+                DB::raw('MAX(CAST(avis_comments.created_at AS CHAR)) as comment_created_at')])
+            ->join('avis_comments', function ($join) {
+                $join->on('avis.id', '=', 'avis_comments.avis_id');
+            })
+            ->groupBy('avis.id')
+            ->orderBy('comment_created_at', 'desc');
     }
 
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopeLatestAttachments($query)
     {
-        return $query
-            ->leftJoin('avis_comments', 'avis.id', '=', 'avis_comments.avis_id')
-            ->leftJoin('avis_comments_attachments', 'avis_comments_attachments.comment_id', '=', 'avis_comments.id')
-            ->select(['avis.*', DB::raw('COUNT(avis_comments_attachments.id) as attachments_count')])
-            ->groupBy('comment_id')
-            ->distinct()
-            ->orderBy('avis_comments_attachments.created_at', 'desc')
-            ->having('attachments_count', '>', '0');
+        return $query->has('comments')
+            ->select([
+                'avis.id',
+                'avis.name',
+                'avis_comments.id as avis_comment_id',
+                DB::raw('COUNT(avis_comments_attachments.id) as attachments_count'),
+                DB::raw('MAX(CAST(avis_comments_attachments.created_at AS CHAR)) as attachment_created_at')])
+            ->join('avis_comments', function ($join) {
+                $join->on('avis.id', '=', 'avis_comments.avis_id')
+                    ->join('avis_comments_attachments', function($a) {
+                   $a->on('avis_comments_attachments.comment_id', '=', 'avis_comments.id');
+                });
+            })
+            ->groupBy('avis.id')
+            ->orderBy('attachment_created_at', 'desc')
+            ->having('attachments_count', '>', 0);
     }
 
     public function scopeRecentRated($query)
     {
-        return $query->distinct()->has('ratings')
-            ->leftJoin('avis_ratings', 'avis_ratings.avis_id', '=', 'avis.id')
-            ->select(['avis.id', 'avis.name'])
+        // not used and need to be improved
+
+        return $query
+            ->has('ratings')
+            ->select([
+                'avis.id',
+                'avis.name'
+            ])
+            ->join('avis_ratings', 'avis_ratings.avis_id', '=', 'avis.id')
             ->groupBy(DB::raw('`avis_ratings`.`updated_at`'))
             ->orderBy(DB::raw('`avis_ratings`.`updated_at`'), 'desc');
     }
 
     public function scopeAverageRating($query, $operator, $rating, $sort = 'DESC')
     {
+        // not used and need to be improved
         return $query->with('ratings')
             ->leftJoin('avis_ratings', 'avis_ratings.avis_id', '=', 'avis.id')
             ->select(['avis.id', 'avis.name', DB::raw('AVG(avis_ratings.rating) as ratings_average')])
@@ -86,6 +115,9 @@ class Avi extends Model
         return $this->ratings->average('rating');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function interview()
     {
         return $this->hasOne(AvisInterviews::class, 'avis_id', 'id');
@@ -98,8 +130,7 @@ class Avi extends Model
 
     public function comments()
     {
-        return $this->hasMany(AvisComments::class, 'avis_id', 'id')
-            ->orderBy('created_at', 'desc');
+        return $this->hasMany(AvisComments::class, 'avis_id', 'id');
     }
 
     public function ratings()

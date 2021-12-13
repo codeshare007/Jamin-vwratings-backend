@@ -16,6 +16,8 @@ class AvisComments extends Model
 {
     use HasFactory;
 
+    protected $table = 'avis_comments';
+
     protected $fillable = [
         'id',
         'user_id',
