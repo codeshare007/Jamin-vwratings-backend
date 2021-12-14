@@ -182,7 +182,7 @@ class AvisController extends Controller
             if ($request->has('attachments')) {
                 /** @var UploadedFile $file */
                 foreach ($request->file('attachments') as $file) {
-                    $fileName = \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();;
+                    $fileName = Str::random(10) . '.' . $file->getClientOriginalExtension();;
                     $filePath = $file->storeAs('uploads', $fileName, 'public');
 
                     $comment->attachments()->create([

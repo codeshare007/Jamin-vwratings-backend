@@ -71,6 +71,7 @@ Route::prefix('v1')->group(function () {
             Route::get('dashboard/hits', 'App\Http\Controllers\Api\V1\Admin\AdminController@getHits');
             Route::post('dashboard/hits', 'App\Http\Controllers\Api\V1\Admin\AdminController@changeHits');
 
+            Route::resource('settings', 'App\Http\Controllers\Api\V1\Admin\SettingsController');
             Route::resource('users', 'App\Http\Controllers\Api\V1\Admin\UsersController');
             Route::resource('messages', 'App\Http\Controllers\Api\V1\Admin\MessagesController');
             Route::resource('campaigns', 'App\Http\Controllers\Api\V1\Admin\AdsCampaignsController');

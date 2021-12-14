@@ -95,6 +95,9 @@ class SiteController extends Controller
         $promo = false;
 
         $amountOfHits = Settings::where('key', 'ads_hits')->first();
+        $announcementHtml = Settings::where('key', 'announcement_html')->first();
+        $announcementEnabled = Settings::where('key', 'announcement_enabled')->first();
+
 
         $config = [
             'amount_of_hits' => $amountOfHits ? $amountOfHits->value + 1 : 10,
@@ -117,7 +120,17 @@ class SiteController extends Controller
             }
 
             if ($hits > $config['amount_of_hits']) $promo = true;
-            return response()->json(['start_promo' => $promo]);
+
+            $response = [
+                'start_promo' => $promo,
+                'announcement_enabled' => (int) $announcementEnabled->value
+            ];
+
+            if ($response['announcement_enabled']) {
+                $response['announcement_content'] = $announcementHtml->value;
+            }
+
+            return response()->json($response);
         }
 
         return response()->json(['status' => 'error']);
