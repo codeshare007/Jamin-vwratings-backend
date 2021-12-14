@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
-use App\Models\AdsCampaigns;
-use App\Models\AvisComments;
-use App\Models\Messages;
-use App\Models\Settings;
-use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use App\Models\{Settings, User, Messages, AdsCampaigns};
+use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
+use Illuminate\Http\{Request, JsonResponse};
 
 class SiteController extends Controller
 {
@@ -30,7 +30,8 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @throws \Illuminate\Validation\ValidationException
+     * @return JsonResponse
+     * @throws ValidationException
      */
     public function message(Request $request)
     {
@@ -57,9 +58,13 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return Application|Factory|View
+     */
     public function promo(Request $request)
     {
-        $campaign = (object) [
+        $campaign = (object)[
             'timer' => 0,
             'content' => 'Ads campaigns not set'
         ];
@@ -82,8 +87,8 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @return JsonResponse
+     * @throws ValidationException
      */
     public function sendTracker(Request $request)
     {
@@ -92,12 +97,9 @@ class SiteController extends Controller
             'route' => 'required'
         ]);
 
-        $promo = false;
-
         $amountOfHits = Settings::where('key', 'ads_hits')->first();
         $announcementHtml = Settings::where('key', 'announcement_html')->first();
         $announcementEnabled = Settings::where('key', 'announcement_enabled')->first();
-
 
         $config = [
             'amount_of_hits' => $amountOfHits ? $amountOfHits->value + 1 : 10,
@@ -106,7 +108,7 @@ class SiteController extends Controller
             ]
         ];
 
-        if (!($lastPage = $request->get('last_page'))) $lastPage = '/';
+        $lastPage = $request->get('last_page') ?? '/';
         $request->session()->put('last_page', $lastPage);
 
         if (!($hits = $request->session()->get('hits'))) {
@@ -115,15 +117,14 @@ class SiteController extends Controller
         }
 
         if ($route = $request->get('route')) {
+
             if (in_array($route, $config['promo_routes'])) {
                 $request->session()->put('hits', $hits = $hits + 1);
             }
 
-            if ($hits > $config['amount_of_hits']) $promo = true;
-
             $response = [
-                'start_promo' => $promo,
-                'announcement_enabled' => (int) $announcementEnabled->value
+                'start_promo' => $hits > $config['amount_of_hits'],
+                'announcement_enabled' => (int)$announcementEnabled->value
             ];
 
             if ($response['announcement_enabled']) {
@@ -138,9 +139,9 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function endPromo(Request $request)
+    public function endPromo(Request $request): JsonResponse
     {
         if ($request->get('csrf') === csrf_token()) {
 
