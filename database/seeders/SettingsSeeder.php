@@ -34,6 +34,12 @@ class SettingsSeeder extends Seeder
                 'description' => 'Announcement is enabled',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
+            ], [
+                'key' => 'announcement_timeout',
+                'value' => 24,
+                'description' => 'Announcement period',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]
         ]);
     }

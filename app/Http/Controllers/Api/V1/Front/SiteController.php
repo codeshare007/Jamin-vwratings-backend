@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -97,39 +98,51 @@ class SiteController extends Controller
             'route' => 'required'
         ]);
 
-        $amountOfHits = Settings::where('key', 'ads_hits')->first();
-        $announcementHtml = Settings::where('key', 'announcement_html')->first();
-        $announcementEnabled = Settings::where('key', 'announcement_enabled')->first();
+        $settings = Settings::all()->pluck('value', 'key');
+        $session = $request->session();
 
         $config = [
-            'amount_of_hits' => $amountOfHits ? $amountOfHits->value + 1 : 10,
+            'amount_of_hits' => $settings['ads_hits'] ? $settings['ads_hits'] + 1 : 10,
             'promo_routes' => [
                 'ratings.avis.view'
             ]
         ];
 
         $lastPage = $request->get('last_page') ?? '/';
-        $request->session()->put('last_page', $lastPage);
+        $session->put('last_page', $lastPage);
 
-        if (!($hits = $request->session()->get('hits'))) {
-            $request->session()->put('hits', 1);
-            $hits = $request->session()->get('hits');
+        if ($session->has('hits') === false) {
+            $session->put('hits', 1);
         }
 
-        if ($route = $request->get('route')) {
+        $hits = $request->session()->get('hits');
 
+        if ($route = $request->get('route')) {
             if (in_array($route, $config['promo_routes'])) {
-                $request->session()->put('hits', $hits = $hits + 1);
+                $session->put('hits');
+                $hits = $request->session()->get('hits');
             }
 
             $response = [
                 'start_promo' => $hits > $config['amount_of_hits'],
-                'announcement_enabled' => (int)$announcementEnabled->value
+                'show_announcement' => $session->has('timout') ? 0 : 1
             ];
 
-            if ($response['announcement_enabled']) {
-                $response['announcement_content'] = $announcementHtml->value;
+            if ((int)$settings['announcement_enabled']) {
+                if ($session->get('timout') == null) {
+                    $session->put('timout', Carbon::now()->addHours($settings['announcement_timeout']));
+                    $response['show_announcement'] = 1;
+                } else {
+                    $timout = Carbon::parse($session->get('timout'));
+                    if (Carbon::now()->greaterThanOrEqualTo($timout) ) {
+                        $request->session()->remove('timout');
+                    }
+                }
+
+                $response['modal_content'] = $settings['announcement_html'];
             }
+
+            $response['session'] = $request->session()->all();
 
             return response()->json($response);
         }
