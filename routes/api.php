@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\V1\Admin\{
+    AdminController,
+    SettingsController
+};
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -67,14 +72,18 @@ Route::prefix('v1')->group(function () {
                 Route::get('me', 'App\Http\Controllers\Api\V1\Admin\AuthController@me');
             });
 
-            Route::get('dashboard', 'App\Http\Controllers\Api\V1\Admin\AdminController@dashboard');
-            Route::get('dashboard/hits', 'App\Http\Controllers\Api\V1\Admin\AdminController@getHits');
-            Route::post('dashboard/hits', 'App\Http\Controllers\Api\V1\Admin\AdminController@changeHits');
+            Route::get('dashboard', [AdminController::class, 'dashboard']);
+            Route::get('dashboard/hits', [AdminController::class, 'getHits']);
+            Route::post('dashboard/hits', [AdminController::class, 'changeHits']);
 
-            Route::resource('settings', 'App\Http\Controllers\Api\V1\Admin\SettingsController');
+            Route::get('settings/announcement', [SettingsController::class, 'getAnnouncement']);
+            Route::post('settings/announcement', [SettingsController::class, 'setAnnouncement']);
+
+            Route::resource('settings', SettingsController::class);
             Route::resource('users', 'App\Http\Controllers\Api\V1\Admin\UsersController');
             Route::resource('messages', 'App\Http\Controllers\Api\V1\Admin\MessagesController');
             Route::resource('campaigns', 'App\Http\Controllers\Api\V1\Admin\AdsCampaignsController');
+
 
             // Avis
             Route::resource('avis', 'App\Http\Controllers\Api\V1\Admin\AvisController')

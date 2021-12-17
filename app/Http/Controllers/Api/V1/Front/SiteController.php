@@ -91,63 +91,59 @@ class SiteController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function sendTracker(Request $request)
+    public function sendTracker(Request $request): JsonResponse
     {
         $this->validate($request, [
             'last_page' => 'required',
             'route' => 'required'
         ]);
 
-        $settings = Settings::all()->pluck('value', 'key');
         $session = $request->session();
 
-        $config = [
-            'amount_of_hits' => $settings['ads_hits'] ? $settings['ads_hits'] + 1 : 10,
-            'promo_routes' => [
-                'ratings.avis.view'
-            ]
-        ];
+        $settings = Settings::all()->pluck('value', 'key');
 
-        $lastPage = $request->get('last_page') ?? '/';
-        $session->put('last_page', $lastPage);
+        $isAnnouncementEnabled = (int) $settings['announcement_enabled'];
+        $announcementTimeout = (int) $settings['announcement_timeout'];
+        $announcementHtml = $settings['announcement_html'];
+        $hitsLimit = (int) $settings['ads_hits'] ?? 10;
 
-        if ($session->has('hits') === false) {
+        // set last visited page
+        $session->put('last_page', $request->get('last_page') ?? DIRECTORY_SEPARATOR);
+
+        // initialize hits
+        if ($session->has('hits') == false) {
             $session->put('hits', 1);
         }
 
-        $hits = $request->session()->get('hits');
-
         if ($route = $request->get('route')) {
-            if (in_array($route, $config['promo_routes'])) {
-                $session->put('hits');
-                $hits = $request->session()->get('hits');
+
+            // increase hits if page in array visited
+            if (in_array($route, ['ratings.avis.view'])) {
+                $session->increment('hits');
             }
 
-            $response = [
-                'start_promo' => $hits > $config['amount_of_hits'],
-                'show_announcement' => $session->has('timout') ? 0 : 1
-            ];
+            $response['start_promo'] = $session->get('hits') > $hitsLimit;
 
-            if ((int)$settings['announcement_enabled']) {
-                if ($session->get('timout') == null) {
-                    $session->put('timout', Carbon::now()->addHours($settings['announcement_timeout']));
-                    $response['show_announcement'] = 1;
-                } else {
-                    $timout = Carbon::parse($session->get('timout'));
-                    if (Carbon::now()->greaterThanOrEqualTo($timout) ) {
-                        $request->session()->remove('timout');
+            if ($isAnnouncementEnabled) {
+                $response['show_modal'] = $session->has('timeout') !== false;
+
+                if ($session->has('timout')) {
+                    $sessionTimeout = Carbon::parse($session->get('timout'));
+                    if (Carbon::now()->greaterThanOrEqualTo($sessionTimeout)) {
+                        $session->remove('timout');
                     }
+                } else {
+                    $timeout = Carbon::now()->addMinutes($announcementTimeout);
+                    $session->put('timout', $timeout);
+                    $response['modal_content'] = $announcementHtml;
+                    $response['show_modal'] = true;
                 }
-
-                $response['modal_content'] = $settings['announcement_html'];
             }
-
-            $response['session'] = $request->session()->all();
 
             return response()->json($response);
         }
 
-        return response()->json(['status' => 'error']);
+        return response()->json(['status' => 'error'], 422);
     }
 
     /**

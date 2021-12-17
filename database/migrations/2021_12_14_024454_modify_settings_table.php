@@ -15,6 +15,7 @@ class ModifySettingsTable extends Migration
     {
         Schema::table('settings', function(Blueprint $table) {
             $table->unique('key');
+            $table->dropTimestamps();
         });
     }
 

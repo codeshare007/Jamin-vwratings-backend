@@ -35,7 +35,7 @@ class SettingsController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function update($id, Request $request)
+    public function update($id, Request $request): JsonResponse
     {
         $this->validate($request, [
             'value' => 'required|string'
@@ -44,6 +44,35 @@ class SettingsController extends Controller
         if ($setting = Settings::findOrFail($id)) {
             $setting->value = $request->get('value');
             $setting->save();
+            return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'error'], 422);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAnnouncement()
+    {
+        return Settings::getSetting('announcement_html');
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function setAnnouncement(Request $request): JsonResponse
+    {
+        $this->validate($request, [
+           'announcement_html' => 'required|string'
+        ]);
+
+        if ($setting = Settings::where('key', '=', 'announcement_html')->first()) {
+            $setting->value = $request->get('announcement_html');
+            $setting->save();
+
             return response()->json(['status' => 'success']);
         }
 

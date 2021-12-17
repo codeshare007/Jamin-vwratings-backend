@@ -18,28 +18,20 @@ class SettingsSeeder extends Seeder
         DB::table('settings')->insertOrIgnore([
             [
                 'key' => 'ads_hits',
-                'value' => 6,
-                'description' => 'Amount of hits to see promo page',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
+                'value' => 1000,
+                'description' => 'Amount of hits to see promo page'
             ], [
                 'key' => 'announcement_html',
                 'value' => null,
-                'description' => 'Content of announcement',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
+                'description' => 'Content of announcement'
             ], [
                 'key' => 'announcement_enabled',
-                'value' => 1,
-                'description' => 'Announcement is enabled',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
+                'value' => 0,
+                'description' => 'Announcement is enabled'
             ], [
                 'key' => 'announcement_timeout',
-                'value' => 24,
-                'description' => 'Announcement period',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
+                'value' => 1440,
+                'description' => 'Announcement period in seconds'
             ]
         ]);
     }
