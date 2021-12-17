@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api\V1\Front;
 
+use Illuminate\Support\Str;
 use App\Models\{Avi, AvisClaims, AvisRatings, User};
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
