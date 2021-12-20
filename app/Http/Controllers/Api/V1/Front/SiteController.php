@@ -104,7 +104,7 @@ class SiteController extends Controller
 
         $isAnnouncementEnabled = (int) $settings['announcement_enabled'];
         $announcementTimeout = (int) $settings['announcement_timeout'];
-        $announcementHtml = $settings['announcement_html'];
+        $announcementContent = $settings['announcement_html'];
         $hitsLimit = (int) $settings['ads_hits'] ?? 10;
 
         // set last visited page
@@ -122,23 +122,42 @@ class SiteController extends Controller
                 $session->increment('hits');
             }
 
-            $response['start_promo'] = $session->get('hits') > $hitsLimit;
+            $response = [
+                'start_promo' => $session->get('hits') > $hitsLimit,
+                'show_modal' => false
+            ];
 
+            $shoModal = false;
             if ($isAnnouncementEnabled) {
-                $response['show_modal'] = $session->has('timeout') !== false;
 
-                if ($session->has('timout')) {
-                    $sessionTimeout = Carbon::parse($session->get('timout'));
-                    if (Carbon::now()->greaterThanOrEqualTo($sessionTimeout)) {
-                        $session->remove('timout');
+                $modalVersion = md5($announcementContent);
+
+                if ($session->has('timeout')) {
+                    $sessionTimeout = Carbon::parse($session->get('timeout'));
+                    if (Carbon::now()->greaterThan($sessionTimeout)) {
+                        $session->remove('timeout');
                     }
                 } else {
-                    $timeout = Carbon::now()->addMinutes($announcementTimeout);
-                    $session->put('timout', $timeout);
-                    $response['modal_content'] = $announcementHtml;
+                    $session->put('timeout', Carbon::now()->addMinutes($announcementTimeout));
+                    $shoModal = true;
+                }
+
+                if ($session->has('modal_version')) {
+                    if ($session->get('modal_version') !== $modalVersion) {
+                        $session->put('modal_version', $modalVersion);
+                        $shoModal = true;
+                    }
+                } else {
+                    $session->put('modal_version', $modalVersion);
+                }
+
+                if ($shoModal) {
+                    $response['modal_content'] = $announcementContent;
                     $response['show_modal'] = true;
                 }
             }
+
+            $response['session'] = $request->session()->all();
 
             return response()->json($response);
         }
