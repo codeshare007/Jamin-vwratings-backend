@@ -34,6 +34,8 @@ Route::prefix('v1')->group(function () {
     Route::post('parties/{id}/rate', 'App\Http\Controllers\Api\V1\Front\PartiesController@rate');
     Route::post('parties/{id}/comment', 'App\Http\Controllers\Api\V1\Front\PartiesController@comment');
 
+    Route::get('avis/attachments', 'App\Http\Controllers\Api\V1\Front\AvisController@attachments');
+
     // Avis
     Route::resource('avis', 'App\Http\Controllers\Api\V1\Front\AvisController');
     Route::post('avis/{id}/rate', 'App\Http\Controllers\Api\V1\Front\AvisController@rate');

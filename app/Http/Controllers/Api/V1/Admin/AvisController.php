@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Admin;
 
+use App\Models\AvisCommentsAttachments;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
@@ -103,7 +104,7 @@ class AvisController extends Controller
 
     /**
      * @param $id
-     * @return \Illuminate\Http\JsonResponse|void
+     * @return JsonResponse
      */
     public function destroy($id)
     {

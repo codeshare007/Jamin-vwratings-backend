@@ -3,7 +3,8 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdsCampaigns;
-use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\{Request, JsonResponse};
 
 class AdsCampaignsController extends Controller
 {
@@ -17,7 +18,7 @@ class AdsCampaignsController extends Controller
         return AdsCampaigns::findOrFail($id);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $this->validate($request, [
             'name' => 'required|string',
@@ -44,7 +45,13 @@ class AdsCampaignsController extends Controller
 
     }
 
-    public function update($id, Request $request)
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function update($id, Request $request): JsonResponse
     {
         $this->validate($request, [
             'name' => 'required|string',
@@ -75,6 +82,9 @@ class AdsCampaignsController extends Controller
 
     public function destroy($id)
     {
-
+        if ($campaign = AdsCampaigns::findOrFail($id)) {
+            $campaign->delete();
+            return response()->json(['status' => 'error']);
+        }
     }
 }

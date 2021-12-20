@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use Illuminate\Support\Str;
-use App\Models\{Avi, AvisClaims, AvisRatings, User};
+use App\Models\{Avi, AvisClaims, AvisCommentsAttachments, AvisRatings, User};
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\QueryException;
@@ -78,6 +78,11 @@ class AvisController extends Controller
             'status' => 'error',
             'message' => 'avi not found'
         ]);
+    }
+
+    public function attachments()
+    {
+        return AvisCommentsAttachments::paginate(100);
     }
 
     /**
