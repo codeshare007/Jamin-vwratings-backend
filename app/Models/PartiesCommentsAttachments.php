@@ -14,4 +14,9 @@ class PartiesCommentsAttachments extends Model
         'path',
         'type'
     ];
+
+    public function comment()
+    {
+        return $this->hasOne(PartiesComments::class, 'id', 'comment_id');
+    }
 }

@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\V1\Front\{
+    AvisController,
+    PartiesController
+};
+
 use App\Http\Controllers\Api\V1\Admin\{
     AdminController,
     SettingsController
@@ -30,16 +35,16 @@ Route::prefix('v1')->group(function () {
     Route::post('send-message', 'App\Http\Controllers\Api\V1\Front\SiteController@message');
 
     // Parties
+    Route::get('parties/attachments', [PartiesController::class, 'attachments']);
     Route::resource('parties', 'App\Http\Controllers\Api\V1\Front\PartiesController');
     Route::post('parties/{id}/rate', 'App\Http\Controllers\Api\V1\Front\PartiesController@rate');
     Route::post('parties/{id}/comment', 'App\Http\Controllers\Api\V1\Front\PartiesController@comment');
 
-    Route::get('avis/attachments', 'App\Http\Controllers\Api\V1\Front\AvisController@attachments');
-
     // Avis
-    Route::resource('avis', 'App\Http\Controllers\Api\V1\Front\AvisController');
-    Route::post('avis/{id}/rate', 'App\Http\Controllers\Api\V1\Front\AvisController@rate');
-    Route::post('avis/{id}/comment', 'App\Http\Controllers\Api\V1\Front\AvisController@comment');
+    Route::get('avis/attachments', [AvisController::class, 'attachments']);
+    Route::resource('avis', AvisController::class);
+    Route::post('avis/{id}/rate', [AvisController::class, 'rate']);
+    Route::post('avis/{id}/comment', [AvisController::class, 'comment']);
 
     // Auth methods
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {

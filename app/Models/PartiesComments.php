@@ -27,7 +27,7 @@ class PartiesComments extends Model
         return $this->hasOne(User::class, 'id', 'party_id');
     }
 
-    public function avi()
+    public function party()
     {
         return $this->hasOne(Parties::class, 'id', 'party_id');
     }

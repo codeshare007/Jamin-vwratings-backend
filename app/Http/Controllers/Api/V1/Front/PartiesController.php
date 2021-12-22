@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Parties, PartiesClaims, PartiesRatings, User};
+use Illuminate\Database\Eloquent\Model;
+use App\Models\{Parties, PartiesClaims, PartiesCommentsAttachments, PartiesRatings, User};
 use Illuminate\Http\{Request, JsonResponse};
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\{Collection, Builder};
@@ -18,7 +19,7 @@ class PartiesController extends Controller
      * @param Request $request
      * @return LengthAwarePaginator
      */
-    public function index(Request $request)
+    public function index(Request $request): LengthAwarePaginator
     {
         $parties = Parties::query();
 
@@ -52,9 +53,17 @@ class PartiesController extends Controller
         return $parties->paginate($request->get('per_page'));
     }
 
+    public function attachments(Request $request): LengthAwarePaginator
+    {
+        $comments = PartiesCommentsAttachments::query();
+        $comments->with(['comment', 'comment.party']);
+
+        return $comments->paginate($request->get('per_page'));
+    }
+
     /**
      * @param $id
-     * @return Builder|Builder[]|Collection|\Illuminate\Database\Eloquent\Model|null
+     * @return Builder|Builder[]|Collection|Model|null
      */
     public function show($id)
     {

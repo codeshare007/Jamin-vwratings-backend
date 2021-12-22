@@ -80,9 +80,16 @@ class AvisController extends Controller
         ]);
     }
 
-    public function attachments()
+    /**
+     * @param Request $request
+     * @return LengthAwarePaginator
+     */
+    public function attachments(Request $request): LengthAwarePaginator
     {
-        return AvisCommentsAttachments::paginate(100);
+        $comments = AvisCommentsAttachments::query();
+        $comments->with(['comment', 'comment.avi']);
+
+        return $comments->paginate($request->get('per_page'));
     }
 
     /**
