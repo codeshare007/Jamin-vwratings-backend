@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use Illuminate\Support\Str;
-use App\Models\{Avi, AvisClaims, AvisCommentsAttachments, AvisRatings, User};
+use App\Models\{Avi, AvisClaims, AvisCommentsAttachments, AvisInterviews, AvisRatings, User};
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\QueryException;
@@ -109,6 +109,11 @@ class AvisController extends Controller
         $user = auth()->user();
         $user->favoriteAvis()->where('avis_id', '=', $id)->delete();
         return response()->json(['status' => 'success']);
+    }
+
+    public function getInterview($id)
+    {
+        return AvisInterviews::where('avis_id', '=', $id)->first();
     }
 
     /**

@@ -44,6 +44,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::get('avis/interviews', [AvisInterviewsController::class, 'index']);
         Route::get('avis/attachments', [AvisController::class, 'attachments']);
+        Route::get('avis/{id}/interview', [AvisController::class, 'getInterview']);
         Route::post('avis/{id}/rate', [AvisController::class, 'rate']);
         Route::post('avis/{id}/comment', [AvisController::class, 'comment']);
         Route::post('avis/{id}/favorite', [AvisController::class, 'favorite']);
