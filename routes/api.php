@@ -4,11 +4,15 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\V1\Front\{
     AvisController,
+    AuthController,
+    SiteController,
+    TestController,
     PartiesController
 };
 
 use App\Http\Controllers\Api\V1\Admin\{
     AdminController,
+    AuthController as AdminAuthController,
     SettingsController
 };
 
@@ -24,36 +28,38 @@ use App\Http\Controllers\Api\V1\Admin\{
 */
 Route::prefix('v1')->group(function () {
 
-    Route::get('test', 'App\Http\Controllers\Api\V1\Front\TestController@index');
+    Route::get('test', [TestController::class, 'test']);
 
-    Route::post('reset-password', 'App\Http\Controllers\Api\V1\Front\AuthController@sendPasswordResetLink');
-    Route::post('reset/password', 'App\Http\Controllers\Api\V1\Front\AuthController@callResetPassword');
+    Route::post('reset-password', [AuthController::class, 'sendPasswordResetLink']);
+    Route::post('reset/password', [AuthController::class, 'callResetPassword']);
 
     // Public Methods
-    Route::post('tracker', 'App\Http\Controllers\Api\V1\Front\SiteController@sendTracker');
-    Route::post('end-promo', 'App\Http\Controllers\Api\V1\Front\SiteController@endPromo');
-    Route::post('send-message', 'App\Http\Controllers\Api\V1\Front\SiteController@message');
+    Route::post('tracker', [SiteController::class, 'sendTracker']);
+    Route::post('end-promo', [SiteController::class, 'endPromo']);
+    Route::post('send-message', [SiteController::class, 'message']);
 
     // Parties
     Route::get('parties/attachments', [PartiesController::class, 'attachments']);
-    Route::resource('parties', 'App\Http\Controllers\Api\V1\Front\PartiesController');
-    Route::post('parties/{id}/rate', 'App\Http\Controllers\Api\V1\Front\PartiesController@rate');
-    Route::post('parties/{id}/comment', 'App\Http\Controllers\Api\V1\Front\PartiesController@comment');
+    Route::resource('parties', PartiesController::class);
+    Route::post('parties/{id}/rate', [PartiesController::class, 'rate']);
+    Route::post('parties/{id}/comment', [PartiesController::class, 'comment']);
+    Route::post('parties/{id}/favorite', [PartiesController::class, 'favorite']);
 
     // Avis
     Route::get('avis/attachments', [AvisController::class, 'attachments']);
     Route::resource('avis', AvisController::class);
     Route::post('avis/{id}/rate', [AvisController::class, 'rate']);
     Route::post('avis/{id}/comment', [AvisController::class, 'comment']);
+    Route::post('avis/{id}/favorite', [AvisController::class, 'favorite']);
 
     // Auth methods
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
-        Route::post('login', 'App\Http\Controllers\Api\V1\Front\AuthController@login');
-        Route::post('register', 'App\Http\Controllers\Api\V1\Front\AuthController@register');
+        Route::post('login', [AuthController::class, 'login']);
+        Route::post('register', [AuthController::class, 'register']);
     });
 
     Route::group(['middleware' => 'api', 'prefix' => 'admin/auth'], function () {
-        Route::post('login', 'App\Http\Controllers\Api\V1\Admin\AuthController@login');
+        Route::post('login', [AdminAuthController::class, 'login']);
     });
 
     // Authenticated methods
@@ -74,9 +80,9 @@ Route::prefix('v1')->group(function () {
         Route::prefix('admin')->group(function () {
 
             Route::prefix('auth')->group(function () {
-                Route::post('logout', 'App\Http\Controllers\Api\V1\Admin\AuthController@logout');
-                Route::post('refresh', 'App\Http\Controllers\Api\V1\Admin\AuthController@refresh');
-                Route::get('me', 'App\Http\Controllers\Api\V1\Admin\AuthController@me');
+                Route::post('logout', [AdminAuthController::class, 'logout']);
+                Route::post('refresh', [AdminAuthController::class, 'refresh']);
+                Route::get('me', [AuthController::class, 'me']);
             });
 
             Route::get('dashboard', [AdminController::class, 'dashboard']);

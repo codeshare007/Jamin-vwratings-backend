@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use Illuminate\Support\Str;
-use App\Models\{Avi, AvisClaims, AvisCommentsAttachments, AvisRatings, User};
+use App\Models\{Avi, AvisClaims, AvisCommentsAttachments, AvisRatings, User, UsersFavoriteAvis};
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\QueryException;
@@ -78,6 +78,27 @@ class AvisController extends Controller
             'status' => 'error',
             'message' => 'avi not found'
         ]);
+    }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function favorite($id): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+
+        if ($avi = Avi::findOrFail($id)) {
+            UsersFavoriteAvis::firstOrCreate([
+                'user_id' => $user->id,
+                'avis_id' => $id
+            ]);
+
+            return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'error'], 422);
     }
 
     /**

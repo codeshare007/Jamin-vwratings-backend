@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Models\User;
@@ -11,7 +12,9 @@ use App\Http\Controllers\Controller;
 class AuthController extends Controller
 {
 
-
+    /**
+     * AuthController constructor.
+     */
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login']]);
@@ -21,7 +24,7 @@ class AuthController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|string',
@@ -47,11 +50,26 @@ class AuthController extends Controller
         return $this->createNewToken($token);
     }
 
+    /**
+     * @return JsonResponse
+     */
+    public function me(): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+
+        if ($user->role === User::ROLE_ADMIN) {
+            return response()->json($user);
+        }
+
+        return response()->json(['status' => 'error'], 422);
+    }
+
 
     /**
      * @return JsonResponse
      */
-    public function logout()
+    public function logout(): JsonResponse
     {
         auth()->logout();
         return response()->json(['message' => 'User successfully signed out']);
@@ -63,28 +81,18 @@ class AuthController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function refresh()
+    public function refresh(): JsonResponse
     {
         return $this->createNewToken(auth()->refresh());
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function me()
-    {
-        if (auth()->user()->role === User::ROLE_ADMIN) {
-            return response()->json(auth()->user());
-        }
-    }
-
-    /**
      * @param $token
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    protected function createNewToken($token)
+    protected function createNewToken($token): JsonResponse
     {
         return response()->json([
             'access_token' => $token,

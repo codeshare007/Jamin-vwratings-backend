@@ -49,7 +49,7 @@ class AuthController extends Controller
      * @param $response
      * @return JsonResponse
      */
-    protected function sendResetResponse(Request $request, $response)
+    protected function sendResetResponse(Request $request, $response): JsonResponse
     {
         if ($user = User::where('email', '=', $request->get('email'))->first()) {
             return response()->json([
@@ -67,7 +67,7 @@ class AuthController extends Controller
      * @param $response
      * @return JsonResponse
      */
-    protected function sendResetFailedResponse(Request $request, $response)
+    protected function sendResetFailedResponse(Request $request, $response): JsonResponse
     {
         return response()->json(['errors' => ['email' => ['Failed, Invalid Token.']]], 422);
     }
@@ -86,7 +86,7 @@ class AuthController extends Controller
      * @param $response
      * @return JsonResponse
      */
-    protected function sendResetLinkFailedResponse(Request $request, $response)
+    protected function sendResetLinkFailedResponse(Request $request, $response): JsonResponse
     {
         return response()->json(['errors' => ['email' => ['Email does not exist or already sent']]], 422);
     }
@@ -94,7 +94,7 @@ class AuthController extends Controller
     /**
      * Handle reset password
      * @param Request $request
-     * @return mixed
+     * @return JsonResponse
      */
     public function callResetPassword(Request $request)
     {
@@ -119,7 +119,7 @@ class AuthController extends Controller
      * @param $response
      * @return JsonResponse
      */
-    protected function sendResetLinkResponse(Request $request, $response)
+    protected function sendResetLinkResponse(Request $request, $response): JsonResponse
     {
         return response()->json([
             'message' => 'Password reset email sent.',
@@ -131,7 +131,7 @@ class AuthController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:16',
@@ -158,7 +158,7 @@ class AuthController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse
     {
         $this->validate($request, [
             'username' => 'required|string|unique:users|max:16',
@@ -194,7 +194,7 @@ class AuthController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-    public function logout()
+    public function logout(): JsonResponse
     {
         auth()->logout();
         return response()->json(['message' => 'User successfully signed out']);
@@ -206,9 +206,9 @@ class AuthController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function refresh()
+    public function refresh(): JsonResponse
     {
         return $this->createNewToken(auth()->refresh());
     }
@@ -216,16 +216,28 @@ class AuthController extends Controller
     /**
      * @return JsonResponse
      */
-    public function me()
+    public function me(): JsonResponse
     {
-        return response()->json(auth()->user());
+        /** @var User $user */
+        $user = auth()->user();
+
+        return response()->json([
+            'id' => $user->id,
+            'email' => $user->email,
+            'username' => $user->username,
+            'role' => $user->role,
+            'favorites' => [
+                'avis' => $user->favoriteAvis()->get(),
+                'parties' => $user->favoriteParties()->get()
+            ]
+        ]);
     }
 
     /**
      * @param $token
      * @return JsonResponse
      */
-    protected function createNewToken($token)
+    protected function createNewToken($token): JsonResponse
     {
         return response()->json([
             'access_token' => $token,
