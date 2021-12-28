@@ -2,12 +2,11 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use Illuminate\Support\Str;
-use App\Models\{Avi, AvisClaims, AvisCommentsAttachments, AvisRatings, User, UsersFavoriteAvis};
+use App\Models\{Avi, AvisClaims, AvisCommentsAttachments, AvisRatings, User};
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\QueryException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\{Collection, Builder};
 use Illuminate\Http\{Request, UploadedFile, JsonResponse};
 
 class AvisController extends Controller
