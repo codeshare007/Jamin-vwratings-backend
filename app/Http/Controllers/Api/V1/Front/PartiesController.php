@@ -71,10 +71,11 @@ class PartiesController extends Controller
         $avi->append(['average_rating', 'user_rating']);
 
         if (PartiesClaims::where('party_id', '=', $id)->count()) {
-            $comments = array_values($avi->comments->filter(function($item) {
-                if ($item->attachments->count() || $item->opinion !== 2 ) return $item;
+            $comments = array_values($avi->comments->filter(function ($item) {
+                if ($item->attachments->count() || $item->opinion !== 2) return $item;
                 return false;
             })->toArray());
+
 
             $avi->unsetRelation('comments');
 
@@ -82,7 +83,40 @@ class PartiesController extends Controller
 
         }
 
+        /** @var User $user */
+        if ($user = auth()->user()) {
+            if ($user->favoriteParties()->where('party_id', '=', $id)->exists()) {
+                $avi['is_favorite'] = true;
+            }
+        }
+
         return $avi;
+    }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function favorite($id): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+
+        if ($favorite = $user->favoriteParties()->where('party_id', '=', $id)->first()) {
+            $favorite->delete();
+        } else {
+            $user->favoriteParties()->create(['party_id' => $id]);
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function removeFavorite($id): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        $user->favoriteParties()->where('party_id', '=', $id)->delete();
+        return response()->json(['status' => 'success']);
     }
 
     /**

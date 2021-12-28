@@ -56,7 +56,6 @@ class AvisController extends Controller
      */
     public function show($id)
     {
-
         if ($avi = Avi::with(['comments.attachments', 'comments', 'claim'])->find($id)) {
             $avi->append(['average_rating', 'user_rating']);
 
@@ -69,6 +68,13 @@ class AvisController extends Controller
 
                 $avi->unsetRelation('comments');
                 $avi['comments'] = $comments;
+            }
+
+            /** @var User $user */
+            if ($user = auth()->user()) {
+                if ($user->favoriteAvis()->where('avis_id', '=', $id)->exists()) {
+                    $avi['is_favorite'] = true;
+                }
             }
 
             return $avi;
@@ -89,16 +95,21 @@ class AvisController extends Controller
         /** @var User $user */
         $user = auth()->user();
 
-        if ($avi = Avi::findOrFail($id)) {
-            UsersFavoriteAvis::firstOrCreate([
-                'user_id' => $user->id,
-                'avis_id' => $id
-            ]);
-
-            return response()->json(['status' => 'success']);
+        if ($favorite = $user->favoriteAvis()->where('avis_id', '=', $id)->first()) {
+            $favorite->delete();
+        } else {
+            $user->favoriteAvis()->create(['avis_id' => $id]);
         }
 
-        return response()->json(['status' => 'error'], 422);
+        return response()->json(['status' => 'success']);
+    }
+
+    public function removeFavorite($id): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        $user->favoriteAvis()->where('avis_id', '=', $id)->delete();
+        return response()->json(['status' => 'success']);
     }
 
     /**

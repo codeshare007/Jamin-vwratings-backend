@@ -225,11 +225,7 @@ class AuthController extends Controller
             'id' => $user->id,
             'email' => $user->email,
             'username' => $user->username,
-            'role' => $user->role,
-            'favorites' => [
-                'avis' => $user->favoriteAvis()->get(),
-                'parties' => $user->favoriteParties()->get()
-            ]
+            'role' => $user->role
         ]);
     }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Front\{
     AuthController,
     SiteController,
     TestController,
+    ProfileController,
     PartiesController
 };
 
@@ -38,19 +39,25 @@ Route::prefix('v1')->group(function () {
     Route::post('end-promo', [SiteController::class, 'endPromo']);
     Route::post('send-message', [SiteController::class, 'message']);
 
-    // Parties
-    Route::get('parties/attachments', [PartiesController::class, 'attachments']);
-    Route::resource('parties', PartiesController::class);
-    Route::post('parties/{id}/rate', [PartiesController::class, 'rate']);
-    Route::post('parties/{id}/comment', [PartiesController::class, 'comment']);
-    Route::post('parties/{id}/favorite', [PartiesController::class, 'favorite']);
-
     // Avis
     Route::get('avis/attachments', [AvisController::class, 'attachments']);
     Route::resource('avis', AvisController::class);
-    Route::post('avis/{id}/rate', [AvisController::class, 'rate']);
-    Route::post('avis/{id}/comment', [AvisController::class, 'comment']);
-    Route::post('avis/{id}/favorite', [AvisController::class, 'favorite']);
+    Route::middleware('auth:api')->group(function () {
+        Route::post('avis/{id}/rate', [AvisController::class, 'rate']);
+        Route::post('avis/{id}/comment', [AvisController::class, 'comment']);
+        Route::post('avis/{id}/favorite', [AvisController::class, 'favorite']);
+        Route::delete('avis/{id}/remove-favorite', [AvisController::class, 'removeFavorite']);
+    });
+
+    // Parties
+    Route::get('parties/attachments', [PartiesController::class, 'attachments']);
+    Route::resource('parties', PartiesController::class);
+    Route::middleware('auth:api')->group(function () {
+        Route::post('parties/{id}/rate', [PartiesController::class, 'rate']);
+        Route::post('parties/{id}/comment', [PartiesController::class, 'comment']);
+        Route::post('parties/{id}/favorite', [PartiesController::class, 'favorite']);
+        Route::delete('parties/{id}/remove-favorite', [PartiesController::class, 'removeFavorite']);
+    });
 
     // Auth methods
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
@@ -64,6 +71,8 @@ Route::prefix('v1')->group(function () {
 
     // Authenticated methods
     Route::middleware('auth:api')->group(function () {
+
+        Route::get('profile', [ProfileController::class, 'index']);
 
         Route::get('comments', 'App\Http\Controllers\Api\V1\Front\SiteController@comments');
         Route::get('claimed', 'App\Http\Controllers\Api\V1\Front\ClaimsController@index');
