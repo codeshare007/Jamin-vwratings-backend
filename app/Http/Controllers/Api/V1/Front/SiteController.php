@@ -14,20 +14,6 @@ use Illuminate\Http\{Request, JsonResponse};
 
 class SiteController extends Controller
 {
-    /**
-     * @return Collection
-     */
-    public function comments(): Collection
-    {
-        /** @var User $user */
-        $user = auth()->user();
-        return $user
-            ->comments()
-            ->with(['attachments', 'avi'])
-            ->limit(5)
-            ->latest()
-            ->get();
-    }
 
     /**
      * @param Request $request

@@ -124,9 +124,51 @@ class User extends Authenticatable implements JWTSubject
     /**
      * @return HasMany
      */
-    public function comments(): HasMany
+    public function avisComments(): HasMany
     {
         return $this->hasMany(AvisComments::class, 'user_id', 'id');
     }
+
+    /**
+     * @return HasMany
+     */
+    public function avis(): HasMany
+    {
+        return $this->hasMany(Avi::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function avisRated(): HasMany
+    {
+        return $this->hasMany(AvisRatings::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function parties(): HasMany
+    {
+        return $this->hasMany(Parties::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function partiesRated()
+    {
+        return $this->hasMany(PartiesRatings::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function partiesComments(): HasMany
+    {
+        return $this->hasMany(PartiesComments::class, 'user_id', 'id');
+    }
+
+
 
 }

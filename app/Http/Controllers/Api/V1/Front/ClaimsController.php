@@ -77,7 +77,7 @@ class ClaimsController extends Controller
                 if ($avi = Avi::where('name', '=', $name)->first()) {
                     if (AvisClaims::where('avis_id', '=', $avi->id)->first()) {
                         return response()->json([
-                            'status' => 'error', 'errors' => ['avi' => ['Avi already claimed']]
+                            'status' => 'error', 'errors' => ['avi' => ['Player already claimed']]
                         ], 422);
                     } else {
                         $avi->claim()->create([
@@ -89,7 +89,7 @@ class ClaimsController extends Controller
                     }
                 } else {
                     return response()->json([
-                        'status' => 'error', 'errors' => ['avi' => ['Avi not Found']]
+                        'status' => 'error', 'errors' => ['avi' => ['Player not found']]
                     ], 422);
                 }
                 break;
@@ -97,7 +97,7 @@ class ClaimsController extends Controller
                 if ($party = Parties::where('name', '=', $name)->first()) {
                     if (PartiesClaims::where('party_id', '=', $party->id)->first()) {
                         return response()->json([
-                            'status' => 'error', 'errors' => ['avi' => ['Avi already claimed']]
+                            'status' => 'error', 'errors' => ['avi' => ['Party already claimed']]
                         ], 422);
 
                     } else {
@@ -110,7 +110,7 @@ class ClaimsController extends Controller
                     }
                 } else {
                     return response()->json([
-                        'status' => 'error', 'errors' => ['avi' => ['Party not Found']]
+                        'status' => 'error', 'errors' => ['avi' => ['Party not found']]
                     ], 422);
                 }
                 break;

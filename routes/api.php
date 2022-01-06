@@ -78,10 +78,18 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
 
         Route::get('profile', [ProfileController::class, 'index']);
-        Route::get('profile/favorite-avis', [ProfileController::class, 'favoriteAvis']);
-        Route::get('profile/favorite-parties', [ProfileController::class, 'favoriteParties']);
+        Route::post('profile', [ProfileController::class, 'update']);
 
-        Route::get('comments', 'App\Http\Controllers\Api\V1\Front\SiteController@comments');
+        Route::post('profile/change-password', [ProfileController::class, 'changePassword']);
+
+        Route::get('profile/avis/favorites', [ProfileController::class, 'favoriteAvis']);
+        Route::get('profile/avis/comments', [ProfileController::class, 'commentsAvis']);
+        Route::get('profile/avis/stats', [ProfileController::class, 'statsAvis']);
+
+        Route::get('profile/parties/favorites', [ProfileController::class, 'favoriteParties']);
+        Route::get('profile/parties/comments', [ProfileController::class, 'commentsParties']);
+        Route::get('profile/parties/stats', [ProfileController::class, 'statsParties']);
+
         Route::get('claimed', 'App\Http\Controllers\Api\V1\Front\ClaimsController@index');
         Route::post('stay-claimed', 'App\Http\Controllers\Api\V1\Front\ClaimsController@stayClaimed');
         Route::post('claim', 'App\Http\Controllers\Api\V1\Front\ClaimsController@claim');
