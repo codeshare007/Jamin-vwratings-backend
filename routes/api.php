@@ -78,6 +78,8 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
 
         Route::get('profile', [ProfileController::class, 'index']);
+        Route::get('profile/favorite-avis', [ProfileController::class, 'favoriteAvis']);
+        Route::get('profile/favorite-parties', [ProfileController::class, 'favoriteParties']);
 
         Route::get('comments', 'App\Http\Controllers\Api\V1\Front\SiteController@comments');
         Route::get('claimed', 'App\Http\Controllers\Api\V1\Front\ClaimsController@index');

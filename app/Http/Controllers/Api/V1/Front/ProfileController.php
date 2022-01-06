@@ -24,4 +24,22 @@ class ProfileController extends Controller
             ]
         ]);
     }
+
+    /**
+     * @return JsonResponse
+     */
+    public function favoriteAvis()
+    {
+        $user = auth()->user();
+        return response()->json($user->favoriteAvis()->get());
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function favoriteParties()
+    {
+        $user = auth()->user();
+        return response()->json($user->favoriteParties()->get());
+    }
 }
