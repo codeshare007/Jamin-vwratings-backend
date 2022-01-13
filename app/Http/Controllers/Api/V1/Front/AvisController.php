@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Http\Controllers\Api\V1\Front;
 
 use Illuminate\Support\Str;
-use App\Models\{Avi, AvisClaims, AvisCommentsAttachments, AvisInterviews, AvisRatings, User};
+use App\Models\{Avi, AvisClaims, AvisCommentsAttachments, AvisInterviews, AvisRatings, User, UsersFavoriteAvis};
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\QueryException;
@@ -55,8 +56,11 @@ class AvisController extends Controller
      */
     public function show($id)
     {
-        if ($avi = Avi::with(['comments.attachments', 'comments', 'claim'])->find($id)) {
+        if ($avi = Avi::with(['comments.attachments', 'comments', 'claim', 'ratings'])->find($id)) {
+
             $avi->append(['average_rating', 'user_rating']);
+
+            $ratingsCount = $avi->ratings()->count();
 
             // remove negative comments if avi claimed
             if (AvisClaims::where('avis_id', '=', $id)->count()) {
@@ -75,6 +79,18 @@ class AvisController extends Controller
                     $avi['is_favorite'] = true;
                 }
             }
+
+            $avi['statistics'] = [
+                'comments' => count($avi['comments']),
+                'rated' => $ratingsCount,
+                'positive' => count(array_filter($avi['comments']->toArray(), function($item) {
+                    return $item['opinion'] == 1 ? $item : null;
+                })),
+                'negative' => count(array_filter($avi['comments']->toArray(), function($item) {
+                    return $item['opinion'] == 2 ? $item : null;
+                })),
+                'watchers' => UsersFavoriteAvis::where(['avis_id' => $id])->count()
+            ];
 
             return $avi;
         }

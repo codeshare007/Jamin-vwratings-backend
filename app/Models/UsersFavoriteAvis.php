@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static firstOrCreate(array $array)
+ * @method static where(array $array)
  */
 class UsersFavoriteAvis extends Model
 {
