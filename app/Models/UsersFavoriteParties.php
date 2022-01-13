@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static where(array $array)
+ */
 class UsersFavoriteParties extends Model
 {
-    use HasFactory;
-
     use HasFactory;
 
     protected $fillable = ['user_id', 'party_id'];

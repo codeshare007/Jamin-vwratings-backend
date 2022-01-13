@@ -50,10 +50,6 @@ class AvisController extends Controller
         return $avis->paginate($request->get('per_page'));
     }
 
-    /**
-     * @param $id
-     * @return mixed
-     */
     public function show($id)
     {
         if ($avi = Avi::with(['comments.attachments', 'comments', 'claim', 'ratings'])->find($id)) {
@@ -80,13 +76,15 @@ class AvisController extends Controller
                 }
             }
 
+            $avisComments = $avi['comments']->toArray();
+
             $avi['statistics'] = [
                 'comments' => count($avi['comments']),
                 'rated' => $ratingsCount,
-                'positive' => count(array_filter($avi['comments']->toArray(), function($item) {
+                'positive' => count(array_filter($avisComments, function($item) {
                     return $item['opinion'] == 1 ? $item : null;
                 })),
-                'negative' => count(array_filter($avi['comments']->toArray(), function($item) {
+                'negative' => count(array_filter($avisComments, function($item) {
                     return $item['opinion'] == 2 ? $item : null;
                 })),
                 'watchers' => UsersFavoriteAvis::where(['avis_id' => $id])->count()
@@ -97,7 +95,7 @@ class AvisController extends Controller
 
         return response()->json([
             'status' => 'error',
-            'message' => 'avi not found'
+            'message' => 'Player not found'
         ]);
     }
 

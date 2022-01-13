@@ -4,7 +4,12 @@ namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{Parties, PartiesClaims, PartiesCommentsAttachments, PartiesRatings, User};
+use App\Models\{Parties,
+    PartiesClaims,
+    PartiesCommentsAttachments,
+    PartiesRatings,
+    User,
+    UsersFavoriteParties};
 use Illuminate\Http\{Request, JsonResponse};
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\{Collection, Builder};
@@ -61,36 +66,53 @@ class PartiesController extends Controller
         return $comments->paginate($request->get('per_page'));
     }
 
-    /**
-     * @param $id
-     * @return Builder|Builder[]|Collection|Model|null
-     */
     public function show($id)
     {
-        $avi = Parties::with(['comments.attachments', 'comments', 'claim'])->find($id);
-        $avi->append(['average_rating', 'user_rating']);
+        if ($party = Parties::with(['comments.attachments', 'comments', 'claim', 'ratings'])->find($id)) {
 
-        if (PartiesClaims::where('party_id', '=', $id)->count()) {
-            $comments = array_values($avi->comments->filter(function ($item) {
-                if ($item->attachments->count() || $item->opinion !== 2) return $item;
-                return false;
-            })->toArray());
+            $party->append(['average_rating', 'user_rating']);
 
+            $ratingsCount = $party->ratings()->count();
 
-            $avi->unsetRelation('comments');
+            // remove negative comments if avi claimed
+            if (PartiesClaims::where('party_id', '=', $id)->count()) {
+                $comments = array_values($party->comments->filter(function ($item) {
+                    if ($item->attachments->count() || $item->opinion !== 2) return $item;
+                    return false;
+                })->toArray());
 
-            $avi['comments'] = $comments;
-
-        }
-
-        /** @var User $user */
-        if ($user = auth()->user()) {
-            if ($user->favoriteParties()->where('party_id', '=', $id)->exists()) {
-                $avi['is_favorite'] = true;
+                $party->unsetRelation('comments');
+                $party['comments'] = $comments;
             }
+
+            /** @var User $user */
+            if ($user = auth()->user()) {
+                if ($user->favoriteParties()->where('party_id', '=', $id)->exists()) {
+                    $party['is_favorite'] = true;
+                }
+            }
+
+            $partiesComments = $party['comments']->toArray();
+
+            $party['statistics'] = [
+                'comments' => count($party['comments']),
+                'rated' => $ratingsCount,
+                'positive' => count(array_filter($partiesComments, function($item) {
+                    return $item['opinion'] == 1 ? $item : null;
+                })),
+                'negative' => count(array_filter($partiesComments, function($item) {
+                    return $item['opinion'] == 2 ? $item : null;
+                })),
+                'watchers' => UsersFavoriteParties::where(['party_id' => $id])->count()
+            ];
+
+            return $party;
         }
 
-        return $avi;
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Party not found'
+        ]);
     }
 
     /**
