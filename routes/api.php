@@ -14,6 +14,9 @@ use App\Http\Controllers\Api\V1\Front\{
 
 use App\Http\Controllers\Api\V1\Admin\{
     AdminController,
+    UsersController,
+    UsersNotificationsController as AdminUsersNotificationsController,
+    NotificationsController as AdminNotificationsController,
     AuthController as AdminAuthController,
     SettingsController
 };
@@ -81,7 +84,9 @@ Route::prefix('v1')->group(function () {
         Route::post('profile', [ProfileController::class, 'update']);
 
         Route::post('profile/change-password', [ProfileController::class, 'changePassword']);
+        Route::post('profile/notifications/read', [ProfileController::class, 'readNotifications']);
 
+        Route::get('profile/notifications', [ProfileController::class, 'notifications']);
         Route::get('profile/avis/favorites', [ProfileController::class, 'favoriteAvis']);
         Route::get('profile/avis/comments', [ProfileController::class, 'commentsAvis']);
         Route::get('profile/avis/stats', [ProfileController::class, 'statsAvis']);
@@ -116,11 +121,13 @@ Route::prefix('v1')->group(function () {
             Route::get('settings/announcement', [SettingsController::class, 'getAnnouncement']);
             Route::post('settings/announcement', [SettingsController::class, 'setAnnouncement']);
 
+            Route::resource('notifications', AdminNotificationsController::class);
+            Route::resource('users-notifications', AdminUsersNotificationsController::class);
+
             Route::resource('settings', SettingsController::class);
-            Route::resource('users', 'App\Http\Controllers\Api\V1\Admin\UsersController');
+            Route::resource('users', UsersController::class);
             Route::resource('messages', 'App\Http\Controllers\Api\V1\Admin\MessagesController');
             Route::resource('campaigns', 'App\Http\Controllers\Api\V1\Admin\AdsCampaignsController');
-
 
             // Avis
             Route::resource('avis', 'App\Http\Controllers\Api\V1\Admin\AvisController')
@@ -129,6 +136,7 @@ Route::prefix('v1')->group(function () {
             Route::resource('avis-claims', 'App\Http\Controllers\Api\V1\Admin\AvisClaimsController');
             Route::resource('avis-comments', 'App\Http\Controllers\Api\V1\Admin\AvisCommentsController');
             Route::resource('avis-ratings', 'App\Http\Controllers\Api\V1\Admin\AvisRatingsController');
+            Route::resource('avis-interviews', 'App\Http\Controllers\Api\V1\Admin\AvisInterviewsController');
 
             Route::resource('parties', 'App\Http\Controllers\Api\V1\Admin\PartiesController')
                 ->names('admin.parties');

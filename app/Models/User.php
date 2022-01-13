@@ -156,7 +156,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * @return HasMany
      */
-    public function partiesRated()
+    public function partiesRated(): HasMany
     {
         return $this->hasMany(PartiesRatings::class, 'user_id', 'id');
     }
@@ -169,6 +169,13 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(PartiesComments::class, 'user_id', 'id');
     }
 
+    /**
+     * @return HasMany
+     */
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(UsersNotifications::class, 'user_id', 'id');
+    }
 
 
 }

@@ -13,6 +13,6 @@ class AvisInterviewsController extends Controller
 {
     public function index()
     {
-        return AvisInterviews::select('id', 'avis_id')->get();
+        return AvisInterviews::select('id', 'avis_id')->latest()->get();
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notifications;
 use App\Models\User;
+use App\Models\UsersNotifications;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Collection;
@@ -37,6 +39,43 @@ class ProfileController extends Controller
         /** @var User $user */
         $user = auth()->user();
         return response()->json($user->favoriteAvis()->get());
+    }
+
+    public function notifications(): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+
+        $notifications = collect();
+        $globalNotifications = Notifications::all();
+
+        foreach ($globalNotifications as $notification) {
+            $notifications->push($notification);
+        }
+
+        foreach ($user->notifications()->get() as $notification) {
+            $notifications->push($notification);
+        }
+
+        return response()->json([
+            'data' => $notifications->sortBy('created_at', SORT_ASC)
+        ]);
+    }
+
+
+    /**
+     * @return JsonResponse
+     */
+    public function readNotifications(): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+
+        foreach ($user->notifications()->get() as $notification) {
+            $notification->update(['status' => UsersNotifications::STATUS_READ]);
+        }
+
+        return response()->json(['status' => 'success']);
     }
 
     /**
@@ -127,13 +166,24 @@ class ProfileController extends Controller
     public function update(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'email' => 'required|email'
+            'email' => 'nullable|email'
         ]);
 
         /** @var User $user */
         $user = auth()->user();
-        $user->email = $request->get('email');
-        $user->save();
+        $email = $request->get('email');
+
+        if ($email) {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL) !== false) {
+                $user->update(['email' => $request->get('email') ]);
+            } else {
+                return response()->json([
+                    'errors' => ['email' => ['Email is not valid.']]
+                ], 422);
+            }
+        } else {
+            $user->update(['email' => null]);
+        }
 
         return response()->json(['status' => 'success']);
     }
