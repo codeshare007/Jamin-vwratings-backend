@@ -70,6 +70,53 @@ class Avi extends Model
             ->having('attachments_count', '>', 0);
     }
 
+    public function scopeMostRated($query)
+    {
+        return $query->has('ratings')
+            ->select([
+               'avis.id',
+               'avis.name',
+               DB::raw('COUNT(avis_ratings.id) as avis_rating_amount')
+            ])->join('avis_ratings', function($join) {
+                $join->on('avis.id', '=', 'avis_ratings.avis_id');
+            })->groupBy('avis.id')
+            ->orderBy('avis_rating_amount', 'desc');
+    }
+
+    public function scopeMostCommented($query)
+    {
+        return $query->has('comments')
+            ->select([
+                'avis.id',
+                'avis.name',
+                DB::raw('COUNT(avis_comments.id) as avis_comments_amount')
+            ])->join('avis_comments', function($join) {
+                $join->on('avis.id', '=', 'avis_comments.avis_id');
+            })->groupBy('avis.id')
+            ->orderBy('avis_comments_amount', 'desc');
+    }
+
+    public function scopeTopRated($query)
+    {
+        return $query->has('ratings')
+            ->select([
+                'avis.id',
+                'avis.name',
+                DB::raw('AVG(avis_ratings.rating) as avis_average_rating'),
+                DB::raw('COUNT(avis_ratings.id) as avis_ratings_amount')
+            ])->join('avis_ratings', function($join) {
+                $join->on('avis.id', '=', 'avis_ratings.avis_id');
+            })->groupBy('avis.id')
+            ->having('avis_ratings_amount', '>', 40)
+            ->orderByRaw('avis_average_rating DESC');
+    }
+
+    public function scopeLowRated($query)
+    {
+        return $query;
+    }
+
+
     public function scopeRecentRated($query)
     {
         // not used and need to be improved
@@ -88,6 +135,7 @@ class Avi extends Model
     public function scopeAverageRating($query, $operator, $rating, $sort = 'DESC')
     {
         // not used and need to be improved
+
         return $query->with('ratings')
             ->leftJoin('avis_ratings', 'avis_ratings.avis_id', '=', 'avis.id')
             ->select(['avis.id', 'avis.name', DB::raw('AVG(avis_ratings.rating) as ratings_average')])

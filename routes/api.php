@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Front\{
     AuthController,
     SiteController,
     TestController,
+    StatisticsController,
     AvisInterviewsController,
     ProfileController,
     PartiesController
@@ -34,6 +35,7 @@ use App\Http\Controllers\Api\V1\Admin\{
 Route::prefix('v1')->group(function () {
 
     Route::get('test', [TestController::class, 'test']);
+    Route::get('statistics', [StatisticsController::class, 'index']);
 
     Route::post('reset-password', [AuthController::class, 'sendPasswordResetLink']);
     Route::post('reset/password', [AuthController::class, 'callResetPassword']);

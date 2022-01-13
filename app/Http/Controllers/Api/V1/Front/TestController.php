@@ -12,15 +12,5 @@ class TestController extends Controller
     public function index()
     {
 
-        return Avi::query();
-
-        /*
-        $duplicates = DB::table('avis')
-            ->select('name', DB::raw('COUNT(*) as `count`'))
-            ->groupBy('name',)
-            ->having('count', '>', 1)
-            ->get();
-
-        return $duplicates; */
     }
 }
