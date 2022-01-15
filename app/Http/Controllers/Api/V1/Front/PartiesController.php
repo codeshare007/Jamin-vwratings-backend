@@ -74,8 +74,10 @@ class PartiesController extends Controller
 
             $ratingsCount = $party->ratings()->count();
 
+            $partyClaimed = false;
             // remove negative comments if avi claimed
             if (PartiesClaims::where('party_id', '=', $id)->count()) {
+                $partyClaimed = true;
                 $comments = array_values($party->comments->filter(function ($item) {
                     if ($item->attachments->count() || $item->opinion !== 2) return $item;
                     return false;
@@ -92,7 +94,11 @@ class PartiesController extends Controller
                 }
             }
 
-            $partiesComments = $party['comments']->toArray();
+            if (!$partyClaimed) {
+                $partiesComments = $party['comments']->toArray();
+            } else {
+                $partiesComments = [];
+            }
 
             $party['statistics'] = [
                 'comments' => count($party['comments']),

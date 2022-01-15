@@ -70,8 +70,11 @@ class AvisController extends Controller
 
             $ratingsCount = $avi->ratings()->count();
 
+            $isAviClaimed = false;
+
             // remove negative comments if avi claimed
             if (AvisClaims::where('avis_id', '=', $id)->count()) {
+
                 $comments = array_values($avi->comments->filter(function ($item) {
                     if ($item->attachments->count() || $item->opinion !== 2) return $item;
                     return false;
@@ -79,6 +82,7 @@ class AvisController extends Controller
 
                 $avi->unsetRelation('comments');
                 $avi['comments'] = $comments;
+                $isAviClaimed = true;
             }
 
             /** @var User $user */
@@ -88,7 +92,11 @@ class AvisController extends Controller
                 }
             }
 
-            $avisComments = $avi['comments']->toArray();
+            if (!$isAviClaimed) {
+                $avisComments = $avi['comments']->toArray();
+            } else {
+                $avisComments = [];
+            }
 
             $avi['statistics'] = [
                 'comments' => count($avi['comments']),
