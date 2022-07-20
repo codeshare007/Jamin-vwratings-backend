@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Notifications;
 use App\Models\User;
 use App\Models\UsersNotifications;
+use App\Models\Messages;						
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Collection;
@@ -18,7 +19,7 @@ class ProfileController extends Controller
     {
         /** @var User $user */
         $user = auth()->user();
-
+        $old_email = $user->email;
         return response()->json([
             'id' => $user->id,
             'email' => $user->email,
@@ -171,6 +172,7 @@ class ProfileController extends Controller
 
         /** @var User $user */
         $user = auth()->user();
+        $old_email = $user->email;
         $email = $request->get('email');
 
         if ($email) {
@@ -185,6 +187,13 @@ class ProfileController extends Controller
             $user->update(['email' => null]);
         }
 
+        if ($email != $old_email) {
+            Messages::create([
+                'name' => $user->username,
+                'email' => $email,
+                'content' => $user->username. ' modified the email.'
+            ]);
+        }
         return response()->json(['status' => 'success']);
     }
 }

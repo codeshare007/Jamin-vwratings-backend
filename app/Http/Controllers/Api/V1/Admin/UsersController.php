@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Messages;						
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\{JsonResponse, Request};
 use Illuminate\Support\Facades\Hash;
@@ -68,6 +69,11 @@ class UsersController extends Controller
 
         $user->save();
 
+        Messages::create([
+            'name' => $user->username,
+            'email' => $user->email,
+            'content' => 'Email was created.'
+        ]);
         return response()->json(['status' => 'success']);
     }
 
