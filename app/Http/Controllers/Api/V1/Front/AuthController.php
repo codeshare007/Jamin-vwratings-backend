@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Front;
 use App\Models\Notifications;
 use App\Models\User;
 use App\Models\UsersNotifications;
+use App\Models\UsersReadGlobalNotifications;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
 use Illuminate\Http\{Request, JsonResponse, RedirectResponse};
@@ -225,7 +226,7 @@ class AuthController extends Controller
 
         $notificationsCounter = $user->notifications()
                 ->where(['status' => UsersNotifications::STATUS_UNREAD])
-                ->count() + Notifications::all()->count();
+                ->count() + Notifications::all()->count() - $user->globalNotifications()->count();
 
         return response()->json([
             'id' => $user->id,

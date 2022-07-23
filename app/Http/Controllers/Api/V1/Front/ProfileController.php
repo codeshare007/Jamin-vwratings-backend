@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Notifications;
+use App\Models\UsersReadGlobalNotifications;
 use App\Models\User;
 use App\Models\UsersNotifications;
-use App\Models\Messages;						
+use App\Models\Messages;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,7 +20,7 @@ class ProfileController extends Controller
     {
         /** @var User $user */
         $user = auth()->user();
-        $old_email = $user->email;
+
         return response()->json([
             'id' => $user->id,
             'email' => $user->email,
@@ -42,22 +43,45 @@ class ProfileController extends Controller
         return response()->json($user->favoriteAvis()->get());
     }
 
-    public function notifications(): JsonResponse
+    public function getNotifications(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = auth()->user();
 
+        $isAll = $request->input('all');
         $notifications = collect();
-        $globalNotifications = Notifications::all();
+        $readIds = collect();
 
-        foreach ($globalNotifications as $notification) {
-            $notifications->push($notification);
+        if ($isAll) {
+            $deletedGlobalIds = collect();
+            foreach ($user->globalNotifications()->where('status', UsersReadGlobalNotifications::STATUS_DELECTED)->get() as $globalNotification) {
+                $deletedGlobalIds->push($globalNotification->notification_id);
+            }
+            $globalNotifications = Notifications::whereNotIn('id', $deletedGlobalIds)->get();
+            foreach ($globalNotifications as $notification) {
+                $notifications->push($notification);
+            }
+            foreach ($user->notifications()->get() as $notification) {
+                $notifications->push($notification);
+            }
+        } else {
+            // Get unread notifications
+            $readIds = collect();
+            foreach ($user->globalNotifications()->get() as $readNotification) {
+                $readIds->push($readNotification->notification_id);
+            }
+
+            $globalNotifications = Notifications::whereNotIn('id', $readIds)->get();
+            foreach ($globalNotifications as $notification) {
+                $notifications->push($notification);
+            }
+
+            $userUnreadNotifications = $user->notifications()->where('status', UsersNotifications::STATUS_UNREAD)->get();
+            foreach ($userUnreadNotifications as $notification) {
+                $notifications->push($notification);
+            }
         }
-
-        foreach ($user->notifications()->get() as $notification) {
-            $notifications->push($notification);
-        }
-
+        
         return response()->json([
             'data' => $notifications->sortBy('created_at', SORT_ASC)
         ]);
@@ -67,13 +91,57 @@ class ProfileController extends Controller
     /**
      * @return JsonResponse
      */
-    public function readNotifications(): JsonResponse
+    public function readAllNotifications(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = auth()->user();
-
         foreach ($user->notifications()->get() as $notification) {
-            $notification->update(['status' => UsersNotifications::STATUS_READ]);
+            $notification->update([
+                'status' => UsersNotifications::STATUS_READ
+            ]);
+        }
+
+        $readOrDeletedNotificationIds = collect();
+        foreach ($user->globalNotifications()->get() as $notification) {
+            $readOrDeletedNotificationIds->push($notification->notification_id);
+        }
+        $unreadGlobalNotifications = Notifications::whereNotIn('id', $readOrDeletedNotificationIds)->get();
+        
+        foreach ($unreadGlobalNotifications as $notification) {
+            UsersReadGlobalNotifications::create([
+                'user_id' => $user->id,
+                'notification_id' => $notification->id,
+                'status' => UsersReadGlobalNotifications::STATUS_READ
+            ]);
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function readNotification($id, Request $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        $isGlobal = $request->input('global');
+
+        if ($isGlobal) {
+            $globalNotification = $user->globalNotifications()->where('notification_id', $id)->first();
+            if (!$globalNotification) {
+                UsersReadGlobalNotifications::create([
+                    'user_id' => $user->id,
+                    'notification_id' => $id,
+                    'status' => UsersReadGlobalNotifications::STATUS_READ
+                ]);
+            }
+        } else {
+            if ($notification = UserNotification::findOrFail($id)) {
+                $notification->update(['status' => UsersNotifications::STATUS_READ]);
+            }
         }
 
         return response()->json(['status' => 'success']);
@@ -194,6 +262,7 @@ class ProfileController extends Controller
                 'content' => $user->username. ' modified the email.'
             ]);
         }
+        
         return response()->json(['status' => 'success']);
     }
 }
