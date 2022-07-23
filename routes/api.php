@@ -86,9 +86,10 @@ Route::prefix('v1')->group(function () {
         Route::post('profile', [ProfileController::class, 'update']);
 
         Route::post('profile/change-password', [ProfileController::class, 'changePassword']);
-        Route::post('profile/notifications/read', [ProfileController::class, 'readNotifications']);
+        Route::post('profile/notifications/read', [ProfileController::class, 'readAllNotifications']);
+        Route::post('profile/notifications/{id}/read', [ProfileController::class, 'readNotification']);
 
-        Route::get('profile/notifications', [ProfileController::class, 'notifications']);
+        Route::get('profile/notifications', [ProfileController::class, 'getNotifications']);
         Route::get('profile/avis/favorites', [ProfileController::class, 'favoriteAvis']);
         Route::get('profile/avis/comments', [ProfileController::class, 'commentsAvis']);
         Route::get('profile/avis/stats', [ProfileController::class, 'statsAvis']);
@@ -149,6 +150,8 @@ Route::prefix('v1')->group(function () {
 
             Route::post('users/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\UsersController@bulkDelete');
             Route::post('messages/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\MessagesController@bulkDelete');
+            Route::post('users-notifications/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\UsersNotificationsController@bulkDelete');
+            Route::post('notifications/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\NotificationsController@bulkDelete');			  
 
             Route::post('avis/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\AvisController@bulkDelete');
             Route::post('avis-claims/bulk-delete', 'App\Http\Controllers\Api\V1\Admin\AvisClaimsController@bulkDelete');

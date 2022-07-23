@@ -83,4 +83,23 @@ class NotificationsController extends Controller
 
         return response()->json(['status' => 'error'], 422);
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function bulkDelete(Request $request): JsonResponse
+    {
+        $this->validate($request, [
+            'ids' => 'array|required'
+        ]);
+
+        Notifications::whereIn('id', $request->get('ids'))->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Notifications Deleted successfully.'
+        ]);
+    }
 }

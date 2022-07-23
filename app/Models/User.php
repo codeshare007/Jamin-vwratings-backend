@@ -177,5 +177,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(UsersNotifications::class, 'user_id', 'id');
     }
 
-
+    /**
+     * @return HasMany
+     */
+    public function globalNotifications(): HasMany
+    {
+        return $this->hasMany(UsersReadGlobalNotifications::class, 'user_id', 'id');
+    }
 }
