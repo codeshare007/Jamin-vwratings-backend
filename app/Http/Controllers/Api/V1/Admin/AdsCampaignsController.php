@@ -8,9 +8,14 @@ use Illuminate\Http\{Request, JsonResponse};
 
 class AdsCampaignsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return AdsCampaigns::paginate(10);
+        if ($request->has('type')) {
+            $type = $request->get('type');
+            return AdsCampaigns::where('type', $type)->paginate(10);
+        } else {
+            return AdsCampaigns::paginate(10);
+        }
     }
 
     public function show($id)
@@ -26,6 +31,7 @@ class AdsCampaignsController extends Controller
             'content' => 'nullable|string',
             'timer' => 'required|integer',
             'active' => 'required|integer',
+            'type' => 'required|integer',
         ]);
 
         $campaign = new AdsCampaigns();
@@ -38,7 +44,7 @@ class AdsCampaignsController extends Controller
 
         $campaign->timer = $request->get('timer');
         $campaign->active = $request->get('active');
-
+        $campaign->type = $request->get('type');
         $campaign->save();
 
         return response()->json(['status' => 'success']);

@@ -62,7 +62,8 @@ class SiteController extends Controller
                 $campaign->timer = 100;
             }
         } else {
-            if ($requestedCampaigns = AdsCampaigns::where('active', '=', 1)->first()) {
+            $type = $request->query('type');
+            if ($requestedCampaigns = AdsCampaigns::where('active', '=', 1)->where('type', '=', $type)->first()) {
                 $campaign = $requestedCampaigns;
             }
         }
@@ -110,7 +111,7 @@ class SiteController extends Controller
 
             $response = [
                 'start_promo' => $session->get('hits') > $hitsLimit,
-                'show_modal' => false
+                'show_modal' => false,
             ];
 
             $shoModal = false;
