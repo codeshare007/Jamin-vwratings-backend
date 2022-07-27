@@ -98,7 +98,7 @@ class NotificationsController extends Controller
         ]);
 
         Notifications::whereIn('id', $request->get('ids'))->delete();
-        UsersReadGlobalNotifications::whereIn('notification_id', $id)->delete();
+        UsersReadGlobalNotifications::whereIn('notification_id', $request->get('ids'))->delete();
 
         return response()->json([
             'status' => 'success',
