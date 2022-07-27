@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AvisComments;
 use App\Models\AvisInterviews;
 use App\Models\Notifications;
+use App\Models\UsersReadGlobalNotifications;	
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\{JsonResponse, Request};
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -78,6 +79,7 @@ class NotificationsController extends Controller
         if ($notification = Notifications::findOrFail($id)) {
             $notification->delete();
 
+            UsersReadGlobalNotifications::where('notification_id', $id)->delete();
             return response()->json(['status' => 'success']);
         }
 
@@ -96,6 +98,7 @@ class NotificationsController extends Controller
         ]);
 
         Notifications::whereIn('id', $request->get('ids'))->delete();
+        UsersReadGlobalNotifications::whereIn('notification_id', $id)->delete();
 
         return response()->json([
             'status' => 'success',
