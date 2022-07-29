@@ -102,6 +102,8 @@ Route::prefix('v1')->group(function () {
         Route::post('stay-claimed', 'App\Http\Controllers\Api\V1\Front\ClaimsController@stayClaimed');
         Route::post('claim', 'App\Http\Controllers\Api\V1\Front\ClaimsController@claim');
 
+        Route::get('fetch_timer', 'App\Http\Controllers\Api\V1\Front\TimerController@index');
+
         Route::prefix('auth')->group(function () {
             Route::post('logout', 'App\Http\Controllers\Api\V1\Front\AuthController@logout');
             Route::post('refresh', 'App\Http\Controllers\Api\V1\Front\AuthController@refresh');
