@@ -10,7 +10,8 @@ use App\Http\Controllers\Api\V1\Front\{
     StatisticsController,
     AvisInterviewsController,
     ProfileController,
-    PartiesController
+    PartiesController,
+    NominationsController,						  
 };
 
 use App\Http\Controllers\Api\V1\Admin\{
@@ -69,6 +70,12 @@ Route::prefix('v1')->group(function () {
 
     Route::resource('parties', PartiesController::class);
 
+    // Nominations
+    Route::middleware('auth:api')->group(function () {
+
+    });
+
+    Route::resource('nominations', NominationsController::class);
     // Auth methods
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
         Route::post('login', [AuthController::class, 'login']);
