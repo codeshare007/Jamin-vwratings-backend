@@ -44,7 +44,7 @@ Route::prefix('v1')->group(function () {
     Route::post('tracker', [SiteController::class, 'sendTracker']);
     Route::post('end-promo', [SiteController::class, 'endPromo']);
     Route::post('send-message', [SiteController::class, 'message']);
-
+    Route::get('fetch_timer', 'App\Http\Controllers\Api\V1\Front\TimerController@index');
     // Avis
     Route::middleware('auth:api')->group(function () {
         Route::get('avis/interviews', [AvisInterviewsController::class, 'index']);
@@ -102,7 +102,7 @@ Route::prefix('v1')->group(function () {
         Route::post('stay-claimed', 'App\Http\Controllers\Api\V1\Front\ClaimsController@stayClaimed');
         Route::post('claim', 'App\Http\Controllers\Api\V1\Front\ClaimsController@claim');
 
-        Route::get('fetch_timer', 'App\Http\Controllers\Api\V1\Front\TimerController@index');
+
 
         Route::prefix('auth')->group(function () {
             Route::post('logout', 'App\Http\Controllers\Api\V1\Front\AuthController@logout');
