@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\V1\Front\{
     AvisInterviewsController,
     ProfileController,
     PartiesController,
-    NominationsController,						  
+    NominationsController,
 };
 
 use App\Http\Controllers\Api\V1\Admin\{
@@ -72,7 +72,7 @@ Route::prefix('v1')->group(function () {
 
     // Nominations
     Route::middleware('auth:api')->group(function () {
-
+        Route::post('nominations/possible', [NominationsController::class, 'possible']);
     });
 
     Route::resource('nominations', NominationsController::class);

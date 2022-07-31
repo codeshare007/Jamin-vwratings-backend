@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\V1\Front;
 
 use Illuminate\Support\Str;
+use Carbon\Carbon;  
 use App\Models\{
     Avi,
-    Nominations,				
+    Nominations,
+    Settings,
 };
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
@@ -24,7 +26,15 @@ class NominationsController extends Controller
      */
     public function index(Request $request)
     {
-
+        $nominations = Nominations::query();
+        $nominations->leftJoin('avis', 'avis.id', '=', 'nominations.avi_id');
+        $nominations->groupBy('avi_id');
+        $nominations->select([
+            'nominations.id',
+            'avis.name as avi_name',
+            'nominations.created_at'
+        ]);
+        return $nominations->paginate($request->get('per_page'));
     }
 
     public function show($id)
@@ -53,7 +63,8 @@ class NominationsController extends Controller
 		
         if ($avi) {    
             Nominations::create([
-               'avi_id' => $avi->id
+               'avi_id' => $avi->id,
+               'user_id' => $user->id
             ]);
             return response()->json(['status' => 'success']);
         } else {
@@ -63,6 +74,21 @@ class NominationsController extends Controller
                 is on the bad list {link to bad list}"
             ], 422);
         }
+    }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function possible(Request $request): JsonResponse
+    {
+        $user = auth()->user();
+        $nomination = Nominations::where('user_id', '=', $user->id)->orderBy('created_at', 'DESC')->first();
+        
+        $period = Settings::getSetting("timer_period_minutes") * 60;
+        // $nomiation->created_at
+        return response()->json([
+            'possible' => abs($nomination->created_at->diffInSeconds(date('Y-m-d H:i:s'))) > $period
+        ]);
     }
 }

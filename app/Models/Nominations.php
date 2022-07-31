@@ -19,10 +19,16 @@ class Nominations extends Model
     protected $fillable = [
         'id',
         'avi_id',
+        'user_id',
     ];
 
     public function avi()
     {
         return $this->hasOne(Avi::class, 'id', 'avi_id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }
