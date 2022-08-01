@@ -31,6 +31,7 @@ class NominationsController extends Controller
         $nominations->groupBy('avi_id');
         $nominations->select([
             'nominations.id',
+            'nominations.avi_id',
             'avis.name as avi_name',
             'nominations.created_at'
         ]);
