@@ -63,7 +63,7 @@ class NominationsController extends Controller
 
 		
         if ($avi) {    
-            $nomination = Nominations::where('avi_id', $avi->id)->where('user_id', $user->id)->first();
+            $nomination = Nominations::where('avi_id', $avi->id)->first();
             if ($nomination) {
                 return response()->json([
                     "status" => "error",
