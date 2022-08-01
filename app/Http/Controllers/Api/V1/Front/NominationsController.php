@@ -62,11 +62,21 @@ class NominationsController extends Controller
 
 		
         if ($avi) {    
-            Nominations::create([
-               'avi_id' => $avi->id,
-               'user_id' => $user->id
-            ]);
-            return response()->json(['status' => 'success']);
+            $nomination = Nominations::where('avi_id', $avi->id)->where('user_id', $user->id)->first();
+            if ($nomination) {
+                return response()->json([
+                    "status" => "error",
+                    "message" => "That name has already been entered this round."
+                ], 422);
+            } else {
+                Nominations::create([
+                    'avi_id' => $avi->id,
+                    'user_id' => $user->id
+                ]);
+                return response()->json([
+                    'status' => 'success',
+                ]);
+            }
         } else {
             return response()->json([
                 "status" => "error",
