@@ -82,7 +82,7 @@ class NominationsController extends Controller
             return response()->json([
                 "status" => "error",
                 "message" => "This name doesn't qualify for nomination. Please check the spelling and make sure the name 
-                is on the "
+                is on the Bad List"
             ], 422);
         }
     }
