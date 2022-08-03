@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\Front\{
     NominationsController,
     VotingsController,
 	NominationsPeepsController,
+    VotingsPeepsController,
 };
 
 use App\Http\Controllers\Api\V1\Admin\{
@@ -85,6 +86,12 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::resource('votings', VotingsController::class);
+	
+    Route::middleware('auth:api')->group(function () {
+        Route::post('votings_peeps/possible', [VotingsPeepsController::class, 'isPossible']);
+    });
+
+    Route::resource('votings_peeps', VotingsPeepsController::class);	
 
     // NominationsPeeps
     Route::middleware('auth:api')->group(function () {
