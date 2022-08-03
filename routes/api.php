@@ -12,11 +12,8 @@ use App\Http\Controllers\Api\V1\Front\{
     ProfileController,
     PartiesController,
     NominationsController,
-<<<<<<< HEAD
     VotingsController,
-=======
 	NominationsPeepsController,
->>>>>>> 2cfe5ae1fbe2e8660da5ab8ba37b3030e970016d
 };
 
 use App\Http\Controllers\Api\V1\Admin\{
