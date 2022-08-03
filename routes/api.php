@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\Front\{
     ProfileController,
     PartiesController,
     NominationsController,
+    VotingsController,
 };
 
 use App\Http\Controllers\Api\V1\Admin\{
@@ -76,6 +77,14 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::resource('nominations', NominationsController::class);
+
+    // Votings
+    Route::middleware('auth:api')->group(function () {
+        Route::post('votings/possible', [VotingsController::class, 'isPossible']);
+    });
+
+    Route::resource('votings', VotingsController::class);
+
     // Auth methods
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
         Route::post('login', [AuthController::class, 'login']);
