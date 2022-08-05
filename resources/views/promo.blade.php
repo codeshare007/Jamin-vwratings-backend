@@ -81,11 +81,15 @@
             http.onreadystatechange = function () {//Call a function when the state changes.
                 if (http.readyState == 4 && http.status == 200) {
                     var response = JSON.parse(http.response);
-                    if ({{$type}} == 4) {
-                        window.location.href = '/creeps';
-                    } else {
+                    if ({{$type}} == 1) {
+						window.location.href = response.last_page;
+                    } else if ({{$type}} == 2) {
                         window.location.href = response.last_page;
-                    }
+                    } else if ({{$type}} == 3) {
+                        window.location.href = response.last_page;
+					} else if ({{$type}} == 4) {
+                        window.location.href = '/creeps';
+					}
                 }
             }
 

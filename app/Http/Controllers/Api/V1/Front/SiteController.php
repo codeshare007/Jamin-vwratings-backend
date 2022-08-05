@@ -63,8 +63,7 @@ class SiteController extends Controller
             }
         } else {
             $type = $request->query('type');
-            // return promo page with type=2
-            if ($requestedCampaigns = AdsCampaigns::where('active', '=', 1)->where('type', '=', 2)->first()) {
+            if ($requestedCampaigns = AdsCampaigns::where('active', '=', 1)->where('type', '=', $type)->first()) {
                 $campaign = $requestedCampaigns;
             }
         }
