@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\Front\{
     VotingsController,
 	NominationsPeepsController,
     VotingsPeepsController,
+    CreepsController,
 };
 
 use App\Http\Controllers\Api\V1\Admin\{
@@ -99,6 +100,13 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::resource('nominations_peeps', NominationsPeepsController::class);
+
+    // NominationsPeeps
+    Route::middleware('auth:api')->group(function () {
+        
+    });
+    Route::post('creeps/update', [CreepsController::class, 'update']);
+    Route::resource('nominations_peeps', CreepsController::class);
 
     // Auth methods
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {

@@ -66,6 +66,8 @@ class SiteController extends Controller
             if ($requestedCampaigns = AdsCampaigns::where('active', '=', 1)->where('type', '=', $type)->first()) {
                 $campaign = $requestedCampaigns;
             }
+            if ($type == 7)
+                $campaign->timer = 30;
         }
 
         return view('promo', [

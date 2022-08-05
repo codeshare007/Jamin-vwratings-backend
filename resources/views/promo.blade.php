@@ -67,15 +67,20 @@
 </div>
 </div>
 <script>
+    var http = new XMLHttpRequest();
+    var params = new FormData();
+    params.append('csrf', "{{ @csrf_token() }}");
     var timeleft = {{ $campaign->timer }};
+    if ({{$type}} == 7) {
+        http.open('POST', '/api/v1/creeps/update', true);
+        http.send(params);
+    }
+        
     var downloadTimer = setInterval(function () {
         if (timeleft <= 0) {
-            clearInterval(downloadTimer);
-
-            var http = new XMLHttpRequest();
+            clearInterval(downloadTimer);            
             var params = new FormData();
             params.append('csrf', "{{ @csrf_token() }}");
-
             http.open('POST', '/api/v1/end-promo', true);
 
             http.onreadystatechange = function () {//Call a function when the state changes.
@@ -89,7 +94,9 @@
                         window.location.href = response.last_page;
 					} else if ({{$type}} == 4) {
                         window.location.href = '/creeps';
-					}
+					} else if ({{$type}} == 7) {
+                        window.location.href = '/creeptimer';
+                    }
                 }
             }
 
