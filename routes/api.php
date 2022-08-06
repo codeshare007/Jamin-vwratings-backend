@@ -105,8 +105,9 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
         
     });
+    // Creeps
     Route::post('creeps/update', [CreepsController::class, 'update']);
-    Route::resource('nominations_peeps', CreepsController::class);
+    Route::resource('creeps', CreepsController::class);
 
     // Auth methods
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {

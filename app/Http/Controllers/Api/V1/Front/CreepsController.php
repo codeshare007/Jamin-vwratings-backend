@@ -29,7 +29,15 @@ class CreepsController extends Controller
      */
     public function index(Request $request)
     {
-        
+        $creeps = Creeps::query();
+        $creeps->leftJoin('avis', 'avis.id', '=', 'creeps.avi_id');
+        $creeps->groupBy('avi_id');
+        $creeps->orderBy('avi_name');
+        $creeps->select([
+            'avis.id as avi_id',
+            'avis.name as avi_name',
+        ]);
+        return $creeps->paginate($request->get('per_page'));
     }
 
     public function show($id)
