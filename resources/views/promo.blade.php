@@ -88,6 +88,10 @@
                         window.location.href = response.last_page;
 					} else if ({{$type}} == 4) {
                         window.location.href = '/creeps';
+                    } else if ({{$type}} == 5) {
+                        window.location.href = response.last_page;
+					} else if ({{$type}} == 6) {
+                        window.location.href = '/peeps';
 					} else if ({{$type}} == 7) {
                         window.location.href = '/creeptimer';
                     }
