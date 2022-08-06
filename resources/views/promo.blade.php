@@ -66,19 +66,13 @@
       </div>
 </div>
 </div>
-<script>
-    var http = new XMLHttpRequest();
-    var params = new FormData();
-    params.append('csrf', "{{ @csrf_token() }}");
+<script>    
     var timeleft = {{ $campaign->timer }};
-    if ({{$type}} == 7) {
-        http.open('POST', '/api/v1/creeps/update', true);
-        http.send(params);
-    }
         
     var downloadTimer = setInterval(function () {
         if (timeleft <= 0) {
-            clearInterval(downloadTimer);            
+            clearInterval(downloadTimer);
+            var http = new XMLHttpRequest();
             var params = new FormData();
             params.append('csrf', "{{ @csrf_token() }}");
             http.open('POST', '/api/v1/end-promo', true);
