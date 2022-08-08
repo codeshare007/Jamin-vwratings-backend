@@ -8,6 +8,7 @@ use App\Models\{
     Avi,
     NominationsPeeps,
     Settings,
+    Peeps,		   
 };
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
@@ -70,13 +71,22 @@ class NominationsPeepsController extends Controller
                     "message" => "That name has already been entered this round."
                 ], 422);
             } else {
-                NominationsPeeps::create([
+                $peeps = Peeps::where('avi_id', $avi->id)->first();
+                if ( $peeps ) {
+                    return response()->json([
+                        "status" => "error",
+                        "message" => "Name is already a creep"
+                    ], 422);
+                }
+                else {
+                    NominationsPeeps::create([
                     'avi_id' => $avi->id,
                     'user_id' => $user->id
                 ]);
                 return response()->json([
                     'status' => 'success',
                 ]);
+				}
             }
         } else {
             return response()->json([
