@@ -8,6 +8,7 @@ use App\Models\AvisClaims;
 use App\Models\Parties;
 use App\Models\PartiesClaims;
 use App\Models\User;
+use App\Models\Creeps;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -71,11 +72,17 @@ class ClaimsController extends Controller
 
         /** @var User $user */
         $user = auth()->user();
-
         switch ($type) {
             case('avi'):
                 if ($avi = Avi::where('name', '=', $name)->first()) {
-                    if (AvisClaims::where('avis_id', '=', $avi->id)->first()) {
+		    $creeps = Creeps::where('avi_id', '=', $avi->id)->first();
+		    if ( $creeps ) {
+                        return response()->json([
+                            'status' => 'error', 'errors' => ['avi' => ['Names on the Creeps List can not be claimed']]
+                        ], 422);
+
+		    }
+                    else if (AvisClaims::where('avis_id', '=', $avi->id)->first()) {
                         return response()->json([
                             'status' => 'error', 'errors' => ['avi' => ['Player already claimed']]
                         ], 422);

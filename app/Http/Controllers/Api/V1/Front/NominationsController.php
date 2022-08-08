@@ -8,6 +8,8 @@ use App\Models\{
     Avi,
     Nominations,
     Settings,
+    Creeps,
+    AvisClaims
 };
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
@@ -70,13 +72,30 @@ class NominationsController extends Controller
                     "message" => "That name has already been entered this round."
                 ], 422);
             } else {
-                Nominations::create([
-                    'avi_id' => $avi->id,
-                    'user_id' => $user->id
-                ]);
-                return response()->json([
-                    'status' => 'success',
-                ]);
+                $creeps = Creeps::where('avi_id', $avi->id)->first();
+		$avi_claims = AvisClaims::where('avis_id', $avi->id)->first();
+                if ( $creeps ) {
+                    return response()->json([
+                        "status" => "error",
+                        "message" => "Name is already a creep"
+                    ], 422);
+                }
+		else if ( $avi_claims ) {
+                    return response()->json([
+                        "status" => "error",
+                        "message" => "Name is claimed... wait for it to unclaim"
+                    ], 422);
+
+		}
+                else {
+                    Nominations::create([
+                        'avi_id' => $avi->id,
+                        'user_id' => $user->id
+                    ]);
+                    return response()->json([
+                        'status' => 'success',
+                    ]);
+                }
             }
         } else {
             return response()->json([
