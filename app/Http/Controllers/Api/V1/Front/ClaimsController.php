@@ -10,7 +10,6 @@ use App\Models\PartiesClaims;
 use App\Models\User;
 use App\Models\Creeps;
 use App\Models\Nominations;
-use App\Models\Votings;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -78,8 +77,7 @@ class ClaimsController extends Controller
             case('avi'):
                 if ($avi = Avi::where('name', '=', $name)->first()) {
 		    $creeps = Creeps::where('avi_id', '=', $avi->id)->first();
-            $nomination = Nominations::where('avi_id', $avi->id)->first();
-			$votings = Votings::where('user_id', $user->id)->get();			
+            $nomination = Nominations::where('avi_id', $avi->id)->first();			
 		    if ( $creeps ) {
                         return response()->json([
                             'status' => 'error', 'errors' => ['avi' => ['Names on the Creeps List can not be claimed']]
@@ -88,12 +86,8 @@ class ClaimsController extends Controller
 		    }
                     else if ( $nomination ) {
                         return response()->json([
-                            'status' => 'error', 'errors' => ['avi' => ['Names can not be claimed while on the nomination list']]
-                        ], 422);
-					} else if ( $votings ) {
-                        return response()->json([
-                            'status' => 'error', 'errors' => ['avi' => ['Names can not be claimed while on the voting list']]
-                        ], 422);						
+                            'status' => 'error', 'errors' => ['avi' => ['Names can not be claimed while on the nomination or voting lists']]
+                        ], 422);			
 					}  else if (AvisClaims::where('avis_id', '=', $avi->id)->first()) {
                         return response()->json([
                             'status' => 'error', 'errors' => ['avi' => ['Player already claimed']]
