@@ -36,6 +36,7 @@ class PeepsController extends Controller
         $peeps->select([
             'avis.id as avi_id',
             'avis.name as avi_name',
+			'peeps.id as id'					  
         ]);
         return $peeps->paginate($request->get('per_page'));
     }
