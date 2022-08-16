@@ -36,7 +36,7 @@ class CreepsController extends Controller
         $creeps->select([
             'avis.id as avi_id',
             'avis.name as avi_name',
-	    'creeps.id as id'
+			'creeps.id as id'
         ]);
         return $creeps->paginate($request->get('per_page'));
     }

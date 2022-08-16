@@ -55,11 +55,21 @@
               <div class="col-md-12">
 					<div align="center" class="promowords">
 						<h2>Take a break and enjoy this ad while the system does it's thing!</h2>
+						<br><span id="countdown">{{ $campaign->timer }}</span> seconds left
 					</div>
                      <div align="center" class="promoPage__content" >
-						{!! $campaign->content !!}
-					<br><br>
-						<span id="countdown">{{ $campaign->timer }}</span> seconds left
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3655622089482340"
+     crossorigin="anonymous"></script>
+<!-- New hard coded promo -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3655622089482340"
+     data-ad-slot="5104458490"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 					</div>
               </div>             
             </div>
